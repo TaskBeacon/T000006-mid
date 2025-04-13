@@ -1,0 +1,43 @@
+# config.yaml
+
+# === Window settings ===
+window:
+  size: [1280, 720]
+  monitor: testMonitor
+  units: deg
+  screen: 1
+  bg_color: gray
+  fullscreen: True
+
+# === Task-level settings ===
+task:
+  total_blocks: 2
+  total_trials: 40
+  trial_per_block: 20
+  conditions: [win, lose, neut]
+  block_seed: [101, 202]
+  response_key: space
+  key_list: [space]
+
+# === Timing & Adaptivity ===
+timing:
+  fixation_duration: 0.5
+  cue_duration: 0.5
+  anticipation_duration: 0.5
+  feedback_duration: 1.0
+  iti_duration: 1.0
+
+  initial_target_duration: 0.5
+  adapt_step: 0.05
+  min_target_duration: 0.1
+  max_target_duration: 1.5
+
+# === Stimuli (for MID task) ===
+stimuli:
+  radius: 4
+  size: 8
+  cue_colors:
+    win: magenta
+    lose: yellow
+    neut: cyan
+  target_color: black
