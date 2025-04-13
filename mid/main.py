@@ -1,4 +1,4 @@
-import yaml
+
 from psychopy.hardware import keyboard
 from psychopy.visual import Window, TextStim
 from mid.block import Block, generate_valid_conditions, assign_stimuli
@@ -6,6 +6,15 @@ from mid.stimuli import MIDStimuli
 from mid.get_feedback import get_mid_feedback
 from mid.run_trial import run_mid_trial
 from mid.settings import TaskSettings
+from mid.subject import SubInfo
+import yaml
+
+with open('mid/config.yaml', encoding='utf-8') as f:
+    config = yaml.safe_load(f)
+
+subform = SubInfo(config, language='cn')
+subject_data = subform.collect()
+
 
 # 1. Load settings
 with open('mid/config/settings.yaml') as f:

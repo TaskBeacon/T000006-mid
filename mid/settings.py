@@ -7,61 +7,67 @@ class TaskSettings:
     """
     Stores all experiment settings for task execution and window setup.
 
-    This class is meant to be loaded from a config dictionary (e.g., parsed from YAML),
-    combining common PsychoPy window parameters, task structure, and extras like timing
-    or adaptation parameters.
+    This class is meant to be loaded from a YAML config with nested sections,
+    which will be flattened and dynamically promoted to attributes.
 
     Attributes
     ----------
+    # --- Core window and task config ---
     size : list[int]
-        Window size in pixels (e.g., [1280, 720]).
+        Window size in pixels.
     monitor : str
-        Name of the monitor profile to use.
+        Monitor profile name.
     units : str
-        Units for PsychoPy window coordinates (e.g., 'deg', 'pix').
+        Units used in PsychoPy (e.g., 'deg', 'pix').
     screen : int
-        Screen index to display the window.
+        Display screen index.
     bg_color : str
-        Background color for the window.
+        Background color of the window.
     fullscreen : bool
-        Whether to use fullscreen mode.
+        Whether to launch in fullscreen.
 
     total_blocks : int
         Number of blocks in the experiment.
     total_trials : int
-        Total number of trials across all blocks.
+        Total number of trials in the experiment.
 
     response_key : str
         Default response key (e.g., 'space').
     key_list : list[str]
-        Valid key list to listen for responses.
+        List of valid response keys.
 
     conditions : list[str]
         List of condition labels (e.g., ['win', 'lose', 'neut']).
     block_seed : list[int] or None
-        Optional list of seeds for reproducibility per block.
-
-    extras : dict[str, Any]
-        Arbitrary additional parameters (e.g., timing, adaptation) from config.
+        Optional list of per-block seeds.
 
     trials_per_block : int
-        Derived field calculated as total_trials / total_blocks.
+        Automatically computed from total_trials / total_blocks.
+
+    ...plus any additional parameters from config, such as:
+        - cue_duration
+        - iti_duration
+        - adapt_step
+        - min_target_duration
+        - etc.
 
     Example
     -------
     >>> import yaml
     >>> with open("config.yaml") as f:
     ...     config = yaml.safe_load(f)
-    >>> settings = TaskSettings.from_dict(config['task'])
-    >>> print(settings.trials_per_block)
+    >>> flat_config = {**config['window'], **config['task'], **config['timing']}
+    >>> settings = TaskSettings.from_dict(flat_config)
+    >>> print(settings.total_blocks)
+    >>> print(settings.cue_duration)
     """
     # --- Window settings ---
     size: List[int] = field(default_factory=lambda: [1920, 1080])
     monitor: str = 'testMonitor'
-    units: str = 'deg'
+    units: str = 'norm'
     screen: int = 1
-    bg_color: str = 'white'
-    fullscreen: bool = False
+    bg_color: str = 'gray'
+    fullscreen: bool = True
 
     # --- Basic experiment structure ---
     total_blocks: int = 1
@@ -72,13 +78,10 @@ class TaskSettings:
     key_list: List[str] = field(default_factory=lambda: ['space'])
 
     # --- Trial logic ---
-    conditions: List[str] = field(default_factory=lambda: [])
+    conditions: List[str] = field(default_factory=list)
     block_seed: Optional[List[int]] = None
 
-    # --- Miscellaneous or task-specific extras ---
-    extras: Dict[str, Any] = field(default_factory=dict)
-
-    # --- Computed field ---
+    # --- Derived fields ---
     trials_per_block: int = field(init=False)
 
     def __post_init__(self):
@@ -89,23 +92,23 @@ class TaskSettings:
     @classmethod
     def from_dict(cls, config: dict):
         """
-        Load settings from a dictionary (e.g., parsed from YAML).
-
-        Any keys not explicitly defined in the dataclass will be stored in `extras`.
+        Create TaskSettings instance from a flat config dictionary.
+        Unknown keys are promoted to attributes on the instance.
 
         Parameters
         ----------
         config : dict
-            Dictionary of experiment settings.
+            Flat dictionary containing both standard and extra keys.
 
         Returns
         -------
         TaskSettings
-            Configured settings object.
         """
         known_keys = set(f.name for f in cls.__dataclass_fields__.values())
         init_args = {k: v for k, v in config.items() if k in known_keys}
         extras = {k: v for k, v in config.items() if k not in known_keys}
+
         settings = cls(**init_args)
-        settings.extras.update(extras)
+        for k, v in extras.items():
+            setattr(settings, k, v)  # promote extras to attributes
         return settings

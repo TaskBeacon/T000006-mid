@@ -2,7 +2,7 @@
 from psychopy import core, event
 from psychopy.visual import TextStim
 
-def run_mid_trial(win, kb, settings, cond, stim_label,
+def run_trial(win, kb, settings, cond, stim_label,
                   cue_map, target_map, target_dur_tracker, total_points):
     # --- Fixation ---
     TextStim(win, text='+', height=1.0, color='black').draw()

@@ -1,10 +1,86 @@
 # config.yaml
 
+# === Subject info ===
+subinfo_fields:
+  - name: subject_id
+    type: int
+    constraints:
+      min: 101
+      max: 999
+      digits: 3
+
+  - name: subject_name
+    type: string
+
+  - name: experimenter
+    type: string
+
+  - name: gender
+    type: choice
+    choices: [Male, Female]
+
+  - name: race
+    type: choice
+    choices: [Caucasian, African-American, Asian, Hispanic, Native-American]
+
+subinfo_lang:
+  en:
+    subject_id: "Subject ID (3 digits)"
+    subject_name: "Subject Name"
+    experimenter: "Experimenter Name"
+    gender: "Gender"
+    race: "Race"
+    Male: "Male"
+    Female: "Female"
+    Caucasian: "Caucasian"
+    African-American: "African-American"
+    Asian: "Asian"
+    Hispanic: "Hispanic"
+    Native-American: "Native American"
+    registration_failed: "Participant registration failed."
+    registration_successful: "Participant successfully registered."
+    invalid_input: "Invalid input for {field}."
+
+  cn:
+    subject_id: "受试编号（三位数）"
+    subject_name: "受试者姓名"
+    experimenter: "主试姓名"
+    gender: "性别"
+    race: "种族"
+    Male: "男"
+    Female: "女"
+    Caucasian: "白人"
+    African-American: "非裔"
+    Asian: "亚洲人"
+    Hispanic: "拉丁裔"
+    Native-American: "美洲原住民"
+    registration_failed: "受试者注册失败。"
+    registration_successful: "受试者注册成功！"
+    invalid_input: "字段 {field} 的输入无效。"
+
+  fr:
+    subject_id: "ID du sujet (3 chiffres)"
+    subject_name: "Nom du sujet"
+    experimenter: "Nom de l'expérimentateur"
+    gender: "Sexe"
+    race: "Ethnie"
+    Male: "Homme"
+    Female: "Femme"
+    Caucasian: "Caucasien"
+    African-American: "Afro-Américain"
+    Asian: "Asiatique"
+    Hispanic: "Hispanique"
+    Native-American: "Amérindien"
+    registration_failed: "Échec de l'inscription du participant."
+    registration_successful: "Inscription réussie du participant."
+    invalid_input: "Entrée invalide pour {field}."
+
+
 # === Window settings ===
 window:
-  size: [1280, 720]
+  size: [1920, 1080]
   monitor: testMonitor
-  units: deg
+  units: norm
   screen: 1
   bg_color: gray
   fullscreen: True
