@@ -84,10 +84,18 @@ class TaskSettings:
     # --- Derived fields ---
     trials_per_block: int = field(init=False)
 
+
     def __post_init__(self):
         self.trials_per_block = ceil(self.total_trials / self.total_blocks)
         if not self.block_seed:
             self.block_seed = [None] * self.total_blocks
+    def __repr__(self):
+    # Field Type	Access	Shown in print(settings)
+    # Defined in class	✅ settings.total_blocks	✅ yes
+    # Added via setattr()	✅ settings.cue_duration	❌ no (unless you override __repr__)
+        base = {k: v for k, v in self.__dict__.items() if not k.startswith('_')}
+        return f"{self.__class__.__name__}({base})"
+
 
     @classmethod
     def from_dict(cls, config: dict):

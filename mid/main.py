@@ -9,17 +9,28 @@ from mid.settings import TaskSettings
 from mid.subject import SubInfo
 import yaml
 
+# 1. collect subject info
 with open('mid/config.yaml', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
-subform = SubInfo(config, language='cn')
+subform_config = {
+    'subinfo_fields': config.get('subinfo_fields', []),
+    'subinfo_lang': config.get('subinfo_lang', {})
+}
+
+subform = SubInfo(subform_config, language='cn')
 subject_data = subform.collect()
 
 
-# 1. Load settings
-with open('mid/config/settings.yaml') as f:
-    config = yaml.safe_load(f)
-settings = TaskSettings.from_dict(config)
+# 2. Load settings
+# Flatten the config
+task_config = {
+    **config.get('window', {}),
+    **config.get('task', {}),
+    **config.get('timing', {})  # ← don't forget this!
+}
+
+settings = TaskSettings.from_dict(task_config)
 
 # 2. Set up window & input
 win = Window(size=settings.size, fullscr=settings.fullscreen, screen=1,

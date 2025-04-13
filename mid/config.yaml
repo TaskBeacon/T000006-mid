@@ -95,6 +95,17 @@ task:
   response_key: space
   key_list: [space]
 
+
+# === Stimuli (for MID task) ===
+stimuli:
+  radius: 4
+  size: 8
+  cue_colors:
+    win: magenta
+    lose: yellow
+    neut: cyan
+  target_color: black
+
 # === Timing & Adaptivity ===
 timing:
   fixation_duration: 0.5
@@ -107,13 +118,3 @@ timing:
   adapt_step: 0.05
   min_target_duration: 0.1
   max_target_duration: 1.5
-
-# === Stimuli (for MID task) ===
-stimuli:
-  radius: 4
-  size: 8
-  cue_colors:
-    win: magenta
-    lose: yellow
-    neut: cyan
-  target_color: black
