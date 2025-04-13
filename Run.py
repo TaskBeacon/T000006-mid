@@ -1,7 +1,7 @@
 from psyflow.screenflow import  *
-from task.expsetup import exp_setup
-from task.trialcontrol import generate_trial_seq
-from task.expcontrol import exp_run
+from mid.expsetup import exp_setup
+from mid.trialcontrol import generate_trial_seq
+from mid.expcontrol import exp_run
 # all
 subdata = get_subject_info()
 subdata = ['144', '23', 'Male', 'Caucasian']
