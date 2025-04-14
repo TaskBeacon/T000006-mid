@@ -71,16 +71,27 @@ class StimBank:
             self._instantiated[name] = self._registry[name](self.win)
         return self._instantiated[name]
 
-    def rebuild(self, name: str, **overrides):
+    def rebuild(self, name: str, update_cache: bool = True, **overrides):
         """
-        Rebuild a stimulus with new parameters (does not use cache).
+        Rebuild a stimulus with new parameters.
 
-        Example:
-        >>> stim = registry.rebuild("cue_win", fillColor="green")
+        Parameters:
+        - name: stimulus name
+        - update_cache: if True, replace the cached instance with the rebuilt one
+        - **overrides: keyword arguments to override default parameters
+
+        Returns:
+        - The new stimulus instance
         """
         if name not in self._registry:
             raise KeyError(f"Stimulus '{name}' not defined.")
-        return self._registry[name](self.win, **overrides)
+
+        new_stim = self._registry[name](self.win, **overrides)
+
+        if update_cache:
+            self._instantiated[name] = new_stim
+
+        return new_stim
 
     def get_group(self, prefix: str) -> Dict[str, Any]:
         """
@@ -129,7 +140,7 @@ class StimBank:
             stim.draw()
             self.win.flip()
             print(f"Preview: '{name}'")
-            if wait_keys:
+            if not wait_keys:
                 event.waitKeys()
         except Exception as e:
             print(f"[Preview Error] Could not preview '{name}': {e}")

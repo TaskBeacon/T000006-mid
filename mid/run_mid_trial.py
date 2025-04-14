@@ -1,48 +1,51 @@
 from mid.TrialUnit import TrialUnit
-from mid.TrialRoutine import TrialRoutine
-def run_mid_trial(win, kb, settings, condition, stim, controller):
+def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller):
+    """
+    Run a single MID trial sequence (fixation → cue → ITI → target → feedback).
 
+    Parameters:
+    - win: PsychoPy Window
+    - kb: PsychoPy Keyboard
+    - settings: experimental settings object (must include cue_duration, iti, feedback_duration, response_keys)
+    - condition: str, e.g., "win", "lose", "neut"
+    - stim_dict: dict with per-trial cue stimuli (e.g., {"cue": ...})
+    - stim_bank: instance of StimBank containing shared stimuli
+    - controller: AdaptiveController to adjust target duration
 
-    routine = TrialRoutine(name=f"MID-{condition}")
+    Returns:
+    - trial_result: dict containing trial state (hit, rt, response, etc.)
+    """
 
-    # Fixation Unit
-    fix = TrialUnit(win).add_stim(stim_bank.get("fix"))
-    fix.show(duration=0.5, trigger_onset=11)
-    routine.add_unit(fix)
+    trial_data = {"condition": condition}
 
-    # Cue Unit
-    cue = TrialUnit(win).add_stim(stim)
-    cue.show(duration=settings.cue_duration, trigger_onset=21)
-    routine.add_unit(cue)
+    # --- Fixation ---
+    TrialUnit(win).add_stim(stim_bank.get("fixation")) \
+        .show(duration=settings.fixation_duration, trigger_onset=11)
 
-    # Delay Unit (ITI)
-    iti = TrialUnit(win).add_stim(stim_bank.get("blank"))
-    iti.show(duration=settings.iti, trigger_onset=0)
-    routine.add_unit(iti)
+    # --- Cue ---
+    TrialUnit(win).add_stim(stim_dict["cue"]) \
+        .show(duration=settings.cue_duration, trigger_onset=21)
 
-    # Target Unit with adaptive duration
-    target_stim = stim_bank.get(f"target_{condition}")
+    # --- anticipation ---
+    TrialUnit(win).add_stim(stim_bank.get("fixation")) \
+        .show(duration=settings.anticipation_duration)
+
+    # --- Target ---
     duration = controller.get_duration(condition)
-    target = TrialUnit(win).add_stim(target_stim)
+    target = TrialUnit(win).add_stim(stim_dict['target'])
     target.capture_response(
-        keys=settings.response_keys,
+        keys=settings.key_list,
         duration=duration,
         trigger_onset=31,
         trigger_response=41,
         trigger_timeout=99
     )
-    routine.add_unit(target)
+    # Update adaptive controller
+    controller.update(condition, target.get_state("hit", False))
+    trial_data.update(target.to_dict())
 
-    # Feedback Unit
-    feedback = TrialUnit(win).add_stim(stim_bank.get("blank"))
-    feedback.show(duration=settings.feedback_duration)
-    routine.add_unit(feedback)
+    # --- Feedback ---
+    TrialUnit(win).add_stim(stim_bank.get("fixation")) \
+        .show(duration=settings.feedback_duration)
 
-    # Hook to update controller based on trial outcome
-    @target.on_end
-    def update_control(u: TrialUnit):
-        controller.update(condition, u.get_state("hit", False))
-
-    # Run the routine
-    routine.run()
-    return routine.to_dict()
+    return trial_data

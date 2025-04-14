@@ -1,8 +1,8 @@
-from psychopy import core, visual, event
+from psychopy import core, visual, event, logging
 from psychopy.hardware.keyboard import Keyboard
 from typing import Callable, Optional, List, Dict, Any, Union
-import logging
 import random
+from mid.Trigger import Trigger
 
 class TrialUnit:
     """
@@ -10,9 +10,9 @@ class TrialUnit:
     responses, time-locked logging, and lifecycle hooks.
     """
 
-    def __init__(self, win: visual.Window, trigger: Optional[Any] = None):
+    def __init__(self, win: visual.Window, trigger: Optional[Trigger] = None):
         self.win = win
-        self.trigger = trigger or (lambda code: print(f"Trigger sent: {code}"))
+        self.trigger = trigger or Trigger()
         self.stimuli: List[visual.BaseVisualStim] = []
         self.state: Dict[str, Any] = {}
         self.clock = core.Clock()
@@ -178,13 +178,13 @@ class TrialUnit:
         )
 
         self.clock.reset()
+        self.keyboard.clearEvents()
         responded = False
         while not responded and self.clock.getTime() < duration:
             for stim in self.stimuli:
                 stim.draw()
             self.win.flip()
-
-            keypress = self.keyboard.getKeys(keyList=keys, timeStamped=self.clock)
+            keypress = self.keyboard.getKeys(keyList=keys, waitRelease=False)
             if keypress:
                 k, rt = keypress[0].name, keypress[0].rt
                 self.set_state(
@@ -222,38 +222,41 @@ class TrialUnit:
         for hook in self._hooks["start"]:
             hook(self)
 
+        # Initial flip with onset timestamp
         for stim in self.stimuli:
             stim.draw()
         flip_time = self.win.flip()
-
         self.set_state(
             onset_time=flip_time,
             onset_time_global=core.getAbsTime()
         )
-        self.clock.reset()
 
+        self.clock.reset()
+        self.keyboard.clearEvents()
         responded = False
+
+        # Extract all response keys registered in hooks
+        all_keys = list(set(k for k_list, _ in self._hooks["response"] for k in k_list))
+
         while not responded:
             for stim in self.stimuli:
                 stim.draw()
             self.win.flip()
 
-            keys = self.keyboard.getKeys(timeStamped=self.clock)
-            if keys:
-                for key_obj in keys:
-                    key_name, key_rt = key_obj.name, key_obj.rt
-                    for valid_keys, hook in self._hooks["response"]:
-                        if key_name in valid_keys:
-                            responded = True
-                            hook(self, key_name, key_rt)
-                            break
-                    if responded:
+            keys = self.keyboard.getKeys(keyList=all_keys, waitRelease=False)
+            for key_obj in keys:
+                key_name, key_rt = key_obj.name, key_obj.rt
+                for valid_keys, hook in self._hooks["response"]:
+                    if key_name in valid_keys:
+                        hook(self, key_name, key_rt)
+                        responded = True
                         break
+                if responded:
+                    break
 
             elapsed = self.clock.getTime()
             for timeout_duration, timeout_hook in self._hooks["timeout"]:
                 if elapsed >= timeout_duration and not responded:
-                    responded = True
                     self.set_state(
                         timeout_triggered=True,
                         duration=elapsed,
@@ -261,6 +264,7 @@ class TrialUnit:
                         close_time_global=core.getAbsTime()
                     )
                     timeout_hook(self)
+                    responded = True
                     break
 
         self.set_state(
@@ -272,3 +276,4 @@ class TrialUnit:
 
         self.log_unit()
         return self
+

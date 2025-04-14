@@ -92,7 +92,7 @@ class AdaptiveController:
             self.durations[key] = self.default_duration
             self.histories[key] = []
 
-        self.histories[key].append(hit)
+        self.histories[key].append(bool(hit))
         acc = sum(self.histories[key]) / len(self.histories[key])
 
         old_duration = self.durations[key]

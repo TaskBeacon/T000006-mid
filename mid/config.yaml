@@ -108,9 +108,9 @@ stimuli:
 
 # === Timing & Adaptivity ===
 timing:
-  fixation_duration: 0.5
-  cue_duration: 0.5
-  anticipation_duration: 0.5
+  fixation_duration: 1
+  cue_duration: 1
+  anticipation_duration: 1
   feedback_duration: 1.0
   iti_duration: 1.0
 
