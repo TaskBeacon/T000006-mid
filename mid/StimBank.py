@@ -1,6 +1,6 @@
 from psychopy.visual import TextStim, Circle, Rect, Polygon, ImageStim
 from psychopy import event
-from typing import Callable, Dict, Any, Type
+from typing import Callable, Dict, Any, Type, Optional
 import yaml
 import inspect
 
@@ -14,7 +14,7 @@ STIM_CLASSES: Dict[str, Type] = {
 }
 
 
-class StimRegistry:
+class StimBank:
     """
     A hybrid stimulus registry system for PsychoPy.
 
@@ -98,8 +98,9 @@ class StimRegistry:
         """
         Preview all registered stimuli.
         """
-        for name in self._registry:
-            self._preview(name, wait_keys)
+        keys = list(self._registry.keys())
+        for i, name in enumerate(keys):
+            self._preview(name, wait_keys=(i == len(keys) - 1))
 
     def preview_group(self, prefix: str, wait_keys: bool = True):
         """
@@ -108,15 +109,15 @@ class StimRegistry:
         matches = [k for k in self._registry if k.startswith(prefix)]
         if not matches:
             print(f"No stimuli found starting with '{prefix}'")
-        for name in matches:
-            self._preview(name, wait_keys)
+        for i, name in enumerate(matches):
+                self._preview(name, wait_keys=(i == len(matches) - 1))
 
     def preview_selected(self, keys: list[str], wait_keys: bool = True):
         """
         Preview a selected list of stimuli by name.
         """
-        for name in keys:
-            self._preview(name, wait_keys)
+        for i, name in enumerate(keys):
+            self._preview(name, wait_keys=(i == len(keys) - 1))
 
     def _preview(self, name: str, wait_keys: bool = True):
         """
@@ -139,89 +140,19 @@ class StimRegistry:
         """
         return list(self._registry.keys())
     
-    def validate_yaml(self, config: str | dict, strict: bool = False):
+    def add_from_yaml(self, config: str | dict, strict: bool = False):
         """
-        Validate YAML stimulus definitions for supported types and constructor compatibility.
+        Load stimulus definitions from YAML file or pre-parsed config.
 
         Parameters:
-        - config: str | dict
-        - strict: if True, raises ValueError on errors instead of printing
+        - config: YAML file path or pre-loaded dict
+        - strict: passed to validate_dict
         """
         if isinstance(config, str):
             with open(config, 'r') as f:
                 config = yaml.safe_load(f)
-            print(f"\n🔍 Validating YAML: {config}\n{'-'*40}")
-        else:
-            print(f"\n🔍 Validating loaded config\n{'-'*40}")
+        self.add_from_dict(config, strict=strict)
 
-        for name, spec in config.items():
-            stim_type = spec.get("type")
-            if stim_type not in STIM_CLASSES:
-                msg = f"❌ [{name}] Unsupported type '{stim_type}'"
-                if strict: raise ValueError(msg)
-                print(msg)
-                continue
-
-            stim_class = STIM_CLASSES[stim_type]
-            kwargs = {k: v for k, v in spec.items() if k != "type"}
-
-            sig = inspect.signature(stim_class.__init__)
-            params = sig.parameters
-            accepted = {k for k in params if k not in ('self', 'win')}
-            required = {
-                k for k, v in params.items()
-                if k not in ('self', 'win') and v.default is inspect.Parameter.empty
-            }
-
-            unknown_args = [k for k in kwargs if k not in accepted]
-            missing_args = [k for k in required if k not in kwargs]
-
-            if unknown_args:
-                msg = f"⚠️ [{name}] Unknown arguments: {unknown_args}"
-                if strict: raise ValueError(msg)
-                print(msg)
-            if missing_args:
-                msg = f"⚠️ [{name}] Missing required arguments: {missing_args}"
-                if strict: raise ValueError(msg)
-                print(msg)
-            if not unknown_args and not missing_args:
-                print(f"✅ [{name}] OK")
-
-
-    def load_from_yaml(self, config: str | dict):
-        """
-        Load stimulus definitions from YAML file or pre-loaded config dictionary.
-
-        Parameters:
-        - config: str path to YAML file OR dict with config data
-        """
-        if isinstance(config, str):
-            with open(config, 'r') as f:
-                config = yaml.safe_load(f)
-        else:
-            config = config
-
-        # Validate
-        self.validate_yaml(config)
-
-        # Register
-        for name, spec in config.items():
-            stim_type = spec.get("type")
-            stim_class = STIM_CLASSES.get(stim_type)
-            if not stim_class:
-                continue  # Already warned during validation
-
-            kwargs = {k: v for k, v in spec.items() if k != "type"}
-
-            def make_factory(cls=stim_class, kw=kwargs, n=name):
-                def _factory(win):
-                    try:
-                        return cls(win, **kw)
-                    except Exception as e:
-                        raise ValueError(f"[StimRegistry] Failed to build '{n}': {e}")
-                return _factory
-
-            self._registry[name] = make_factory()
 
     def has(self, name: str) -> bool:
         """Check whether a stimulus is registered (defined)."""
@@ -277,3 +208,81 @@ class StimRegistry:
         with open(path, 'w') as f:
             yaml.dump(yaml_defs, f)
         print(f"✅ Exported {len(yaml_defs)} YAML stimuli to {path}")
+
+    def make_factory(self, cls, base_kwargs: dict, name: str):
+        """
+        Create a stimulus factory with support for dynamic overrides at call time.
+
+        Parameters:
+        - cls: the PsychoPy stimulus class (e.g., TextStim, Circle)
+        - base_kwargs: default arguments to use
+        - name: for error messages
+
+        Returns:
+        - a callable factory(win, **overrides)
+        """
+        def _factory(win, **override_kwargs):
+            try:
+                merged = dict(base_kwargs)
+                merged.update(override_kwargs)
+                return cls(win, **merged)
+            except Exception as e:
+                raise ValueError(f"[StimBank] Failed to build '{name}': {e}")
+        return _factory
+
+
+    def add_from_dict(self, **named_specs: dict):
+        for name, spec in named_specs.items():
+            stim_type = spec.get("type")
+            stim_class = STIM_CLASSES.get(stim_type)
+            if not stim_class:
+                raise ValueError(f"[StimBank] Unknown stim type '{stim_type}' in '{name}'")
+
+            kwargs = {k: v for k, v in spec.items() if k != "type"}
+            self._registry[name] = self.make_factory(stim_class, kwargs, name)
+
+    def validate_dict(self, config: dict, strict: bool = False):
+        """
+        Validate a dictionary of stimulus definitions for compatibility.
+
+        Parameters:
+        - config: dictionary containing stimulus definitions
+        - strict: if True, raises ValueError on issues (default: False = just print warnings)
+        """
+        print(f"\n🔍 Validating stimulus dictionary\n{'-' * 40}")
+
+        for name, spec in config.items():
+            stim_type = spec.get("type")
+            if stim_type not in STIM_CLASSES:
+                msg = f"❌ [{name}] Unsupported type '{stim_type}'"
+                if strict:
+                    raise ValueError(msg)
+                print(msg)
+                continue
+
+            stim_class = STIM_CLASSES[stim_type]
+            kwargs = {k: v for k, v in spec.items() if k != "type"}
+
+            sig = inspect.signature(stim_class.__init__)
+            params = sig.parameters
+            accepted = {k for k in params if k not in ('self', 'win')}
+            required = {
+                k for k, v in params.items()
+                if k not in ('self', 'win') and v.default is inspect.Parameter.empty
+            }
+
+            unknown_args = [k for k in kwargs if k not in accepted]
+            missing_args = [k for k in required if k not in kwargs]
+
+            if unknown_args:
+                msg = f"⚠️ [{name}] Unknown arguments: {unknown_args}"
+                if strict:
+                    raise ValueError(msg)
+                print(msg)
+            if missing_args:
+                msg = f"⚠️ [{name}] Missing required arguments: {missing_args}"
+                if strict:
+                    raise ValueError(msg)
+                print(msg)
+            if not unknown_args and not missing_args:
+                print(f"✅ [{name}] OK")

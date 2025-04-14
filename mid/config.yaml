@@ -80,7 +80,7 @@ subinfo_lang:
 window:
   size: [1920, 1080]
   monitor: testMonitor
-  units: norm
+  units: deg
   screen: 1
   bg_color: gray
   fullscreen: True

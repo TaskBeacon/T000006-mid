@@ -1,36 +1,36 @@
 from psychopy import core, logging
 from typing import Callable, Any, Optional, Dict, List
 from .TrialUnit import TrialUnit
-class Trial:
+class TrialRunner:
     """
-    A container for sequencing multiple TrialUnits as a single experimental trial.
-    Handles trial-level hooks, data aggregation, and logging.
+    A container for sequencing multiple TrialUnits as a single experimental TrialRunner.
+    Handles TrialRunner-level hooks, data aggregation, and logging.
     """
 
     def __init__(self, name: str = "", units: Optional[List[TrialUnit]] = None):
         self.name = name
         self.units: List[TrialUnit] = units or []
         self.trial_state: Dict[str, Any] = {}
-        self._start_hooks: List[Callable[['Trial'], None]] = []
-        self._end_hooks: List[Callable[['Trial'], None]] = []
+        self._start_hooks: List[Callable[['TrialRunner'], None]] = []
+        self._end_hooks: List[Callable[['TrialRunner'], None]] = []
 
     def add_unit(self, unit: TrialUnit):
-        """Add a TrialUnit to this trial."""
+        """Add a TrialUnit to this TrialRunner."""
         self.units.append(unit)
         return self
 
-    def on_start(self, func: Callable[['Trial'], None]):
-        """Register a function to run before the trial starts."""
+    def on_start(self, func: Callable[['TrialRunner'], None]):
+        """Register a function to run before the TrialRunner starts."""
         self._start_hooks.append(func)
         return self
 
-    def on_end(self, func: Callable[['Trial'], None]):
-        """Register a function to run after the trial ends."""
+    def on_end(self, func: Callable[['TrialRunner'], None]):
+        """Register a function to run after the TrialRunner ends."""
         self._end_hooks.append(func)
         return self
 
     def set_state(self, **kwargs):
-        """Update trial-level state."""
+        """Update TrialRunner-level state."""
         self.trial_state.update(kwargs)
 
     def get_state(self, key: str, default=None):
@@ -38,7 +38,7 @@ class Trial:
 
     def run(self):
         """Run all TrialUnits in sequence and log aggregate state."""
-        logging.exp(f"Running trial: {self.name}")
+        logging.exp(f"Running TrialRunner: {self.name}")
         self.set_state(trial_name=self.name, trial_start=core.getAbsTime())
 
         for hook in self._start_hooks:
@@ -54,7 +54,7 @@ class Trial:
             hook(self)
 
         # Final summary log
-        logging.data(f"Trial '{self.name}' data: {self.trial_state}")
+        logging.data(f"TrialRunner '{self.name}' data: {self.trial_state}")
         return self
 
     def to_dict(self):
