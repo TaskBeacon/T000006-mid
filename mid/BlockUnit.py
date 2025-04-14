@@ -87,7 +87,7 @@ class BlockUnit:
     # Core Execution
     # ----------------------------
 
-    def run(self, run_trial_func: Callable):
+    def run_trial(self, run_trial_func: Callable, **extra_args):
         self.meta['block_start_time'] = core.getAbsTime()
         logging.exp(f"📦 Starting BlockUnit: {self.block_id}")
 
@@ -96,7 +96,7 @@ class BlockUnit:
 
         for i, (cond, stim) in enumerate(self.trials):
             result = run_trial_func(
-                self.win, self.kb, self.settings, cond, stim
+                self.win, self.kb, self.settings, cond, stim, **extra_args
             )
             result.update({
                 "trial_index": i,
@@ -133,5 +133,31 @@ def generate_balanced_conditions(n_trials, condition_labels, seed=None):
     np.random.shuffle(conditions)
     return np.array(conditions)
 
-def assign_stimuli(conditions, stim_map):
-    return np.array([stim_map[f"cue_{c}"] for c in conditions], dtype=object)
+def assign_stimuli_flexible(
+    conditions: np.ndarray,
+    stim_map: Dict[str, Any],
+    components: List[str] = ("cue", "target", "feedback")
+) -> np.ndarray:
+    """
+    Assigns multiple stimuli per condition using a list of stimulus components.
+
+    Parameters:
+    - conditions: array of condition labels (e.g., ['win', 'lose', 'neut'])
+    - stim_map: dict of available stimuli, typically from stim_bank.get_group("...")
+    - components: list of stimulus types (prefixes), e.g., ['cue', 'target']
+
+    Returns:
+    - np.ndarray of dicts like {'cue': ..., 'target': ...}
+    """
+    stim_seq = []
+    for cond in conditions:
+        stim_bundle = {}
+        for comp in components:
+            key = f"{comp}_{cond}"
+            if key in stim_map:
+                stim_bundle[comp] = stim_map[key]
+            else:
+                raise KeyError(f"Stimulus '{key}' not found in stim_map.")
+        stim_seq.append(stim_bundle)
+
+    return np.array(stim_seq, dtype=object)
