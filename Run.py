@@ -1,6 +1,6 @@
 from psyflow.screenflow import  *
 from mid.expsetup import exp_setup
-from mid.trialcontrol import generate_trial_seq
+from mid.Trial import generate_trial_seq
 from mid.expcontrol import exp_run
 # all
 subdata = get_subject_info()

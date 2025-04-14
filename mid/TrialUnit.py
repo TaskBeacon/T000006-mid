@@ -1,13 +1,15 @@
-from psychopy import core, visual, logging
+from psychopy import core, visual, event
 from psychopy.hardware.keyboard import Keyboard
-from typing import Callable, Any, Optional, Dict, List
+from typing import Callable, Optional, List, Dict, Any, Union
+import logging
 import random
 
-class StimUnit:
+class TrialUnit:
     """
-    A modular stimulus unit for PsychoPy, supporting stimulus display, triggers,
+    A modular Trial unit for PsychoPy, supporting stimulus display, triggers,
     responses, time-locked logging, and lifecycle hooks.
     """
+
     def __init__(self, win: visual.Window, trigger: Optional[Any] = None):
         self.win = win
         self.trigger = trigger or (lambda code: print(f"Trigger sent: {code}"))
@@ -17,11 +19,16 @@ class StimUnit:
         self.keyboard = Keyboard()
         self._hooks: Dict[str, List] = {"start": [], "response": [], "timeout": [], "end": []}
 
-    def add_stim(self, stim: visual.BaseVisualStim):
+    def add_stim(self, stim: visual.BaseVisualStim) -> "TrialUnit":
         self.stimuli.append(stim)
         return self
 
-    def set_state(self, **kwargs):
+    def clear_stimuli(self) -> "TrialUnit":
+        """Remove all previously added stimuli (e.g., between blocks)."""
+        self.stimuli.clear()
+        return self
+
+    def set_state(self, **kwargs) -> None:
         self.state.update(kwargs)
 
     def get_state(self, key: str, default: Any = None) -> Any:
@@ -30,14 +37,30 @@ class StimUnit:
     def to_dict(self) -> Dict[str, Any]:
         return dict(self.state)
 
-    def send_trigger(self, trigger_code: int):
+    def send_trigger(self, trigger_code: int) -> "TrialUnit":
         self.trigger.send(trigger_code)
         return self
 
-    def log_unit(self):
-        logging.data(f"StimUnit Data: {self.state}")
+    def log_unit(self) -> None:
+        logging.data(f"TrialUnit Data: {self.state}")
 
-    def on_start(self, func: Optional[Callable[['StimUnit'], None]] = None):
+    def describe_state(self) -> None:
+        """Print the current state for inspection."""
+        print("📋 TrialUnit State")
+        for k, v in self.state.items():
+            print(f"  {k}: {v}")
+
+    def simulate_response(self, key: str, rt: float) -> None:
+        """Set a fake response (e.g., for testing)."""
+        self.set_state(
+            response=key,
+            rt=rt,
+            hit=True,
+            close_time=core.getTime(),
+            close_time_global=core.getAbsTime()
+        )
+
+    def on_start(self, func: Optional[Callable[['TrialUnit'], None]] = None):
         if func is None:
             def decorator(f):
                 self._hooks["start"].append(f)
@@ -47,7 +70,7 @@ class StimUnit:
             self._hooks["start"].append(func)
             return self
 
-    def on_response(self, keys: List[str], func: Optional[Callable[['StimUnit', str, float], None]] = None):
+    def on_response(self, keys: List[str], func: Optional[Callable[['TrialUnit', str, float], None]] = None):
         if func is None:
             def decorator(f):
                 self._hooks["response"].append((keys, f))
@@ -57,7 +80,7 @@ class StimUnit:
             self._hooks["response"].append((keys, func))
             return self
 
-    def on_timeout(self, timeout: float, func: Optional[Callable[['StimUnit'], None]] = None):
+    def on_timeout(self, timeout: float, func: Optional[Callable[['TrialUnit'], None]] = None):
         if func is None:
             def decorator(f):
                 self._hooks["timeout"].append((timeout, f))
@@ -67,7 +90,7 @@ class StimUnit:
             self._hooks["timeout"].append((timeout, func))
             return self
 
-    def on_end(self, func: Optional[Callable[['StimUnit'], None]] = None):
+    def on_end(self, func: Optional[Callable[['TrialUnit'], None]] = None):
         if func is None:
             def decorator(f):
                 self._hooks["end"].append(f)
@@ -81,7 +104,7 @@ class StimUnit:
         """Auto-close after a fixed or jittered duration (no trigger support)."""
         t_val = random.uniform(*t) if isinstance(t, tuple) else t
 
-        def auto_close(unit: 'StimUnit'):
+        def auto_close(unit: 'TrialUnit'):
             unit.set_state(
                 duration=t_val,
                 timeout_triggered=True,
@@ -92,7 +115,7 @@ class StimUnit:
 
     def close_on(self, *keys: str):
         """Close on specific key press (no trigger support)."""
-        def close_fn(unit: 'StimUnit', key: str, rt: float):
+        def close_fn(unit: 'TrialUnit', key: str, rt: float):
             unit.set_state(
                 keys=key,
                 response_time=rt,
@@ -101,7 +124,7 @@ class StimUnit:
             )
         return self.on_response(list(keys), close_fn)
 
-    def show(self, duration: float | tuple[float, float], trigger_onset: int = 0):
+    def show(self, duration: float | tuple[float, float], trigger_onset: int = 0) -> "TrialUnit":
         """
         Show static stimulus for a fixed or jittered duration.
         Flip-synced trigger, onset/offset logging.
@@ -140,7 +163,7 @@ class StimUnit:
         trigger_onset: int = 0,
         trigger_response: int | dict[str, int] = 1,
         trigger_timeout: int = 99
-    ):
+    ) -> "TrialUnit":
         """
         Wait for a keypress or timeout. Triggers and onset time synced to visual flip.
         """
@@ -189,7 +212,7 @@ class StimUnit:
         self.log_unit()
         return self
 
-    def run(self):
+    def run(self) -> "TrialUnit":
         """
         Full logic loop for displaying stimulus, collecting response, handling timeout,
         and logging with precision timing.
@@ -246,4 +269,6 @@ class StimUnit:
         )
         for hook in self._hooks["end"]:
             hook(self)
+
         self.log_unit()
+        return self
