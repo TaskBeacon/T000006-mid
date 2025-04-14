@@ -123,3 +123,15 @@ class BlockUnit:
         cue_summary = {c: list(self.conditions).count(c) for c in set(self.conditions)} if self.conditions is not None else {}
         print(f"🧱 BlockUnit '{self.block_id}' — {len(self.trials)} trials")
         print(f"  Cue Distribution: {cue_summary}")
+
+def generate_balanced_conditions(n_trials, condition_labels, seed=None):
+    if seed is not None:
+        np.random.seed(seed)
+    n_per_cond = n_trials // len(condition_labels)
+    extra = n_trials % len(condition_labels)
+    conditions = condition_labels * n_per_cond + list(np.random.choice(condition_labels, extra))
+    np.random.shuffle(conditions)
+    return np.array(conditions)
+
+def assign_stimuli(conditions, stim_map):
+    return np.array([stim_map[f"cue_{c}"] for c in conditions], dtype=object)

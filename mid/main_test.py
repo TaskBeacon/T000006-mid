@@ -83,8 +83,26 @@ stim_bank.preview_selected(['cue_neut'])
 stim_bank.rebuild('cue_neut', fillColor='red')
 stim_bank.preview_selected(['cue_neut'])
 
+from mid.BlockUnit import BlockUnit, generate_balanced_conditions, assign_stimuli
 # 4. setup experiment
+block = BlockUnit(
+    block_id="block1",
+    settings=settings,
+    stim_map=stim_bank.get_group("cue"),  # assumes keys like 'cue_win', etc.
+    window=win,
+    keyboard=keyboard,
+    seed=123
+)
 
+# Chain setup: generate conditions and assign stimuli
+block.generate_stim_sequence(
+    generate_func=generate_balanced_conditions,
+    assign_func=assign_stimuli
+)
+block.conditions
+block.stimuli
+block.describe()
+block.stim_map
 
 
 
