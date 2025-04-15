@@ -47,7 +47,7 @@ class TrialUnit:
 
     def describe_state(self) -> None:
         """Print the current state for inspection."""
-        print("📋 TrialUnit State")
+        print("TrialUnit State")
         for k, v in self.state.items():
             print(f"  {k}: {v}")
 
@@ -399,7 +399,7 @@ class TrialUnit:
 
                 keypress = self.keyboard.getKeys(keyList=keys, waitRelease=False)
                 if keypress:
-                    k,= keypress[0].name
+                    k= keypress[0].name
                     rt = self.clock.getTime()
                     self.set_state(
                         hit=True, 
