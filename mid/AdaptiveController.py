@@ -22,7 +22,7 @@ class AdaptiveController:
         condition_specific: bool = True,
         enable_logging: bool = True
     ):
-        self.default_duration = initial_duration
+        self.initial_duration = initial_duration
         self.min_duration = min_duration
         self.max_duration = max_duration
         self.step = step
@@ -68,7 +68,7 @@ class AdaptiveController:
         key = self._get_key(condition)
 
         if key not in self.durations:
-            self.durations[key] = self.default_duration
+            self.durations[key] = self.initial_duration
             self.histories[key] = []
 
         self.histories[key].append(bool(hit))
@@ -89,7 +89,11 @@ class AdaptiveController:
 
     def get_duration(self, condition: Optional[str] = None) -> float:
         key = self._get_key(condition)
-        return self.durations.get(key, self.default_duration)
+        if key not in self.durations:
+            self.durations[key] = self.initial_duration
+            self.histories[key] = []
+        return self.durations[key]
+
 
     def describe(self):
         print("Adaptive Controller Status")

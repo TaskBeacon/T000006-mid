@@ -1,3 +1,8 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
 from mid.TaskSettings import TaskSettings
 from mid.SubInfo import SubInfo
 import yaml
@@ -83,12 +88,8 @@ block.describe()
 config_controller = {
     **config.get('controller', {})
     }
-controller = AdaptiveController(config_controller)
+controller = AdaptiveController.from_dict(config_controller)
 block.run_trial(
     partial(run_mid_trial, stim_bank=stim_bank, controller=controller)
 )
 
-win.close()
-core.quit()
-
-settings.frame_time_seconds = win.getMsPerFrame()[0]/1000
