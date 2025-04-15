@@ -54,10 +54,9 @@ class SubInfo:
     >>> seed = collector.get_seed()  # e.g., 103
     """
 
-    def __init__(self, config: dict, language: str = 'en'):
+    def __init__(self, config: dict):
         self.fields = config['subinfo_fields']
         self.field_map = config.get('subinfo_mapping', {})
-        self.language = language
         self.subject_data = None
 
         # --- Enforce subject_id field ---
@@ -70,14 +69,7 @@ class SubInfo:
             })
             if 'subject_id' not in self.field_map:
                 self.field_map['subject_id'] = 'Subject ID (3 digits)'
-        
-        if language not in config.get('subinfo_mapping', {}):
-            print(f"[SubInfo] WARNING: Language '{language}' not found in config. Falling back to English.")
-            self.field_map = config.get('subinfo_mapping', {})
-        else:
-            self.field_map = config['subinfo_mapping']
-
-
+       
 
     def _local(self, key: str):
         return self.field_map.get(key, key)

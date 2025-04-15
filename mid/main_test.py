@@ -1,4 +1,4 @@
-from mid.settings import TaskSettings
+from mid.TaskSettings import TaskSettings
 from mid.SubInfo import SubInfo
 import yaml
 from psychopy.visual import Window

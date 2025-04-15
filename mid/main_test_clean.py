@@ -1,4 +1,4 @@
-from mid.settings import TaskSettings
+from mid.TaskSettings import TaskSettings
 from mid.SubInfo import SubInfo
 import yaml
 from psychopy.visual import Window
@@ -10,6 +10,9 @@ from mid.run_mid_trial import run_mid_trial
 from mid.AdaptiveController import AdaptiveController
 from psychopy import logging, core
 
+
+
+
 with open('mid/config.yaml', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
@@ -20,7 +23,8 @@ with open('mid/config.yaml', encoding='utf-8') as f:
 
 # subform = SubInfo(subform_config)
 # subject_data = subform.collect()
-    
+
+subject_data={'subject_id': '123', 'subject_name': '123', 'experimenter': '123', 'gender': 'Male', 'race': 'Caucasian'}    
 # 2. Load settings
 # Flatten the config
 task_config = {
@@ -30,8 +34,11 @@ task_config = {
 }
 
 settings = TaskSettings.from_dict(task_config)
+settings.add_subinfo(subject_data)
 
-
+logging.setDefaultClock(core.Clock())
+logging.LogFile('test.log', level=logging.DATA, filemode='a')
+logging.console.setLevel(logging.INFO)
 
 # 2. Set up window & input
 win = Window(size=settings.size, fullscr=settings.fullscreen, screen=1,
@@ -73,12 +80,10 @@ block.generate_stim_sequence(
 )
 
 
-logging.setDefaultClock(core.Clock())
-logging.LogFile('test.log', level=logging.DATA, filemode='a')
-logging.console.setLevel(logging.INFO)
-
-
-controller = AdaptiveController(step=0.02, target_accuracy=0.66)
+config_controller = {
+    **config.get('controller', {})
+    }
+controller = AdaptiveController()
 block.run_trial(
     partial(run_mid_trial, stim_bank=stim_bank, controller=controller)
 )

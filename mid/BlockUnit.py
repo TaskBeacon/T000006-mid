@@ -12,6 +12,7 @@ class BlockUnit:
     def __init__(
         self,
         block_id: str,
+        block_idx: int,
         settings: Any,
         stim_map: Optional[Dict[str, Any]] = None,
         window: Any = None,
@@ -30,10 +31,11 @@ class BlockUnit:
         - seed (int, optional): Random seed for reproducibility.
         """
         self.block_id = block_id
+        self.block_idx = block_idx
         self.settings = settings
         self.win = window
         self.kb = keyboard
-        self.seed = seed
+        self.seed = settings.block_seed[self.block_idx]
         self.stim_map = stim_map or {}
 
         self.conditions: Optional[np.ndarray] = None
@@ -166,7 +168,7 @@ class BlockUnit:
         - extra_args: Additional arguments to pass to each trial function.
         """
         self.meta['block_start_time'] = core.getAbsTime()
-        logging.exp(f"📦 Starting BlockUnit: {self.block_id}")
+        logging.exp(f"Starting BlockUnit: {self.block_id}")
 
         for hook in self._on_start:
             hook(self)

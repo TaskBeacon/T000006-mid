@@ -1,5 +1,4 @@
 # config.yaml
-
 # === Subject info ===
 subinfo_fields:
   - name: subject_id
@@ -56,9 +55,9 @@ task:
   total_trials: 20
   trial_per_block: 20
   conditions: [win, lose, neut]
-  block_seed: [101, 202]
   response_key: space
   key_list: [space]
+  seed_mode: "same_across_sub"
 
 
 # === Stimuli (for MID task) ===

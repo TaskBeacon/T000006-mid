@@ -5,7 +5,7 @@ from mid.BlockUnit import Block, generate_valid_conditions, assign_stimuli
 from mid.StimBank import MIDStimuli
 from mid.get_feedback import get_mid_feedback
 from mid.run_trial import run_mid_trial
-from mid.settings import TaskSettings
+from mid.TaskSettings import TaskSettings
 from mid.SubInfo import SubInfo
 import yaml
 
