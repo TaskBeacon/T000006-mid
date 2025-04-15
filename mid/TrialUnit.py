@@ -6,12 +6,35 @@ from mid.Trigger import Trigger
 
 class TrialUnit:
     """
-    A modular Trial unit for PsychoPy, supporting stimulus display, triggers,
-    responses, time-locked logging, and lifecycle hooks.
+    TrialUnit(win, unit_label, trigger=None, frame_time_seconds=1/60)
+
+    A modular trial unit for PsychoPy-based experiments. Designed to encapsulate
+    stimulus presentation, response handling, event triggers, and lifecycle hooks
+    with flexible timing control.
+
+    Features
+    --------
+    - Add multiple visual stimuli and manage them as a group.
+    - Register event hooks for start, response, timeout, and end stages.
+    - Supports both time-based and frame-based control modes.
+    - Triggers aligned to visual flips (e.g., for EEG/fMRI).
+    - Logs detailed trial state to PsychoPy’s logging system.
+
+    Parameters
+    ----------
+    win : visual.Window
+        PsychoPy window where stimuli will be drawn.
+    unit_label : str
+        Identifier for the trial (used for logging/debugging).
+    trigger : Trigger, optional
+        External trigger handler (default: a dummy Trigger instance).
+    frame_time_seconds : float
+        Duration of a single frame in seconds (default: 1/60 for 60Hz).
     """
 
-    def __init__(self, win: visual.Window, trigger: Optional[Trigger] = None, frame_time_seconds: float = 1/60):
+    def __init__(self, win: visual.Window, unit_label: str, trigger: Optional[Any] = None, frame_time_seconds: float = 1/60):
         self.win = win
+        self.label = unit_label
         self.trigger = trigger or Trigger()
         self.stimuli: List[visual.BaseVisualStim] = []
         self.state: Dict[str, Any] = {}
@@ -21,47 +44,122 @@ class TrialUnit:
         self.frame_time_seconds = frame_time_seconds
 
     def add_stim(self, stim: visual.BaseVisualStim) -> "TrialUnit":
+        """
+        Add a visual stimulus to the trial.
+
+        Parameters
+        ----------
+        stim : visual.BaseVisualStim
+            A PsychoPy visual stimulus (e.g., TextStim, ImageStim).
+
+        Returns
+        -------
+        TrialUnit
+            Returns self for chaining.
+        """
         self.stimuli.append(stim)
         return self
 
     def clear_stimuli(self) -> "TrialUnit":
-        """Remove all previously added stimuli (e.g., between blocks)."""
+        """
+        Clear all previously added stimuli from the trial.
+
+        Returns
+        -------
+        TrialUnit
+        """
         self.stimuli.clear()
         return self
 
-    def set_state(self, **kwargs) -> None:
-        self.state.update(kwargs)
+    def set_state(self, prefix: Optional[str] = None, **kwargs) -> "TrialUnit":
+        """
+        Update internal state with optional key prefixing.
+
+        Parameters
+        ----------
+        prefix : str, optional
+            If None, use self.label. If "", store keys as-is. Else use prefix + '_'.
+        kwargs : dict
+            State variables to store.
+        """
+        effective_prefix = prefix if prefix is not None else self.label
+
+        for k, v in kwargs.items():
+            key = f"{effective_prefix}_{k}" if effective_prefix else k
+            self.state[key] = v
+        return self  # Enables chaining
+
 
     def get_state(self, key: str, default: Any = None) -> Any:
+        """
+        Retrieve a value from internal state.
+
+        Parameters
+        ----------
+        key : str
+            The state variable name.
+        default : Any
+            Default value if key is not present.
+
+        Returns
+        -------
+        Any
+        """
         return self.state.get(key, default)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self, target: Optional[dict] = None) -> dict:
+        """
+        Return the internal state dictionary, or merge into an external one.
+
+        Parameters
+        ----------
+        target : dict, optional
+            If provided, updates this dict in-place and returns it.
+
+        Returns
+        -------
+        dict
+            The internal state (or merged result if target is provided).
+        """
+        if target is not None:
+            target.update(self.state)
+            return target
         return dict(self.state)
 
     def send_trigger(self, trigger_code: int) -> "TrialUnit":
+        """
+        Send a trigger value via the connected trigger object.
+
+        Parameters
+        ----------
+        trigger_code : int
+            The value to send.
+
+        Returns
+        -------
+        TrialUnit
+        """
         self.trigger.send(trigger_code)
         return self
 
     def log_unit(self) -> None:
+        """
+        Log the current state using PsychoPy's logging mechanism.
+        """
         logging.data(f"TrialUnit Data: {self.state}")
 
     def describe_state(self) -> None:
-        """Print the current state for inspection."""
+        """
+        Print internal trial state for debugging.
+        """
         print("TrialUnit State")
         for k, v in self.state.items():
             print(f"  {k}: {v}")
 
-    def simulate_response(self, key: str, rt: float) -> None:
-        """Set a fake response (e.g., for testing)."""
-        self.set_state(
-            response=key,
-            rt=rt,
-            hit=True,
-            close_time=core.getTime(),
-            close_time_global=core.getAbsTime()
-        )
-
     def on_start(self, func: Optional[Callable[['TrialUnit'], None]] = None):
+        """
+        Register or decorate a function to call at trial start.
+        """
         if func is None:
             def decorator(f):
                 self._hooks["start"].append(f)
@@ -72,6 +170,16 @@ class TrialUnit:
             return self
 
     def on_response(self, keys: List[str], func: Optional[Callable[['TrialUnit', str, float], None]] = None):
+        """
+        Register or decorate a function to call when a valid response key is pressed.
+
+        Parameters
+        ----------
+        keys : list[str]
+            Keys that trigger the callback.
+        func : Callable or None
+            A function accepting (TrialUnit, key, rt) or None to use as decorator.
+        """
         if func is None:
             def decorator(f):
                 self._hooks["response"].append((keys, f))
@@ -82,6 +190,16 @@ class TrialUnit:
             return self
 
     def on_timeout(self, timeout: float, func: Optional[Callable[['TrialUnit'], None]] = None):
+        """
+        Register or decorate a function to call on timeout.
+
+        Parameters
+        ----------
+        timeout : float
+            Time in seconds after which timeout is triggered.
+        func : Callable or None
+            A function accepting (TrialUnit) or None to use as decorator.
+        """
         if func is None:
             def decorator(f):
                 self._hooks["timeout"].append((timeout, f))
@@ -92,6 +210,9 @@ class TrialUnit:
             return self
 
     def on_end(self, func: Optional[Callable[['TrialUnit'], None]] = None):
+        """
+        Register or decorate a function to call at the end of the trial.
+        """
         if func is None:
             def decorator(f):
                 self._hooks["end"].append(f)
@@ -102,7 +223,14 @@ class TrialUnit:
             return self
 
     def duration(self, t: float | tuple[float, float]):
-        """Auto-close after a fixed or jittered duration (no trigger support)."""
+        """
+        Auto-close the trial after a fixed or jittered duration.
+
+        Parameters
+        ----------
+        t : float or tuple
+            Duration or (min, max) range for random sampling.
+        """
         t_val = random.uniform(*t) if isinstance(t, tuple) else t
 
         def auto_close(unit: 'TrialUnit'):
@@ -115,7 +243,14 @@ class TrialUnit:
         return self.on_timeout(t_val, auto_close)
 
     def close_on(self, *keys: str):
-        """Close on specific key press (no trigger support)."""
+        """
+        Auto-close the trial on specific key press.
+
+        Parameters
+        ----------
+        keys : str
+            One or more response keys.
+        """
         def close_fn(unit: 'TrialUnit', key: str, rt: float):
             unit.set_state(
                 keys=key,
@@ -124,6 +259,7 @@ class TrialUnit:
                 close_time_global=core.getAbsTime()
             )
         return self.on_response(list(keys), close_fn)
+
 
 
     def capture_response(
@@ -316,7 +452,8 @@ class TrialUnit:
             onset_time=self.clock.getTime(),
             flip_time=flip_time,
             onset_time_global=core.getAbsTime(),
-            onset_trigger=onset_trigger
+            onset_trigger=onset_trigger,
+            duration = t_val
         )
 
         # --- Frame-based or precise timing ---

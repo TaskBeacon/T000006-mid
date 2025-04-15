@@ -93,3 +93,7 @@ block.run_trial(
     partial(run_mid_trial, stim_bank=stim_bank, controller=controller)
 )
 
+import pandas as pd
+res=block.to_dict()
+df = pd.DataFrame(res)
+df.to_csv(settings.res_file, index=False)

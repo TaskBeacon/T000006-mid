@@ -113,7 +113,7 @@ class BlockUnit:
         """
         return self.generate_conditions(generate_func, n_trials, condition_labels).assign_stimuli(assign_func)
 
-    def with_trials(self, trial_list: List[Tuple[Any, Any]]):
+    def add_trials(self, trial_list: List[Tuple[Any, Any]]):
         """
         Manually assign a list of (condition, stimulus) trial tuples.
 
