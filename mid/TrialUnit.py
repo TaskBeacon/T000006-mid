@@ -218,7 +218,7 @@ class TrialUnit:
         if frame_based:
             # Estimate total frame duration based on maximum timeout
             max_timeout = max((t for t, _ in self._hooks["timeout"]), default=5.0)
-            n_frames = int(round(max_timeout / self.frame_time))
+            n_frames = int(round(max_timeout / self.frame_time_seconds))
 
             for _ in range(n_frames):
                 for stim in self.stimuli:
@@ -294,7 +294,7 @@ class TrialUnit:
     
     def show(
         self,
-        duration: float | tuple[float, float],
+        duration: float | list,
         onset_trigger: int = 0,
         frame_based: bool = True
     ) -> "TrialUnit":
@@ -303,7 +303,7 @@ class TrialUnit:
         (recommended for EEG/fMRI) or precise time-based loop.
         """
         local_rng = random.Random()
-        t_val = local_rng.uniform(*duration) if isinstance(duration, tuple) else duration
+        t_val = local_rng.uniform(*duration) if isinstance(duration, list) else duration
         self.set_state(duration=t_val)
 
         # --- Initial Flip (trigger locked to onset) ---
@@ -324,7 +324,7 @@ class TrialUnit:
         tclock.reset()
 
         if frame_based:
-            n_frames = int(round(t_val / self.frame_time))
+            n_frames = int(round(t_val / self.frame_time_seconds))
             for _ in range(n_frames):
                 for stim in self.stimuli:
                     stim.draw()
@@ -345,7 +345,7 @@ class TrialUnit:
     def capture_response(
         self,
         keys: list[str],
-        duration: float | tuple[float, float],
+        duration: float | list,
         onset_trigger: int = 0,
         response_trigger: int | dict[str, int] = 1,
         timeout_trigger: int = 99,
@@ -371,7 +371,7 @@ class TrialUnit:
             Whether to use frame counting instead of time-based control.
         """
         local_rng = random.Random()
-        t_val = local_rng.uniform(*duration) if isinstance(duration, tuple) else duration
+        t_val = local_rng.uniform(*duration) if isinstance(duration, list) else duration
         self.set_state(duration=t_val)
 
         for stim in self.stimuli:
@@ -391,7 +391,7 @@ class TrialUnit:
         responded = False
 
         if frame_based:
-            n_frames = int(round(duration / self.frame_time))
+            n_frames = int(round(t_val / self.frame_time_seconds))
             for _ in range(n_frames):
                 for stim in self.stimuli:
                     stim.draw()

@@ -20,11 +20,11 @@ def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller
 
     # --- Fixation ---
     TrialUnit(win,frame_time_seconds=settings.frame_time_seconds).add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.fixation_duration, trigger_onset=1111)
+        .show(duration=settings.fixation_duration, onset_trigger=1111)
 
     # --- Cue ---
     TrialUnit(win,frame_time_seconds=settings.frame_time_seconds).add_stim(stim_dict["cue"]) \
-        .show(duration=settings.cue_duration, trigger_onset=2222)
+        .show(duration=settings.cue_duration, onset_trigger=2222)
 
     # --- anticipation ---
     TrialUnit(win,frame_time_seconds=settings.frame_time_seconds).add_stim(stim_bank.get("fixation")) \
@@ -36,9 +36,9 @@ def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller
     target.capture_response(
         keys=settings.key_list,
         duration=duration,
-        trigger_onset=31,
-        trigger_response=41,
-        trigger_timeout=99
+        onset_trigger=31,
+        response_trigger=41,
+        timeout_trigger=99
     )
     # Update adaptive controller
     controller.update(condition, target.get_state("hit", False))

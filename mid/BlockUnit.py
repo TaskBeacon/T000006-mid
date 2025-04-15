@@ -13,11 +13,12 @@ class BlockUnit:
         self,
         block_id: str,
         block_idx: int,
-        settings: Any,
+        settings: dict,
         stim_map: Optional[Dict[str, Any]] = None,
         window: Any = None,
         keyboard: Any = None,
-        seed: Optional[int] = None
+        seed: Optional[int] = None,
+        n_trials: Optional[int] = None
     ):
         """
         Initialize a BlockUnit.
@@ -32,10 +33,11 @@ class BlockUnit:
         """
         self.block_id = block_id
         self.block_idx = block_idx
+        self.n_trials = getattr(settings, "trials_per_block", 50) if n_trials is None else n_trials
         self.settings = settings
         self.win = window
         self.kb = keyboard
-        self.seed = settings.block_seed[self.block_idx]
+        self.seed = settings.block_seed[self.block_idx] if seed is None else seed
         self.stim_map = stim_map or {}
 
         self.conditions: Optional[np.ndarray] = None
@@ -69,7 +71,7 @@ class BlockUnit:
         Returns:
         - self
         """
-        n = n_trials or getattr(self.settings, "trials_per_block", 20)
+        n = n_trials or self.n_trials
         labels = condition_labels or getattr(self.settings, "conditions", ["A", "B", "C"])
         self.conditions = func(n, labels, seed=self.seed)
         return self

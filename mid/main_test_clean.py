@@ -11,8 +11,6 @@ from mid.AdaptiveController import AdaptiveController
 from psychopy import logging, core
 
 
-
-
 with open('mid/config.yaml', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
@@ -37,7 +35,7 @@ settings = TaskSettings.from_dict(task_config)
 settings.add_subinfo(subject_data)
 
 logging.setDefaultClock(core.Clock())
-logging.LogFile('test.log', level=logging.DATA, filemode='a')
+logging.LogFile(settings.log_file, level=logging.DATA, filemode='a')
 logging.console.setLevel(logging.INFO)
 
 # 2. Set up window & input
@@ -45,8 +43,10 @@ win = Window(size=settings.size, fullscr=settings.fullscreen, screen=1,
              monitor=settings.monitor, units=settings.units, color=settings.bg_color,
              gammaErrorPolicy='ignore')
 kb = keyboard.Keyboard()
-settings.frame_time_seconds = win.getActualFrameTime()[0]/1000
-
+aaa=1
+bbb=2
+settings.frame_time_seconds = win.getMsPerFrame()[0]/1000
+settings.win_fps = win.getActualFrameRate()
 
 # Assuming 
 stim_bank = StimBank(win)
@@ -66,11 +66,11 @@ stim_map = stim_bank.get_selected([
 # 4. setup experiment
 block = BlockUnit(
     block_id="block1",
+    block_idx=0,
     settings=settings,
     stim_map=stim_map,  # assumes keys like 'cue_win', etc.
     window=win,
-    keyboard=keyboard,
-    seed=123
+    keyboard=keyboard
 )
 
 assign_cue_target = partial(assign_stimuli, components=["cue", "target"])
@@ -78,15 +78,17 @@ block.generate_stim_sequence(
     generate_func=generate_balanced_conditions,
     assign_func=assign_cue_target
 )
-
+block.describe()
 
 config_controller = {
     **config.get('controller', {})
     }
-controller = AdaptiveController()
+controller = AdaptiveController(config_controller)
 block.run_trial(
     partial(run_mid_trial, stim_bank=stim_bank, controller=controller)
 )
 
 win.close()
 core.quit()
+
+settings.frame_time_seconds = win.getMsPerFrame()[0]/1000
