@@ -1,7 +1,0 @@
-4.5555 	DATA 	Trigger sent: 1111
-5.3525 	DATA 	TrialUnit Data: {'duration': 0.8009831705420282, 'onset_time': 0.00494089990388602, 'flip_time': 4.555313399992883, 'onset_time_global': 1744706188, 'onset_trigger': 1111, 'close_time': 0.8017698999028653, 'close_time_global': 1744706189}
-5.3679 	DATA 	Trigger sent: 2222
-6.1877 	DATA 	TrialUnit Data: {'duration': 0.8217241614090168, 'onset_time': 0.015469000092707574, 'flip_time': 5.367749000084586, 'onset_time_global': 1744706189, 'onset_trigger': 2222, 'close_time': 0.8350449000718072, 'close_time_global': 1744706189}
-6.2068 	DATA 	Trigger sent: 0
-7.1857 	DATA 	TrialUnit Data: {'duration': 0.9881623635301222, 'onset_time': 0.01911420002579689, 'flip_time': 6.206624799990095, 'onset_time_global': 1744706189, 'onset_trigger': 0, 'close_time': 0.997860400006175, 'close_time_global': 1744706190}
-7.2022 	DATA 	Trigger sent: 31
