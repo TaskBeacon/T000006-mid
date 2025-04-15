@@ -297,3 +297,65 @@ class StimBank:
                 print(msg)
             if not unknown_args and not missing_args:
                 print(f"✅ [{name}] OK")
+
+
+
+import inspect
+from typing import Dict, Any
+from psychopy.visual import TextStim
+
+def flatten_textstim_dict(
+    yaml_dict: dict,
+    section_key: str,
+    lang: str = "en",
+    stim_type: str = "text",
+    prefix: str = ""
+) -> Dict[str, dict]:
+    """
+    Convert a localized YAML section into a flat dictionary of PsychoPy stimulus specs.
+
+    Args:
+        yaml_dict (dict): Parsed YAML dictionary.
+        section_key (str): Key of the section (e.g., 'feedback_text').
+        lang (str): Language key to use (e.g., 'en' or 'zh').
+        stim_type (str): Type of stimulus ('text', etc.).
+        prefix (str): Optional name prefix for each stimulus.
+
+    Returns:
+        dict: Dictionary of flattened stimulus definitions.
+    """
+    STIM_CLASSES = {"text": TextStim}
+    if stim_type not in STIM_CLASSES:
+        raise ValueError(f"Unsupported stim_type: {stim_type}")
+
+    stim_class = STIM_CLASSES[stim_type]
+    valid_keys = set(inspect.signature(stim_class.__init__).parameters) - {"self", "win"}
+
+    # Extract the language-specific content
+    lang_dict = yaml_dict.get(section_key, {}).get(lang, {})
+    if not lang_dict:
+        raise ValueError(f"No content found for '{section_key}' in language '{lang}'.")
+
+    # Extract extra style attributes (e.g., feedback_color, feedback_height)
+    style_prefix = section_key.replace("_text", "")
+    extra_kwargs = {
+        k.replace(f"{style_prefix}_", ""): v
+        for k, v in yaml_dict.items()
+        if k.startswith(f"{style_prefix}_") and k.replace(f"{style_prefix}_", "") in valid_keys
+    }
+
+    # Flatten the structure
+    stim_defs = {}
+    def flatten(base_key, content):
+        if isinstance(content, dict):
+            for subk, subv in content.items():
+                flatten(f"{base_key}_{subk}", subv)
+        else:
+            stim_defs[f"{prefix}{base_key}"] = {
+                "type": stim_type,
+                "text": content,
+                **extra_kwargs
+            }
+
+    flatten("", lang_dict)
+    return stim_defs

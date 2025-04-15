@@ -1,5 +1,5 @@
 from mid.settings import TaskSettings
-from mid.subject import SubInfo
+from mid.SubInfo import SubInfo
 import yaml
 from psychopy.visual import Window
 from psychopy.hardware import keyboard

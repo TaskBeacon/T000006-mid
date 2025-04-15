@@ -6,7 +6,7 @@ from mid.StimBank import MIDStimuli
 from mid.get_feedback import get_mid_feedback
 from mid.run_trial import run_mid_trial
 from mid.settings import TaskSettings
-from mid.subject import SubInfo
+from mid.SubInfo import SubInfo
 import yaml
 
 # 1. collect subject info

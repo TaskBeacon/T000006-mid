@@ -1,5 +1,5 @@
 from mid.TrialUnit import TrialUnit
-def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller):
+def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, fb_manager):
     """
     Run a single MID trial sequence (fixation → cue → ITI → target → feedback).
 
@@ -45,7 +45,10 @@ def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller
     trial_data.update(target.to_dict())
 
     # --- Feedback ---
-    TrialUnit(win).add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.feedback_duration)
+    delta = fb_manager.update_points(condition, hit=target.get_state("hit", False))
+    message = fb_manager.get_message(condition, hit=target.get_state("hit", False), points=abs(delta))
+
+    fb_stim = TextStim(win, text=message, color="white", height=0.08)
+    TrialUnit(win).add_stim(fb_stim).show(duration=settings.feedback_duration)
 
     return trial_data

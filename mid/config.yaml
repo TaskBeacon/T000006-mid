@@ -23,25 +23,7 @@ subinfo_fields:
     type: choice
     choices: [Caucasian, African-American, Asian, Hispanic, Native-American]
 
-subinfo_lang:
-  en:
-    subject_id: "Subject ID (3 digits)"
-    subject_name: "Subject Name"
-    experimenter: "Experimenter Name"
-    gender: "Gender"
-    race: "Race"
-    Male: "Male"
-    Female: "Female"
-    Caucasian: "Caucasian"
-    African-American: "African-American"
-    Asian: "Asian"
-    Hispanic: "Hispanic"
-    Native-American: "Native American"
-    registration_failed: "Participant registration failed."
-    registration_successful: "Participant successfully registered."
-    invalid_input: "Invalid input for {field}."
-
-  cn:
+subinfo_mapping:
     subject_id: "受试编号（三位数）"
     subject_name: "受试者姓名"
     experimenter: "主试姓名"
@@ -57,23 +39,6 @@ subinfo_lang:
     registration_failed: "受试者注册失败。"
     registration_successful: "受试者注册成功！"
     invalid_input: "字段 {field} 的输入无效。"
-
-  fr:
-    subject_id: "ID du sujet (3 chiffres)"
-    subject_name: "Nom du sujet"
-    experimenter: "Nom de l'expérimentateur"
-    gender: "Sexe"
-    race: "Ethnie"
-    Male: "Homme"
-    Female: "Femme"
-    Caucasian: "Caucasien"
-    African-American: "Afro-Américain"
-    Asian: "Asiatique"
-    Hispanic: "Hispanique"
-    Native-American: "Amérindien"
-    registration_failed: "Échec de l'inscription du participant."
-    registration_successful: "Inscription réussie du participant."
-    invalid_input: "Entrée invalide pour {field}."
 
 
 # === Window settings ===
@@ -98,13 +63,87 @@ task:
 
 # === Stimuli (for MID task) ===
 stimuli:
-  radius: 4
-  size: 8
-  cue_colors:
-    win: magenta
-    lose: yellow
-    neut: cyan
-  target_color: black
+  fixation:
+    type: text
+    text: "+"
+
+  cue_win:
+    type: circle
+    radius: 4
+    fillColor: magenta
+    lineColor: ""
+
+  cue_lose:
+    type: rect
+    width: 8
+    height: 8
+    fillColor: yellow
+    lineColor: ""
+
+  cue_neut:
+    type: polygon
+    edges: 3
+    size: 8
+    fillColor: cyan
+    lineColor: ""
+
+  target_win:
+    type: circle
+    radius: 4
+    fillColor: black
+    lineColor: ""
+
+  target_lose:
+    type: rect
+    width: 8
+    height: 8
+    fillColor: black
+    lineColor: ""
+
+  target_neut:
+    type: polygon
+    edges: 3
+    size: 8
+    fillColor: black
+    lineColor: ""
+
+  feedback_win_hit:
+    type: text
+    text: "You earned +10 points!"
+    color: white
+    height: 0.08
+
+  feedback_win_miss:
+    type: text
+    text: "Too slow! No points."
+    color: white
+    height: 0.08
+
+  feedback_lose_hit:
+    type: text
+    text: "You avoided losing 10 points!"
+    color: white
+    height: 0.08
+
+  feedback_lose_miss:
+    type: text
+    text: "You lost 10 points."
+    color: white
+    height: 0.08
+
+  feedback_neut_hit:
+    type: text
+    text: "You earned 0 points."
+    color: white
+    height: 0.08
+
+  feedback_neut_miss:
+    type: text
+    text: "You earned 0 points."
+    color: white
+    height: 0.08
+
+
 
 # === Timing & Adaptivity ===
 timing:
