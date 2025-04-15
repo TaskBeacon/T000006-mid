@@ -13,6 +13,13 @@ from psychopy import logging, core
 with open('mid/config.yaml', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
+# subform_config = {
+#     'subinfo_fields': config.get('subinfo_fields', []),
+#     'subinfo_mapping': config.get('subinfo_mapping', {})
+# }
+
+# subform = SubInfo(subform_config)
+# subject_data = subform.collect()
     
 # 2. Load settings
 # Flatten the config
@@ -24,25 +31,24 @@ task_config = {
 
 settings = TaskSettings.from_dict(task_config)
 
+
+
 # 2. Set up window & input
 win = Window(size=settings.size, fullscr=settings.fullscreen, screen=1,
              monitor=settings.monitor, units=settings.units, color=settings.bg_color,
              gammaErrorPolicy='ignore')
 kb = keyboard.Keyboard()
+settings.frame_time_seconds = win.getActualFrameTime()[0]/1000
+
 
 # Assuming 
 stim_bank = StimBank(win)
 # Preload all for safety
 
-stim_bank.add_from_dict(
-    fixation={"type": "text", "text": "+"},
-    cue_win={"type": "circle", "radius": 4, "fillColor": "magenta","lineColor": ""},
-    cue_lose={"type": "rect", "width": 8, "height": 8, "fillColor": "yellow","lineColor": ""},
-    cue_neut={"type": "polygon", "edges": 3, "size": 8, "fillColor": "cyan","lineColor": ""},
-    target_win={"type": "circle", "radius": 4, "fillColor": "black","lineColor": ""},
-    target_lose={"type": "rect", "width": 8, "height": 8, "fillColor": "black","lineColor": ""},
-    target_neut={"type": "polygon", "edges": 3, "size": 8, "fillColor": "black","lineColor": ""}
-)
+stim_config={
+    **config.get('stimuli', {})
+}
+stim_bank.add_from_dict(stim_config)
 stim_bank.preload_all()
 
 
@@ -77,3 +83,5 @@ block.run_trial(
     partial(run_mid_trial, stim_bank=stim_bank, controller=controller)
 )
 
+win.close()
+core.quit()

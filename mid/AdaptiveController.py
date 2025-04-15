@@ -1,4 +1,5 @@
-from typing import Dict, List, Optional
+import yaml
+from typing import Dict, List, Optional, Union
 from psychopy import logging
 
 
@@ -9,55 +10,18 @@ class AdaptiveController:
 
     It supports both general (pooled) or condition-specific tracking,
     and is suitable for use across multiple blocks of trials.
-
-    Attributes:
-    -----------
-    default_duration : float
-        Starting stimulus duration (in seconds).
-    min_duration : float
-        Minimum allowed duration for the stimulus.
-    max_duration : float
-        Maximum allowed duration for the stimulus.
-    step : float
-        Amount to increase/decrease duration based on performance.
-    target_accuracy : float
-        Desired hit rate (0.0 to 1.0).
-    condition_specific : bool
-        Whether to track adjustments separately for each condition.
-    enable_logging : bool
-        If True, log changes via PsychoPy's `logging.data`.
     """
 
     def __init__(
         self,
-        initial_duration: float = 0.4,
+        initial_duration: float = 0.25,
         min_duration: float = 0.1,
-        max_duration: float = 1.0,
+        max_duration: float = 0.4,
         step: float = 0.02,
         target_accuracy: float = 0.66,
-        condition_specific: bool = False,
+        condition_specific: bool = True,
         enable_logging: bool = True
     ):
-        """
-        Initialize the adaptive controller.
-
-        Parameters
-        ----------
-        initial_duration : float
-            The starting stimulus duration.
-        min_duration : float
-            The shortest allowed stimulus duration.
-        max_duration : float
-            The longest allowed stimulus duration.
-        step : float
-            The adjustment step for each trial.
-        target_accuracy : float
-            The desired accuracy to maintain.
-        condition_specific : bool
-            Whether to track each condition separately.
-        enable_logging : bool
-            If True, logs updates via `logging.data()`.
-        """
         self.default_duration = initial_duration
         self.min_duration = min_duration
         self.max_duration = max_duration
@@ -69,23 +33,38 @@ class AdaptiveController:
         self.durations: Dict[Optional[str], float] = {}
         self.histories: Dict[Optional[str], List[bool]] = {}
 
+    @classmethod
+    def from_dict(cls, config: dict) -> 'AdaptiveController':
+        """
+        Create an AdaptiveController instance from a flattened config dictionary.
+
+        - Missing keys are filled with defaults.
+        - Raises an error if unsupported keys are included.
+        """
+        allowed_keys = {
+            'initial_duration': 0.25,
+            'min_duration': 0.1,
+            'max_duration': 0.4,
+            'step': 0.02,
+            'target_accuracy': 0.66,
+            'condition_specific': True,
+            'enable_logging': True
+        }
+
+        # Check for unsupported keys
+        extra_keys = set(config.keys()) - set(allowed_keys)
+        if extra_keys:
+            raise ValueError(f"[AdaptiveController] Unsupported config keys: {extra_keys}")
+
+        # Fill in config with defaults
+        final_config = {k: config.get(k, default) for k, default in allowed_keys.items()}
+
+        return cls(**final_config)
+
     def _get_key(self, condition: Optional[str]) -> Optional[str]:
-        """
-        Internal helper to determine the key for condition-based tracking.
-        """
         return condition if self.condition_specific else None
 
     def update(self, hit: bool, condition: Optional[str] = None):
-        """
-        Update internal state based on the latest trial outcome.
-
-        Parameters
-        ----------
-        hit : bool
-            Whether the participant successfully responded.
-        condition : str or None
-            The condition label associated with the trial (if using condition-specific tracking).
-        """
         key = self._get_key(condition)
 
         if key not in self.durations:
@@ -105,31 +84,15 @@ class AdaptiveController:
 
         if self.enable_logging:
             label = f"[{condition}]" if condition else ""
-            logging.data(f"🎯 Adaptive{label} — Trials: {len(self.histories[key])}, "
-                        f"Accuracy: {acc:.2%}, Duration updated: {old_duration:.3f} → {new_duration:.3f}")
+            logging.data(f"Adaptive{label} — Trials: {len(self.histories[key])}, "
+                         f"Accuracy: {acc:.2%}, Duration updated: {old_duration:.3f} → {new_duration:.3f}")
 
     def get_duration(self, condition: Optional[str] = None) -> float:
-        """
-        Get the current stimulus duration to use for a given condition.
-
-        Parameters
-        ----------
-        condition : str or None
-            The condition to fetch the duration for (if using condition-specific tracking).
-
-        Returns
-        -------
-        float
-            The duration to use for the next stimulus.
-        """
         key = self._get_key(condition)
         return self.durations.get(key, self.default_duration)
 
     def describe(self):
-        """
-        Print a human-readable summary of controller state and accuracy per condition.
-        """
-        print("📊 Adaptive Controller Status")
+        print("Adaptive Controller Status")
         for key, history in self.histories.items():
             label = f"[{key}]" if key else "[All]"
             acc = sum(history) / len(history)

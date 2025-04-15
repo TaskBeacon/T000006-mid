@@ -151,19 +151,6 @@ class StimBank:
         """
         return list(self._registry.keys())
     
-    def add_from_yaml(self, config: str | dict, strict: bool = False):
-        """
-        Load stimulus definitions from YAML file or pre-parsed config.
-
-        Parameters:
-        - config: YAML file path or pre-loaded dict
-        - strict: passed to validate_dict
-        """
-        if isinstance(config, str):
-            with open(config, 'r') as f:
-                config = yaml.safe_load(f)
-        self.add_from_dict(config, strict=strict)
-
 
     def has(self, name: str) -> bool:
         """Check whether a stimulus is registered (defined)."""
@@ -242,8 +229,23 @@ class StimBank:
         return _factory
 
 
-    def add_from_dict(self, **named_specs: dict):
-        for name, spec in named_specs.items():
+    def add_from_dict(self, named_specs: Optional[dict] = None, **kwargs):
+        """
+        Add stimulus definitions from a dictionary.
+
+        Parameters
+        ----------
+        named_specs : dict, optional
+            A dictionary of stimulus definitions.
+        kwargs :
+            Alternatively, pass stimulus definitions as keyword arguments.
+        """
+        all_specs = {}
+        if named_specs:
+            all_specs.update(named_specs)
+        all_specs.update(kwargs)
+
+        for name, spec in all_specs.items():
             stim_type = spec.get("type")
             stim_class = STIM_CLASSES.get(stim_type)
             if not stim_class:
@@ -251,6 +253,7 @@ class StimBank:
 
             kwargs = {k: v for k, v in spec.items() if k != "type"}
             self._registry[name] = self.make_factory(stim_class, kwargs, name)
+
 
     def validate_dict(self, config: dict, strict: bool = False):
         """
@@ -298,64 +301,3 @@ class StimBank:
             if not unknown_args and not missing_args:
                 print(f"✅ [{name}] OK")
 
-
-
-import inspect
-from typing import Dict, Any
-from psychopy.visual import TextStim
-
-def flatten_textstim_dict(
-    yaml_dict: dict,
-    section_key: str,
-    lang: str = "en",
-    stim_type: str = "text",
-    prefix: str = ""
-) -> Dict[str, dict]:
-    """
-    Convert a localized YAML section into a flat dictionary of PsychoPy stimulus specs.
-
-    Args:
-        yaml_dict (dict): Parsed YAML dictionary.
-        section_key (str): Key of the section (e.g., 'feedback_text').
-        lang (str): Language key to use (e.g., 'en' or 'zh').
-        stim_type (str): Type of stimulus ('text', etc.).
-        prefix (str): Optional name prefix for each stimulus.
-
-    Returns:
-        dict: Dictionary of flattened stimulus definitions.
-    """
-    STIM_CLASSES = {"text": TextStim}
-    if stim_type not in STIM_CLASSES:
-        raise ValueError(f"Unsupported stim_type: {stim_type}")
-
-    stim_class = STIM_CLASSES[stim_type]
-    valid_keys = set(inspect.signature(stim_class.__init__).parameters) - {"self", "win"}
-
-    # Extract the language-specific content
-    lang_dict = yaml_dict.get(section_key, {}).get(lang, {})
-    if not lang_dict:
-        raise ValueError(f"No content found for '{section_key}' in language '{lang}'.")
-
-    # Extract extra style attributes (e.g., feedback_color, feedback_height)
-    style_prefix = section_key.replace("_text", "")
-    extra_kwargs = {
-        k.replace(f"{style_prefix}_", ""): v
-        for k, v in yaml_dict.items()
-        if k.startswith(f"{style_prefix}_") and k.replace(f"{style_prefix}_", "") in valid_keys
-    }
-
-    # Flatten the structure
-    stim_defs = {}
-    def flatten(base_key, content):
-        if isinstance(content, dict):
-            for subk, subv in content.items():
-                flatten(f"{base_key}_{subk}", subv)
-        else:
-            stim_defs[f"{prefix}{base_key}"] = {
-                "type": stim_type,
-                "text": content,
-                **extra_kwargs
-            }
-
-    flatten("", lang_dict)
-    return stim_defs

@@ -30,7 +30,7 @@ class Trigger:
     def send(self, code: int):
         """Send a trigger code."""
         self.trigger_func(code)
-        logging.data(f"🔺 Trigger sent: {code}")
+        logging.data(f"Trigger sent: {code}")
 
     def _eeg_trigger(self) -> Callable[[int], None]:
         """

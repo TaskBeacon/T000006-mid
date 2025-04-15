@@ -10,7 +10,7 @@ class TrialUnit:
     responses, time-locked logging, and lifecycle hooks.
     """
 
-    def __init__(self, win: visual.Window, trigger: Optional[Trigger] = None):
+    def __init__(self, win: visual.Window, trigger: Optional[Trigger] = None, frame_time_seconds: float = 1/60):
         self.win = win
         self.trigger = trigger or Trigger()
         self.stimuli: List[visual.BaseVisualStim] = []
@@ -18,6 +18,7 @@ class TrialUnit:
         self.clock = core.Clock()
         self.keyboard = Keyboard()
         self._hooks: Dict[str, List] = {"start": [], "response": [], "timeout": [], "end": []}
+        self.frame_time_seconds = frame_time_seconds
 
     def add_stim(self, stim: visual.BaseVisualStim) -> "TrialUnit":
         self.stimuli.append(stim)
@@ -124,52 +125,21 @@ class TrialUnit:
             )
         return self.on_response(list(keys), close_fn)
 
-    def show(self, duration: float | tuple[float, float], trigger_onset: int = 0) -> "TrialUnit":
-        """
-        Show static stimulus for a fixed or jittered duration.
-        Flip-synced trigger, onset/offset logging.
-        """
-        t_val = random.uniform(*duration) if isinstance(duration, tuple) else duration
-        self.set_state(duration=t_val)
-
-        for stim in self.stimuli:
-            stim.draw()
-        self.win.callOnFlip(self.send_trigger, trigger_onset)
-        flip_time = self.win.flip()
-
-        self.set_state(
-            onset_time=flip_time,
-            onset_time_global=core.getAbsTime(),
-            trigger=trigger_onset
-        )
-
-        self.clock.reset()
-        while self.clock.getTime() < t_val:
-            for stim in self.stimuli:
-                stim.draw()
-            self.win.flip()
-
-        self.set_state(
-            close_time=core.getTime(),
-            close_time_global=core.getAbsTime()
-        )
-        self.log_unit()
-        return self
 
     def capture_response(
         self,
         keys: list[str],
         duration: float,
-        trigger_onset: int = 0,
-        trigger_response: int | dict[str, int] = 1,
-        trigger_timeout: int = 99
+        onset_trigger: int = 0,
+        response_trigger: int | dict[str, int] = 1,
+        timeout_trigger: int = 99
     ) -> "TrialUnit":
         """
         Wait for a keypress or timeout. Triggers and onset time synced to visual flip.
         """
         for stim in self.stimuli:
             stim.draw()
-        self.win.callOnFlip(self.send_trigger, trigger_onset)
+        self.win.callOnFlip(self.send_trigger, onset_trigger)
         flip_time = self.win.flip()
 
         self.set_state(
@@ -193,10 +163,10 @@ class TrialUnit:
                     close_time_global=core.getAbsTime()
                 )
 
-                if isinstance(trigger_response, dict):
-                    self.send_trigger(trigger_response.get(k, 1))
+                if isinstance(response_trigger, dict):
+                    self.send_trigger(response_trigger.get(k, 1))
                 else:
-                    self.send_trigger(trigger_response)
+                    self.send_trigger(response_trigger)
 
                 responded = True
                 break
@@ -207,15 +177,20 @@ class TrialUnit:
                 close_time=core.getTime(),
                 close_time_global=core.getAbsTime()
             )
-            self.send_trigger(trigger_timeout)
+            self.send_trigger(timeout_trigger)
 
         self.log_unit()
         return self
 
-    def run(self) -> "TrialUnit":
+    def run(self, frame_based: bool = False) -> "TrialUnit":
         """
         Full logic loop for displaying stimulus, collecting response, handling timeout,
         and logging with precision timing.
+
+        Parameters:
+        -----------
+        frame_based : bool
+            Whether to use frame-counted duration instead of time-based duration.
         """
         self.set_state(global_time=core.getAbsTime())
 
@@ -226,46 +201,85 @@ class TrialUnit:
         for stim in self.stimuli:
             stim.draw()
         flip_time = self.win.flip()
+
         self.set_state(
-            onset_time=flip_time,
+            onset_time=self.clock.getTime(),
+            flip_time=flip_time,
             onset_time_global=core.getAbsTime()
         )
 
         self.clock.reset()
         self.keyboard.clearEvents()
+        self.keyboard.clearEvents()
         responded = False
 
-        # Extract all response keys registered in hooks
         all_keys = list(set(k for k_list, _ in self._hooks["response"] for k in k_list))
 
-        while not responded:
-            for stim in self.stimuli:
-                stim.draw()
-            self.win.flip()
+        if frame_based:
+            # Estimate total frame duration based on maximum timeout
+            max_timeout = max((t for t, _ in self._hooks["timeout"]), default=5.0)
+            n_frames = int(round(max_timeout / self.frame_time))
 
-            keys = self.keyboard.getKeys(keyList=all_keys, waitRelease=False)
-            for key_obj in keys:
-                key_name, key_rt = key_obj.name, key_obj.rt
-                for valid_keys, hook in self._hooks["response"]:
-                    if key_name in valid_keys:
-                        hook(self, key_name, key_rt)
+            for _ in range(n_frames):
+                for stim in self.stimuli:
+                    stim.draw()
+                self.win.flip()
+
+                keys = self.keyboard.getKeys(keyList=all_keys, waitRelease=False)
+                for key_obj in keys:
+                    key_name, key_rt = key_obj.name, key_obj.rt
+                    for valid_keys, hook in self._hooks["response"]:
+                        if key_name in valid_keys:
+                            hook(self, key_name, key_rt)
+                            responded = True
+                            break
+                    if responded:
+                        break
+
+                elapsed = self.clock.getTime()
+                for timeout_duration, timeout_hook in self._hooks["timeout"]:
+                    if elapsed >= timeout_duration and not responded:
+                        self.set_state(
+                            timeout_triggered=True,
+                            duration=elapsed,
+                            close_time=core.getTime(),
+                            close_time_global=core.getAbsTime()
+                        )
+                        timeout_hook(self)
                         responded = True
                         break
                 if responded:
                     break
+        else:
+            # Time-based loop
+            while not responded:
+                for stim in self.stimuli:
+                    stim.draw()
+                self.win.flip()
 
-            elapsed = self.clock.getTime()
-            for timeout_duration, timeout_hook in self._hooks["timeout"]:
-                if elapsed >= timeout_duration and not responded:
-                    self.set_state(
-                        timeout_triggered=True,
-                        duration=elapsed,
-                        close_time=core.getTime(),
-                        close_time_global=core.getAbsTime()
-                    )
-                    timeout_hook(self)
-                    responded = True
-                    break
+                keys = self.keyboard.getKeys(keyList=all_keys, waitRelease=False)
+                for key_obj in keys:
+                    key_name, key_rt = key_obj.name, key_obj.rt
+                    for valid_keys, hook in self._hooks["response"]:
+                        if key_name in valid_keys:
+                            hook(self, key_name, key_rt)
+                            responded = True
+                            break
+                    if responded:
+                        break
+
+                elapsed = self.clock.getTime()
+                for timeout_duration, timeout_hook in self._hooks["timeout"]:
+                    if elapsed >= timeout_duration and not responded:
+                        self.set_state(
+                            timeout_triggered=True,
+                            duration=elapsed,
+                            close_time=core.getTime(),
+                            close_time_global=core.getAbsTime()
+                        )
+                        timeout_hook(self)
+                        responded = True
+                        break
 
         self.set_state(
             close_time=core.getTime(),
@@ -276,4 +290,167 @@ class TrialUnit:
 
         self.log_unit()
         return self
+
+    
+    def show(
+        self,
+        duration: float | tuple[float, float],
+        onset_trigger: int = 0,
+        frame_based: bool = True
+    ) -> "TrialUnit":
+        """
+        Display the stimulus for a specified duration, either using frame-based timing
+        (recommended for EEG/fMRI) or precise time-based loop.
+        """
+        local_rng = random.Random()
+        t_val = local_rng.uniform(*duration) if isinstance(duration, tuple) else duration
+        self.set_state(duration=t_val)
+
+        # --- Initial Flip (trigger locked to onset) ---
+        for stim in self.stimuli:
+            stim.draw()
+        self.win.callOnFlip(self.send_trigger, onset_trigger)
+        flip_time = self.win.flip(clearBuffer=True)  # clear to avoid flickering
+
+        self.set_state(
+            onset_time=self.clock.getTime(),
+            flip_time=flip_time,
+            onset_time_global=core.getAbsTime(),
+            onset_trigger=onset_trigger
+        )
+
+        # --- Frame-based or precise timing ---
+        tclock = core.Clock()
+        tclock.reset()
+
+        if frame_based:
+            n_frames = int(round(t_val / self.frame_time))
+            for _ in range(n_frames):
+                for stim in self.stimuli:
+                    stim.draw()
+                self.win.flip()
+        else:
+            while tclock.getTime() < t_val:
+                for stim in self.stimuli:
+                    stim.draw()
+                self.win.flip()
+
+        self.set_state(
+            close_time=self.clock.getTime(),
+            close_time_global=core.getAbsTime()
+        )
+        self.log_unit()
+        return self
+
+    def capture_response(
+        self,
+        keys: list[str],
+        duration: float | tuple[float, float],
+        onset_trigger: int = 0,
+        response_trigger: int | dict[str, int] = 1,
+        timeout_trigger: int = 99,
+        frame_based: bool = True
+    ) -> "TrialUnit":
+        """
+        Wait for a keypress or timeout. Supports both time-based and frame-based duration.
+        Triggers and onset time synced to visual flip.
+
+        Parameters
+        ----------
+        keys : list[str]
+            Keys to listen for.
+        duration : float
+            Response window duration in seconds.
+        onset_trigger : int
+            Trigger code sent at stimulus onset.
+        response_trigger : int | dict[str, int]
+            Trigger code for response, can be per-key.
+        timeout_trigger : int
+            Trigger code for timeout.
+        frame_based : bool
+            Whether to use frame counting instead of time-based control.
+        """
+        local_rng = random.Random()
+        t_val = local_rng.uniform(*duration) if isinstance(duration, tuple) else duration
+        self.set_state(duration=t_val)
+
+        for stim in self.stimuli:
+            stim.draw()
+        self.win.callOnFlip(self.send_trigger, onset_trigger)
+        flip_time = self.win.flip()
+
+        self.set_state(
+            onset_time=self.clock.getTime(),
+            flip_time=flip_time,
+            onset_time_global=core.getAbsTime(),
+            onset_trigger=onset_trigger
+        )
+
+        self.clock.reset()
+        self.keyboard.clearEvents()
+        responded = False
+
+        if frame_based:
+            n_frames = int(round(duration / self.frame_time))
+            for _ in range(n_frames):
+                for stim in self.stimuli:
+                    stim.draw()
+                self.win.flip()
+
+                keypress = self.keyboard.getKeys(keyList=keys, waitRelease=False)
+                if keypress:
+                    k,= keypress[0].name
+                    rt = self.clock.getTime()
+                    self.set_state(
+                        hit=True, 
+                        response=k, 
+                        rt=rt,
+                        close_time=self.clock.getTime(),
+                        close_time_global=core.getAbsTime()
+                    )
+
+                    response_trigger = response_trigger.get(k, 1) if isinstance(response_trigger, dict) else response_trigger
+                    self.send_trigger(response_trigger)
+                    self.set_state(response_trigger=response_trigger)
+                    responded = True
+                    break
+        else:
+
+            while not responded and self.clock.getTime() < duration:
+                for stim in self.stimuli:
+                    stim.draw()
+                self.win.flip()
+
+                keypress = self.keyboard.getKeys(keyList=keys, waitRelease=False)
+                if keypress:
+                    k = keypress[0].name
+                    rt = self.clock.getTime()
+                    self.set_state(
+                        hit=True, response=k, rt=rt,
+                        close_time=self.clock.getTime(),
+                        close_time_global=core.getAbsTime()
+                    )
+
+                    response_trigger = response_trigger.get(k, 1) if isinstance(response_trigger, dict) else response_trigger
+                    self.send_trigger(response_trigger)
+                    self.set_state(response_trigger=response_trigger)
+                    responded = True
+                    break
+
+
+        if not responded:
+            self.set_state(
+                hit=False, 
+                response=None, 
+                rt=0.0,
+                close_time=self.clock.getTime(),
+                close_time_global=core.getAbsTime(),
+                timeout_trigger=timeout_trigger
+            )
+            self.send_trigger(timeout_trigger)
+
+        self.log_unit()
+        return self
+
+
 
