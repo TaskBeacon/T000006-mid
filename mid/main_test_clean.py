@@ -128,6 +128,7 @@ for block_i in range(settings.total_blocks):
         partial(run_mid_trial, stim_bank=stim_bank, controller=controller, triggerbank=triggerbank)
     )
     
+    block.to_dict(all_data)
     if block_i < settings.total_blocks - 1:
         takeabreak=TrialUnit(win, 'block').add_stim(TextStim(win, text=f"Block {block_i}")).wait_and_continue()
     else:
@@ -135,7 +136,6 @@ for block_i in range(settings.total_blocks):
     
 
 
-# import pandas as pd
-# res=block.to_dict()
-# df = pd.DataFrame(res)
-# df.to_csv(settings.res_file, index=False)
+import pandas as pd
+df = pd.DataFrame(all_data)
+df.to_csv(settings.res_file, index=False)
