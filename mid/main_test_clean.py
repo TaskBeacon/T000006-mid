@@ -14,6 +14,8 @@ from mid.BlockUnit import BlockUnit, generate_balanced_conditions, assign_stimul
 from mid.run_mid_trial import run_mid_trial
 from mid.AdaptiveController import AdaptiveController
 from psychopy import logging, core
+from mid.TrialUnit import TrialUnit
+from psychopy.visual import TextStim
 
 
 with open('mid/config.yaml', encoding='utf-8') as f:
@@ -87,30 +89,51 @@ trigger_config = {
 }
 triggerbank = TriggerBank(trigger_config)
 
-# 4. setup experiment
-block = BlockUnit(
-    block_id="block1",
-    block_idx=0,
-    settings=settings,
-    stim_map=stim_map,  # assumes keys like 'cue_win', etc.
-    window=win,
-    keyboard=keyboard
-)
-
-assign_cue_target = partial(assign_stimuli, components=["cue", "target"])
-block.generate_stim_sequence(
-    generate_func=generate_balanced_conditions,
-    assign_func=assign_cue_target
-)
-block.describe()
-
 controller_config = {
     **config.get('controller', {})
     }
 controller = AdaptiveController.from_dict(controller_config)
-block.run_trial(
-    partial(run_mid_trial, stim_bank=stim_bank, controller=controller, triggerbank=triggerbank)
-)
+
+all_data = []
+for block_i in range(settings.total_blocks):
+    # 4. setup experiment
+    block = BlockUnit(
+        block_id=f"block_{block_i}",
+        block_idx=block_i,
+        settings=settings,
+        stim_map=stim_map,  # assumes keys like 'cue_win', etc.
+        window=win,
+        keyboard=keyboard
+    )
+
+    assign_cue_target = partial(assign_stimuli, components=["cue", "target"])
+    block.generate_stim_sequence(
+        generate_func=generate_balanced_conditions,
+        assign_func=assign_cue_target
+    )
+
+    @block.on_start
+    def _block_start(b):
+        print("Block start {}".format(b.block_idx))
+        b.logging_block_info()
+        trigger.send(triggerbank.get("block_onset"))
+    @block.on_end
+    def _block_end(b):     
+        print("Block end {}".format(b.block_idx))
+        trigger.send(triggerbank.get("block_end"))
+        print(b.summarize())
+        # print(b.describe())
+    
+    block.run_trial(
+        partial(run_mid_trial, stim_bank=stim_bank, controller=controller, triggerbank=triggerbank)
+    )
+    
+    if block_i < settings.total_blocks - 1:
+        takeabreak=TrialUnit(win, 'block').add_stim(TextStim(win, text=f"Block {block_i}")).wait_and_continue()
+    else:
+        takeabreak=TrialUnit(win, 'block').add_stim(TextStim(win, text="end")).wait_and_continue(terminate=True)
+    
+
 
 # import pandas as pd
 # res=block.to_dict()

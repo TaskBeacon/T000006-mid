@@ -39,12 +39,29 @@ class TriggerSender:
         self.on_trigger_start = on_trigger_start
         self.on_trigger_end = on_trigger_end
 
-    def send(self, code: int):
-        """Send a trigger code."""
+    def send(self, code: Optional[int]):
+        """
+        Send a trigger code via the registered trigger function.
+        Handles pre/post callbacks and optional delay.
+        
+        Parameters
+        ----------
+        code : int or None
+            Trigger code to send. If None, it is skipped with a warning.
+        """
+        if code is None:
+            logging.warning("[Trigger] Skipping trigger send: code is None")
+            return
+
         if self.on_trigger_start:
             self.on_trigger_start()
 
-        self.trigger_func(code)
+        try:
+            self.trigger_func(code)
+        except Exception as e:
+            logging.error(f"[Trigger] Failed to send trigger {code}: {e}")
+        else:
+            logging.data(f"Trigger sent: {code}")
 
         if self.post_delay:
             core.wait(self.post_delay)
@@ -52,7 +69,6 @@ class TriggerSender:
         if self.on_trigger_end:
             self.on_trigger_end()
 
-        logging.data(f"Trigger sent: {code}")
 
 
 # def send_serial_trigger(

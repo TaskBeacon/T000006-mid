@@ -130,31 +130,26 @@ class BlockUnit:
     # Hooks
     # ----------------------------
 
-    def on_start(self, func: Callable[['BlockUnit'], None]):
-        """
-        Register a function to run before trials begin.
+    def on_start(self, func: Optional[Callable[['BlockUnit'], None]] = None):
+        if func is None:
+            def decorator(f):
+                self._on_start.append(f)
+                return self
+            return decorator
+        else:
+            self._on_start.append(func)
+            return self
 
-        Parameters:
-        - func: A callable that takes the BlockUnit as input.
+    def on_end(self, func: Optional[Callable[['BlockUnit'], None]] = None):
+        if func is None:
+            def decorator(f):
+                self._on_end.append(f)
+                return self
+            return decorator
+        else:
+            self._on_end.append(func)
+            return self
 
-        Returns:
-        - self
-        """
-        self._on_start.append(func)
-        return self
-
-    def on_end(self, func: Callable[['BlockUnit'], None]):
-        """
-        Register a function to run after all trials complete.
-
-        Parameters:
-        - func: A callable that takes the BlockUnit as input.
-
-        Returns:
-        - self
-        """
-        self._on_end.append(func)
-        return self
 
     # ----------------------------
     # Core Execution
@@ -192,16 +187,52 @@ class BlockUnit:
 
         self.meta['block_end_time'] = core.getAbsTime()
         self.meta['duration'] = self.meta['block_end_time'] - self.meta['block_start_time']
-        logging.exp(f"✅ Finished BlockUnit '{self.block_id}' in {self.meta['duration']:.2f}s")
+        logging.exp(f"Finished BlockUnit '{self.block_id}' in {self.meta['duration']:.2f}s")
 
-    def to_dict(self) -> List[Dict[str, Any]]:
+    def summarize(self, summary_func: Optional[Callable[['BlockUnit'], Dict[str, Any]]] = None) -> Dict[str, Any]:
         """
-        Return a list of all trial result dictionaries.
+        Summarize results after block completion.
+
+        Parameters:
+        - summary_func: Optional custom summary function. Must accept BlockUnit and return a dict.
 
         Returns:
-        - A list of dictionaries, each representing one trial.
+        - A dictionary of summary statistics (also stored in self.meta["summary"]).
         """
+        if summary_func:
+            summary = summary_func(self)
+        else:
+            # Default summary: RT and hit rate per condition
+            results = self.to_dict()
+            conds = set(r["condition"] for r in results)
+            summary = {}
+            for cond in conds:
+                subset = [r for r in results if r["condition"] == cond]
+                hit_rate = np.mean([r.get("hit", 0) for r in subset])
+                rt_values = [r["RT"] for r in subset if r.get("RT") is not None]
+                avg_rt = np.mean(rt_values) if rt_values else None
+                summary[cond] = {
+                    "hit_rate": hit_rate,
+                    "avg_rt": avg_rt
+                }
+
+        self.meta["summary"] = summary
+        return summary
+    def to_dict(self, target: Optional[List[Dict[str, Any]]] = None) -> List[Dict[str, Any]]:
+        """
+        Return trial results or append to existing list.
+
+        Parameters:
+        - target: An optional list to append results to.
+
+        Returns:
+        - The list of trial result dictionaries.
+        """
+        if target is not None:
+            target.extend(self.results)
+            return target
         return self.results
+
 
     def __len__(self):
         """
@@ -210,13 +241,14 @@ class BlockUnit:
         """
         return len(self.trials)
 
-    def describe(self):
+    def logging_block_info(self):
         """
         Print a basic summary of the block’s condition distribution.
         """
         cue_summary = {c: list(self.conditions).count(c) for c in set(self.conditions)} if self.conditions is not None else {}
         print(f"🧱 BlockUnit '{self.block_id}' — {len(self.trials)} trials")
         print(f"  Cue Distribution: {cue_summary}")
+        logging.exp(f"BlockUnit '{self.block_id}' — {len(self.trials)} trials - Discription: {cue_summary}")
 
 def generate_balanced_conditions(n_trials, condition_labels, seed=None):
     if seed is not None:

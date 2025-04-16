@@ -261,63 +261,6 @@ class TrialUnit:
         return self.on_response(list(keys), close_fn)
 
 
-
-    def capture_response(
-        self,
-        keys: list[str],
-        duration: float,
-        onset_trigger: int = 0,
-        response_trigger: int | dict[str, int] = 1,
-        timeout_trigger: int = 99
-    ) -> "TrialUnit":
-        """
-        Wait for a keypress or timeout. Triggers and onset time synced to visual flip.
-        """
-        for stim in self.stimuli:
-            stim.draw()
-        self.win.callOnFlip(self.send_trigger, onset_trigger)
-        flip_time = self.win.flip()
-
-        self.set_state(
-            onset_time=flip_time,
-            onset_time_global=core.getAbsTime()
-        )
-
-        self.clock.reset()
-        self.keyboard.clearEvents()
-        responded = False
-        while not responded and self.clock.getTime() < duration:
-            for stim in self.stimuli:
-                stim.draw()
-            self.win.flip()
-            keypress = self.keyboard.getKeys(keyList=keys, waitRelease=False)
-            if keypress:
-                k, rt = keypress[0].name, keypress[0].rt
-                self.set_state(
-                    hit=True, response=k, rt=rt,
-                    close_time=core.getTime(),
-                    close_time_global=core.getAbsTime()
-                )
-
-                if isinstance(response_trigger, dict):
-                    self.send_trigger(response_trigger.get(k, 1))
-                else:
-                    self.send_trigger(response_trigger)
-
-                responded = True
-                break
-
-        if not responded:
-            self.set_state(
-                hit=False, response=None, rt=0.0,
-                close_time=core.getTime(),
-                close_time_global=core.getAbsTime()
-            )
-            self.send_trigger(timeout_trigger)
-
-        self.log_unit()
-        return self
-
     def run(self, frame_based: bool = False) -> "TrialUnit":
         """
         Full logic loop for displaying stimulus, collecting response, handling timeout,
@@ -588,6 +531,68 @@ class TrialUnit:
 
         self.log_unit()
         return self
+    def wait_and_continue(
+        self,
+        keys: list[str] = ["space"],
+        log_message: Optional[str] = None,
+        terminate: bool = False
+    ) -> "TrialUnit":
+        """
+        Display the current stimuli and wait for a key press to continue or quit.
 
+        Parameters
+        ----------
+        keys : list[str]
+            Keys that allow the trial to proceed (default: ["space"]).
+        log_message : str, optional
+            Optional log message (default: auto-generated).
+        terminate : bool
+            If True, the experiment will quit after key press.
 
+        Returns
+        -------
+        TrialUnit
+        """
+        self.set_state(wait_keys=keys)
+
+        for stim in self.stimuli:
+            stim.draw()
+        flip_time = self.win.flip()
+
+        self.set_state(
+            flip_time=flip_time,
+            onset_time=core.getTime(),
+            onset_time_global=core.getAbsTime()
+        )
+        self.clock.reset()
+        self.keyboard.clearEvents()
+
+        while True:
+            for stim in self.stimuli:
+                stim.draw()
+            self.win.flip()
+
+            keys_pressed = self.keyboard.getKeys(keyList=keys, waitRelease=False)
+            if keys_pressed:
+                key = keys_pressed[0].name
+                rt = core.getTime()
+                self.set_state(
+                    response=key,
+                    response_time=rt,
+                    close_time=core.getTime(),
+                    close_time_global=core.getAbsTime()
+                )
+                break
+
+        msg = log_message or (
+            "Experiment ended by key press." if terminate else f"Continuing after key '{key}'"
+        )
+        logging.data(msg)
+        self.log_unit()
+
+        if terminate:
+            self.win.close()
+            core.quit()
+
+        return self
 

@@ -52,8 +52,8 @@ window:
 # === Task-level settings ===
 task:
   total_blocks: 2
-  total_trials: 20
-  trial_per_block: 10
+  total_trials: 10
+  trial_per_block: 5
   conditions: [win, lose, neut]
   response_key: space
   key_list: [space]
