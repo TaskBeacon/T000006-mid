@@ -592,7 +592,6 @@ class TrialUnit:
 
         if terminate:
             self.win.close()
-            core.quit()
 
         return self
 
