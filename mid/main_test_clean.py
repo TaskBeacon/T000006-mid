@@ -68,6 +68,25 @@ stim_map = stim_bank.get_selected([
     "cue_win", "cue_lose", "cue_neut",
     "target_win", "target_lose", "target_neut"
 ])
+
+# trigger
+from mid.trigger import TriggerSender, show_ports, TriggerBank
+show_ports()
+import serial
+# ser = serial.Serial("COM3", baudrate=115200)
+ser = serial.serial_for_url("loop://", baudrate=115200, timeout=1)
+trigger = TriggerSender(
+    trigger_func=lambda code: ser.write([1, 225, 1, 0, (code)]),
+    post_delay=0.005,
+    on_trigger_start=lambda: ser.open() if not ser.is_open else None,
+    on_trigger_end=lambda: ser.close()
+)
+
+trigger_config = {
+    **config.get('triggers', {})
+}
+triggerbank = TriggerBank(trigger_config)
+
 # 4. setup experiment
 block = BlockUnit(
     block_id="block1",
@@ -85,15 +104,15 @@ block.generate_stim_sequence(
 )
 block.describe()
 
-config_controller = {
+controller_config = {
     **config.get('controller', {})
     }
-controller = AdaptiveController.from_dict(config_controller)
+controller = AdaptiveController.from_dict(controller_config)
 block.run_trial(
-    partial(run_mid_trial, stim_bank=stim_bank, controller=controller)
+    partial(run_mid_trial, stim_bank=stim_bank, controller=controller, triggerbank=triggerbank)
 )
 
-import pandas as pd
-res=block.to_dict()
-df = pd.DataFrame(res)
-df.to_csv(settings.res_file, index=False)
+# import pandas as pd
+# res=block.to_dict()
+# df = pd.DataFrame(res)
+# df.to_csv(settings.res_file, index=False)

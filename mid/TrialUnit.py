@@ -1,8 +1,8 @@
-from psychopy import core, visual, event, logging
+from psychopy import core, visual, logging
 from psychopy.hardware.keyboard import Keyboard
 from typing import Callable, Optional, List, Dict, Any, Union
 import random
-from mid.Trigger import Trigger
+from mid.trigger import TriggerSender
 
 class TrialUnit:
     """
@@ -27,7 +27,7 @@ class TrialUnit:
     unit_label : str
         Identifier for the trial (used for logging/debugging).
     trigger : Trigger, optional
-        External trigger handler (default: a dummy Trigger instance).
+        External trigger handler (default: a dummy TriggerSender instance).
     frame_time_seconds : float
         Duration of a single frame in seconds (default: 1/60 for 60Hz).
     """
@@ -35,7 +35,7 @@ class TrialUnit:
     def __init__(self, win: visual.Window, unit_label: str, trigger: Optional[Any] = None, frame_time_seconds: float = 1/60):
         self.win = win
         self.label = unit_label
-        self.trigger = trigger or Trigger()
+        self.trigger = trigger or TriggerSender()
         self.stimuli: List[visual.BaseVisualStim] = []
         self.state: Dict[str, Any] = {}
         self.clock = core.Clock()

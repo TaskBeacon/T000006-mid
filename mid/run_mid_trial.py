@@ -1,5 +1,5 @@
 from mid.TrialUnit import TrialUnit
-def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller):
+def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, triggerbank):
     """
     Run a single MID trial sequence (fixation → cue → ITI → target → feedback).
     See full docstring above...
@@ -15,17 +15,19 @@ def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller
 
     # --- Fixation ---
     make_unit("fixation").add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.fixation_duration, onset_trigger=1111)
+        .show(duration=settings.fixation_duration, onset_trigger=triggerbank.get("fixation_onset")) \
+        .to_dict(trial_data)
 
     # --- Cue ---
     make_unit("cue").add_stim(stim_dict["cue"]) \
-        .show(duration=settings.cue_duration, onset_trigger=2222)
+        .show(duration=settings.cue_duration, onset_trigger=triggerbank.get(f"{condition}_cue_onset")) \
+        .to_dict(trial_data)
 
 
     # --- Anticipation ---
     make_unit("anticipation") \
         .add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.anticipation_duration) \
+        .show(duration=settings.anticipation_duration, onset_trigger=triggerbank.get(f"{condition}_anti_onset")) \
         .to_dict(trial_data)
 
     # --- Target ---
@@ -35,12 +37,12 @@ def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller
     target.capture_response(
             keys=settings.key_list,
             duration=duration,
-            onset_trigger=31,
-            response_trigger=41,
-            timeout_trigger=99)
+            onset_trigger=triggerbank.get(f"{condition}_target_onset"),
+            response_trigger=triggerbank.get(f"{condition}_key_press"),
+            timeout_trigger=triggerbank.get(f"{condition}_no_response"),
+)
     target.to_dict(trial_data)
     
-
 
     # --- Feedback ---
     hit = target.get_state("hit", False)
@@ -56,7 +58,6 @@ def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller
     fb_stim = stim_bank.get(f"feedback_{condition}_{hit_type}")
     fb = make_unit("feedback") \
         .add_stim(fb_stim) \
-        .show(duration=settings.feedback_duration)
+        .show(duration=settings.feedback_duration, onset_trigger=triggerbank.get(f"{condition}_{hit_type}_fb_onset"))
     fb.set_state(hit=hit, delta=delta).to_dict(trial_data)
-
     return trial_data
