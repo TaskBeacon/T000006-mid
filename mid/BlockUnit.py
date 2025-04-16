@@ -208,8 +208,8 @@ class BlockUnit:
             summary = {}
             for cond in conds:
                 subset = [r for r in results if r["condition"] == cond]
-                hit_rate = np.mean([r.get("hit", 0) for r in subset])
-                rt_values = [r["RT"] for r in subset if r.get("RT") is not None]
+                hit_rate = np.mean([r.get("target_hit", 0) for r in subset])
+                rt_values = [r["target_rt"] for r in subset if r.get("target_rt") is not None]
                 avg_rt = np.mean(rt_values) if rt_values else None
                 summary[cond] = {
                     "hit_rate": hit_rate,

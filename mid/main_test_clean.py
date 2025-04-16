@@ -54,6 +54,7 @@ aaa=1
 bbb=2
 settings.frame_time_seconds = win.getMsPerFrame()[0]/1000
 settings.win_fps = win.getActualFrameRate()
+win.monitorFramePeriod
 
 # Assuming 
 stim_bank = StimBank(win)
@@ -94,6 +95,8 @@ controller_config = {
     }
 controller = AdaptiveController.from_dict(controller_config)
 
+
+
 all_data = []
 for block_i in range(settings.total_blocks):
     # 4. setup experiment
@@ -130,12 +133,14 @@ for block_i in range(settings.total_blocks):
     
     block.to_dict(all_data)
     if block_i < settings.total_blocks - 1:
-        takeabreak=TrialUnit(win, 'block').add_stim(TextStim(win, text=f"Block {block_i}")).wait_and_continue()
+        TrialUnit(win, 'block').add_stim(TextStim(win, text=f"Block {block_i}")).wait_and_continue()
     else:
-        takeabreak=TrialUnit(win, 'block').add_stim(TextStim(win, text="end")).wait_and_continue(terminate=True)
+        TrialUnit(win, 'block').add_stim(TextStim(win, text="end")).wait_and_continue(terminate=True)
     
 
 
 import pandas as pd
 df = pd.DataFrame(all_data)
 df.to_csv(settings.res_file, index=False)
+
+block.summarize()

@@ -84,8 +84,8 @@ class AdaptiveController:
 
         if self.enable_logging:
             label = f"[{condition}]" if condition else ""
-            logging.data(f"Adaptive{label} — Trials: {len(self.histories[key])}, "
-                         f"Accuracy: {acc:.2%}, Duration updated: {old_duration:.3f} → {new_duration:.3f}")
+            logging.data(f"📢Adaptive{label} — Trials: {len(self.histories[key])}, "
+                         f"📢Accuracy: {acc:.2%}, Duration updated: {old_duration:.3f} → {new_duration:.3f}")
 
     def get_duration(self, condition: Optional[str] = None) -> float:
         key = self._get_key(condition)
@@ -100,4 +100,4 @@ class AdaptiveController:
         for key, history in self.histories.items():
             label = f"[{key}]" if key else "[All]"
             acc = sum(history) / len(history)
-            print(f"  {label} — Accuracy: {acc:.2%} ({len(history)} trials), Duration: {self.durations[key]:.3f}")
+            print(f"{label} — Accuracy: {acc:.2%} ({len(history)} trials), Duration: {self.durations[key]:.3f}")

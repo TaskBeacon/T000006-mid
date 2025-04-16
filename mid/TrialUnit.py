@@ -6,7 +6,7 @@ from mid.trigger import TriggerSender
 
 class TrialUnit:
     """
-    TrialUnit(win, unit_label, trigger=None, frame_time_seconds=1/60)
+    TrialUnit(win, unit_label, trigger=None, frame_time=1/60)
 
     A modular trial unit for PsychoPy-based experiments. Designed to encapsulate
     stimulus presentation, response handling, event triggers, and lifecycle hooks
@@ -28,11 +28,11 @@ class TrialUnit:
         Identifier for the trial (used for logging/debugging).
     trigger : Trigger, optional
         External trigger handler (default: a dummy TriggerSender instance).
-    frame_time_seconds : float
+    frame_time : float
         Duration of a single frame in seconds (default: 1/60 for 60Hz).
     """
 
-    def __init__(self, win: visual.Window, unit_label: str, trigger: Optional[Any] = None, frame_time_seconds: float = 1/60):
+    def __init__(self, win: visual.Window, unit_label: str, trigger: Optional[Any] = None):
         self.win = win
         self.label = unit_label
         self.trigger = trigger or TriggerSender()
@@ -41,7 +41,7 @@ class TrialUnit:
         self.clock = core.Clock()
         self.keyboard = Keyboard()
         self._hooks: Dict[str, List] = {"start": [], "response": [], "timeout": [], "end": []}
-        self.frame_time_seconds = frame_time_seconds
+        self.frame_time = self.win.monitorFramePeriod
 
     def add_stim(self, stim: visual.BaseVisualStim) -> "TrialUnit":
         """
@@ -90,22 +90,39 @@ class TrialUnit:
         return self  # Enables chaining
 
 
-    def get_state(self, key: str, default: Any = None) -> Any:
+    def get_state(self, key: str, default: Any = None, prefix: Optional[str] = None) -> Any:
         """
         Retrieve a value from internal state.
-
+        
+        Lookup order:
+        1. Try exact key.
+        2. If not found, try prefixed key using:
+        - provided prefix (if given)
+        - otherwise self.label
+        
         Parameters
         ----------
         key : str
-            The state variable name.
+            State variable name.
         default : Any
-            Default value if key is not present.
-
+            Value to return if key is not found.
+        prefix : str, optional
+            Optional manual prefix to use (overrides self.label).
+        
         Returns
         -------
         Any
+            Stored value, or default if not found.
         """
-        return self.state.get(key, default)
+        # Try raw key first
+        if key in self.state:
+            return self.state[key]
+
+        # Fallback to prefixed key
+        effective_prefix = prefix if prefix is not None else self.label
+        full_key = f"{effective_prefix}_{key}" if effective_prefix else key
+        return self.state.get(full_key, default)
+
 
     def to_dict(self, target: Optional[dict] = None) -> dict:
         """
@@ -146,15 +163,8 @@ class TrialUnit:
         """
         Log the current state using PsychoPy's logging mechanism.
         """
-        logging.data(f"TrialUnit Data: {self.state}")
+        logging.data(f"📋TrialUnit Data: {self.state}")
 
-    def describe_state(self) -> None:
-        """
-        Print internal trial state for debugging.
-        """
-        print("TrialUnit State")
-        for k, v in self.state.items():
-            print(f"  {k}: {v}")
 
     def on_start(self, func: Optional[Callable[['TrialUnit'], None]] = None):
         """
@@ -289,7 +299,6 @@ class TrialUnit:
 
         self.clock.reset()
         self.keyboard.clearEvents()
-        self.keyboard.clearEvents()
         responded = False
 
         all_keys = list(set(k for k_list, _ in self._hooks["response"] for k in k_list))
@@ -297,7 +306,7 @@ class TrialUnit:
         if frame_based:
             # Estimate total frame duration based on maximum timeout
             max_timeout = max((t for t, _ in self._hooks["timeout"]), default=5.0)
-            n_frames = int(round(max_timeout / self.frame_time_seconds))
+            n_frames = int(round(max_timeout / self.frame_time))
 
             for _ in range(n_frames):
                 for stim in self.stimuli:
@@ -404,7 +413,7 @@ class TrialUnit:
         tclock.reset()
 
         if frame_based:
-            n_frames = int(round(t_val / self.frame_time_seconds))
+            n_frames = int(round(t_val / self.frame_time))
             for _ in range(n_frames):
                 for stim in self.stimuli:
                     stim.draw()
@@ -452,26 +461,25 @@ class TrialUnit:
         """
         local_rng = random.Random()
         t_val = local_rng.uniform(*duration) if isinstance(duration, list) else duration
-        self.set_state(duration=t_val)
-
-        for stim in self.stimuli:
-            stim.draw()
-        self.win.callOnFlip(self.send_trigger, onset_trigger)
-        flip_time = self.win.flip()
-
-        self.set_state(
+        self.set_state(duration=t_val,
             onset_time=self.clock.getTime(),
-            flip_time=flip_time,
             onset_time_global=core.getAbsTime(),
             onset_trigger=onset_trigger
         )
 
-        self.clock.reset()
+        for stim in self.stimuli:
+            stim.draw()
+        self.win.callOnFlip(self.send_trigger, onset_trigger)
+        self.win.callOnFlip(self.clock.reset)
         self.keyboard.clearEvents()
+        flip_time = self.win.flip()
+
+        self.set_state(flip_time=flip_time)
+      
         responded = False
 
         if frame_based:
-            n_frames = int(round(t_val / self.frame_time_seconds))
+            n_frames = int(round(t_val / self.frame_time))
             for _ in range(n_frames):
                 for stim in self.stimuli:
                     stim.draw()
@@ -488,7 +496,6 @@ class TrialUnit:
                         close_time=self.clock.getTime(),
                         close_time_global=core.getAbsTime()
                     )
-
                     response_trigger = response_trigger.get(k, 1) if isinstance(response_trigger, dict) else response_trigger
                     self.send_trigger(response_trigger)
                     self.set_state(response_trigger=response_trigger)
@@ -496,7 +503,7 @@ class TrialUnit:
                     break
         else:
 
-            while not responded and self.clock.getTime() < duration:
+            while not responded and self.clock.getTime() < t_val:
                 for stim in self.stimuli:
                     stim.draw()
                 self.win.flip()
@@ -506,7 +513,9 @@ class TrialUnit:
                     k = keypress[0].name
                     rt = self.clock.getTime()
                     self.set_state(
-                        hit=True, response=k, rt=rt,
+                        hit=True, 
+                        response=k, 
+                        rt=rt,
                         close_time=self.clock.getTime(),
                         close_time_global=core.getAbsTime()
                     )
@@ -553,20 +562,16 @@ class TrialUnit:
         -------
         TrialUnit
         """
-        self.set_state(wait_keys=keys)
+        self.set_state(wait_keys=keys,
+                       onset_time=self.clock.getTime(),
+                        onset_time_global=core.getAbsTime())
 
         for stim in self.stimuli:
             stim.draw()
         flip_time = self.win.flip()
-
-        self.set_state(
-            flip_time=flip_time,
-            onset_time=core.getTime(),
-            onset_time_global=core.getAbsTime()
-        )
-        self.clock.reset()
+        self.win.callOnFlip(self.clock.reset)
         self.keyboard.clearEvents()
-
+        self.set_state(flip_time=flip_time)
         while True:
             for stim in self.stimuli:
                 stim.draw()
@@ -575,7 +580,7 @@ class TrialUnit:
             keys_pressed = self.keyboard.getKeys(keyList=keys, waitRelease=False)
             if keys_pressed:
                 key = keys_pressed[0].name
-                rt = core.getTime()
+                rt = self.clock.getTime()
                 self.set_state(
                     response=key,
                     response_time=rt,
