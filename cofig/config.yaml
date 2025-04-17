@@ -55,8 +55,7 @@ task:
   total_trials: 10
   trial_per_block: 5
   conditions: [win, lose, neut]
-  response_key: space
-  key_list: [space]
+  key_list: [down]
   seed_mode: "same_across_sub"
 
 
@@ -138,23 +137,26 @@ stimuli:
   
   block_break:
     type: text
-    text: "Take a break! \n 
-          When you are ready, press space to continue."
+    text: |
+      Take a break! 
+      When you are ready, press space to continue.
     color: white
 
   block_feedback:
     type: text
-    text: "Block {block_num} of {total_blocks} completed.\n /
-           Accuaracy: {accuracy:.2f}\n /
-           Reward: {reward:.2f}\n /
-           Press space to continue."
+    text: |
+      Block {block_num} of {total_blocks} completed. 
+      Accuaracy: {accuracy:.2f}
+      Reward: {reward:.2f}
+      Press space to continue.
     color: white
 
   good_bye:
     type: text
-    text: "Thank you for participating!\n /
-           Your final reward is {reward:.2f}.\n /
-           Press space to exit."
+    text: |
+      Thank you for participating!
+      Your final reward is {reward:.2f}.
+      Press space to exit.
     color: white
 
 # === Timing & Adaptivity ===

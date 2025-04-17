@@ -14,7 +14,6 @@ from psyflow import generate_balanced_conditions, assign_stimuli
 from psychopy.visual import Window
 from psychopy.hardware import keyboard
 from psychopy import logging, core
-from psychopy.visual import TextStim
 
 from functools import partial
 import yaml
@@ -140,10 +139,13 @@ for block_i in range(settings.total_blocks):
     
     block.to_dict(all_data)
     if block_i < settings.total_blocks - 1:
-        TrialUnit(win, 'block').add_stim(StimBank.get('block_break')).wait_and_continue()
+        TrialUnit(win, 'block').add_stim(stim_bank.get('block_break')).wait_and_continue()
     else:
-        TrialUnit(win, 'block').add_stim(StimBank.get('good_bye')).wait_and_continue(terminate=True)
+        TrialUnit(win, 'block').add_stim(stim_bank.get_and_format('good_bye', reward=100)).wait_and_continue(terminate=True)
     
 import pandas as pd
 df = pd.DataFrame(all_data)
 df.to_csv(settings.res_file, index=False)
+
+
+
