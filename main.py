@@ -1,7 +1,3 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.resolve()))
-
 from psyflow import TaskSettings
 from psyflow import SubInfo
 from psyflow import StimBank
@@ -20,12 +16,12 @@ import yaml
 import sys
 import serial
 
-from mid_core import run_mid_trial,Controller
+from src import run_trial,Controller
 
 
 
 # 1. Load config
-with open('cofig/config.yaml', encoding='utf-8') as f:
+with open('config/config.yaml', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
 # 2. collect subject info
@@ -64,7 +60,7 @@ logging.LogFile(settings.log_file, level=logging.DATA, filemode='a')
 logging.console.setLevel(logging.INFO)
 settings.frame_time_seconds =win.monitorFramePeriod
 settings.win_fps = win.getActualFrameRate()
-
+settings.save_path = './data'
 
 # 5. Setup stimulus bank
 stim_bank = StimBank(win)
@@ -124,7 +120,7 @@ for block_i in range(settings.total_blocks):
     @block.on_start
     def _block_start(b):
         print("Block start {}".format(b.block_idx))
-        b.logging_block_info()
+        # b.logging_block_info()
         triggersender.send(triggerbank.get("block_onset"))
     @block.on_end
     def _block_end(b):     
@@ -135,7 +131,7 @@ for block_i in range(settings.total_blocks):
     
     # 9. run block
     block.run_trial(
-        partial(run_mid_trial, stim_bank=stim_bank, controller=controller, triggersender=triggersender, triggerbank=triggerbank)
+        partial(run_trial, stim_bank=stim_bank, controller=controller, triggersender=triggersender, triggerbank=triggerbank)
     )
     
     block.to_dict(all_data)

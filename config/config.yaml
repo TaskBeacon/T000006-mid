@@ -8,7 +8,7 @@ subinfo_fields:
       max: 999
       digits: 3
 
-  - name: subject_name
+  - name: session_name
     type: string
 
   - name: experimenter
@@ -24,7 +24,7 @@ subinfo_fields:
 
 subinfo_mapping:
     subject_id: "Subject ID (three digits)"
-    subject_name: "Subject Name"
+    session_name: "Session Name"
     experimenter: "Experimenter"
     gender: "Gender"
     race: "Race"
@@ -164,11 +164,11 @@ stimuli:
 
   instruction_image1:
     type: image
-    image: ./img/instruction_iamge1.bmp
+    image: ./assets/instruction_iamge1.bmp
 
   instruction_image2:
     type: image
-    image: ./img/instruction_image2.bmp
+    image: ./assets/instruction_image2.bmp
 
   good_bye:
     type: text
