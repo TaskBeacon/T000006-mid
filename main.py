@@ -75,6 +75,7 @@ stim_config={
 }
 stim_bank.add_from_dict(stim_config)
 stim_bank.preload_all()
+stim_bank.preview_selected(['instruction_image2'])
 stim_map = stim_bank.get_selected([
     "cue_win", "cue_lose", "cue_neut",
     "target_win", "target_lose", "target_neut"

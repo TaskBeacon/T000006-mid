@@ -64,46 +64,47 @@ stimuli:
   fixation:
     type: text
     text: "+"
+    color: white
 
   cue_win:
     type: circle
     radius: 3
     fillColor: magenta
-    lineColor: ""
+    lineColor: black
 
   cue_lose:
     type: rect
     width: 6
     height: 6
     fillColor: yellow
-    lineColor: ""
+    lineColor: black
 
   cue_neut:
     type: polygon
     edges: 3
     size: 6
     fillColor: cyan
-    lineColor: ""
+    lineColor: black
 
   target_win:
     type: circle
     radius: 3
     fillColor: black
-    lineColor: ""
+    lineColor: black
 
   target_lose:
     type: rect
     width: 6
     height: 6
     fillColor: black
-    lineColor: ""
+    lineColor: black
 
   target_neut:
     type: polygon
     edges: 3
     size: 6
     fillColor: black
-    lineColor: ""
+    lineColor: black
 
   feedback_win_hit:
     type: text
@@ -150,6 +151,24 @@ stimuli:
       Reward: {reward:.2f}
       Press space to continue.
     color: white
+
+  instruction_text:
+    type: text
+    text: |
+      In this task, you will see a series of cues and targets. 
+      Your task is to respond to the cues as quickly as possible. 
+      If you respond to a cue, you will earn 10 points. 
+      If you do not respond to a cue, you will earn 0 points. 
+      Press space to continue.
+    color: white
+
+  instruction_image1:
+    type: image
+    image: ./img/instruction_iamge1.bmp
+
+  instruction_image2:
+    type: image
+    image: ./img/instruction_image2.bmp
 
   good_bye:
     type: text
