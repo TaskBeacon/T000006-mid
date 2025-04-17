@@ -22,10 +22,18 @@ def run_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, tr
 
 
     # --- Anticipation ---
-    make_unit(unit_label='anticipation') \
-        .add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.anticipation_duration, onset_trigger=triggerbank.get(f"{condition}_anti_onset")) \
-        .to_dict(trial_data)
+    anti=make_unit(unit_label='anticipation') \
+        .add_stim(stim_bank.get("fixation")) 
+    anti.capture_response(
+            keys=settings.key_list,
+            duration=settings.anticipation_duration,
+            onset_trigger=triggerbank.get(f"{condition}_anti_onset"),
+            terminate_on_response=False)
+        
+    
+    early_response = anti.get_state("response", False)
+    anti.set_state(early_response=early_response)
+    anti.to_dict(trial_data)
 
     # --- Target ---
     duration = controller.get_duration(condition)
@@ -40,15 +48,20 @@ def run_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, tr
 )
     target.to_dict(trial_data)
 
-    hit = target.get_state("hit", False)
+    
     # --- Feedback ---
-    controller.update(condition, hit)
-    if condition == "win":
-        delta = 10 if hit else 0
-    elif condition == "lose":
-        delta = 0 if hit else -10
+    if early_response:
+        delta = -10
+        hit=False
     else:
-        delta = 0
+        hit = target.get_state("hit", False)
+        if condition == "win":
+            delta = 10 if hit else 0
+        elif condition == "lose":
+            delta = 0 if hit else -10
+        else:
+            delta = 0
+    controller.update(condition, hit)
 
     hit_type = "hit" if hit else "miss"
     fb_stim = stim_bank.get(f"feedback_{condition}_{hit_type}")
