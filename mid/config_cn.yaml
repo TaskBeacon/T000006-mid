@@ -23,21 +23,21 @@ subinfo_fields:
     choices: [Caucasian, African-American, Asian, Hispanic, Native-American]
 
 subinfo_mapping:
-    subject_id: "Subject ID (three digits)"
-    subject_name: "Subject Name"
-    experimenter: "Experimenter"
-    gender: "Gender"
-    race: "Race"
-    Male: "Male"
-    Female: "Female"
-    Caucasian: "White"
-    African-American: "African American"
-    Asian: "Asian"
-    Hispanic: "Hispanic"
-    Native-American: "Native American"
-    registration_failed: "Registration failed."
-    registration_successful: "Registration successful！"
-    invalid_input: "Field {field} input is invalid."
+    subject_id: "受试编号（三位数）"
+    subject_name: "受试者姓名"
+    experimenter: "主试姓名"
+    gender: "性别"
+    race: "种族"
+    Male: "男"
+    Female: "女"
+    Caucasian: "白人"
+    African-American: "非裔"
+    Asian: "亚洲人"
+    Hispanic: "拉丁裔"
+    Native-American: "美洲原住民"
+    registration_failed: "受试者注册失败。"
+    registration_successful: "受试者注册成功！"
+    invalid_input: "字段 {field} 的输入无效。"
 
 
 # === Window settings ===
@@ -74,15 +74,15 @@ stimuli:
 
   cue_lose:
     type: rect
-    width: 6
-    height: 6
+    width: 8
+    height: 8
     fillColor: yellow
     lineColor: ""
 
   cue_neut:
     type: polygon
-    edges: 2.5
-    size: 6
+    edges: 3
+    size: 8
     fillColor: cyan
     lineColor: ""
 
@@ -94,36 +94,36 @@ stimuli:
 
   target_lose:
     type: rect
-    width: 6
-    height: 6
+    width: 8
+    height: 8
     fillColor: black
     lineColor: ""
 
   target_neut:
     type: polygon
-    edges: 2.5
-    size: 6
+    edges: 3
+    size: 8
     fillColor: black
     lineColor: ""
 
   feedback_win_hit:
     type: text
-    text: "You earned 10 points!"
+    text: "You earned +10 points!"
     color: white
 
   feedback_win_miss:
     type: text
-    text: "You earned 0 points."
+    text: "Too slow! No points."
     color: white
 
   feedback_lose_hit:
     type: text
-    text: "You earned 0 points."
+    text: "You avoided losing 10 points!"
     color: white
 
   feedback_lose_miss:
     type: text
-    text: "You earned -10 points."
+    text: "You lost 10 points."
     color: white
 
   feedback_neut_hit:
@@ -135,12 +135,6 @@ stimuli:
     type: text
     text: "You earned 0 points."
     color: white
-  
-  block_break:
-    type: text
-    text: "Take a break! \n 
-          When you are ready, press space to continue."
-    color: white
 
   block_feedback:
     type: text
@@ -148,14 +142,12 @@ stimuli:
            Accuaracy: {accuracy:.2f}\n /
            Reward: {reward:.2f}\n /
            Press space to continue."
-    color: white
 
   good_bye:
     type: text
     text: "Thank you for participating!\n /
            Your final reward is {reward:.2f}.\n /
            Press space to exit."
-    color: white
 
 # === Timing & Adaptivity ===
 timing:

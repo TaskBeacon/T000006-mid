@@ -3,33 +3,39 @@
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-from mid.TaskSettings import TaskSettings
-from mid.SubInfo import SubInfo
+from psyflow.TaskSettings import TaskSettings
+from psyflow.SubInfo import SubInfo
 import yaml
 from psychopy.visual import Window
 from psychopy.hardware import keyboard
-from mid.StimBank import StimBank
+from psyflow.StimBank import StimBank
 from functools import partial
-from mid.BlockUnit import BlockUnit, generate_balanced_conditions, assign_stimuli
+from psyflow.BlockUnit import BlockUnit, generate_balanced_conditions, assign_stimuli
 from mid.run_mid_trial import run_mid_trial
 from mid.AdaptiveController import AdaptiveController
 from psychopy import logging, core
-from mid.TrialUnit import TrialUnit
+from psyflow.TrialUnit import TrialUnit
 from psychopy.visual import TextStim
+# trigger
+from psyflow.TriggerSender import TriggerSender
+from psyflow.TriggerBank import TriggerBank
+from psyflow.utils import show_ports
+show_ports()
+import serial
 
 
 with open('mid/config.yaml', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
-# subform_config = {
-#     'subinfo_fields': config.get('subinfo_fields', []),
-#     'subinfo_mapping': config.get('subinfo_mapping', {})
-# }
+subform_config = {
+    'subinfo_fields': config.get('subinfo_fields', []),
+    'subinfo_mapping': config.get('subinfo_mapping', {})
+}
 
-# subform = SubInfo(subform_config)
-# subject_data = subform.collect()
+subform = SubInfo(subform_config)
+subject_data = subform.collect()
 
-subject_data={'subject_id': '123', 'subject_name': '123', 'experimenter': '123', 'gender': 'Male', 'race': 'Caucasian'}    
+# subject_data={'subject_id': '123', 'subject_name': '123', 'experimenter': '123', 'gender': 'Male', 'race': 'Caucasian'}    
 # 2. Load settings
 # Flatten the config
 task_config = {
@@ -72,10 +78,7 @@ stim_map = stim_bank.get_selected([
     "target_win", "target_lose", "target_neut"
 ])
 
-# trigger
-from mid.trigger import TriggerSender, show_ports, TriggerBank
-show_ports()
-import serial
+
 # ser = serial.Serial("COM3", baudrate=115200)
 ser = serial.serial_for_url("loop://", baudrate=115200, timeout=1)
 trigger = TriggerSender(

@@ -1,4 +1,4 @@
-from mid.TrialUnit import TrialUnit
+from psyflow.TrialUnit import TrialUnit
 def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, triggerbank):
     """
     Run a single MID trial sequence (fixation → cue → ITI → target → feedback).
