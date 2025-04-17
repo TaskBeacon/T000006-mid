@@ -1,9 +1,9 @@
-import yaml
-from typing import Dict, List, Optional, Union
+
+from typing import Dict, List, Optional
 from psychopy import logging
 
 
-class AdaptiveController:
+class Controller:
     """
     AdaptiveController dynamically adjusts stimulus duration based on participant performance,
     aiming to maintain a target accuracy rate (e.g., 66%).

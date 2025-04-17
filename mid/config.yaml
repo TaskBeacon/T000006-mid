@@ -68,7 +68,7 @@ stimuli:
 
   cue_win:
     type: circle
-    radius: 4
+    radius: 3
     fillColor: magenta
     lineColor: ""
 
@@ -81,14 +81,14 @@ stimuli:
 
   cue_neut:
     type: polygon
-    edges: 2.5
+    edges: 3
     size: 6
     fillColor: cyan
     lineColor: ""
 
   target_win:
     type: circle
-    radius: 4
+    radius: 3
     fillColor: black
     lineColor: ""
 
@@ -101,7 +101,7 @@ stimuli:
 
   target_neut:
     type: polygon
-    edges: 2.5
+    edges: 3
     size: 6
     fillColor: black
     lineColor: ""

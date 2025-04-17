@@ -1,25 +1,25 @@
-# import sys
-# import os
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from psyflow import TaskSettings
+from psyflow import SubInfo
+from psyflow import StimBank
+from psyflow import BlockUnit
+from psyflow import TrialUnit
+from psyflow import TriggerSender
+from psyflow import TriggerBank
+from psyflow import show_ports, generate_balanced_conditions, assign_stimuli
 
-
-from psyflow.TaskSettings import TaskSettings
-from psyflow.SubInfo import SubInfo
-import yaml
 from psychopy.visual import Window
 from psychopy.hardware import keyboard
-from psyflow.StimBank import StimBank
-from functools import partial
-from psyflow.BlockUnit import BlockUnit, generate_balanced_conditions, assign_stimuli
-from mid.run_mid_trial import run_mid_trial
-from mid.AdaptiveController import AdaptiveController
 from psychopy import logging, core
-from psyflow.TrialUnit import TrialUnit
 from psychopy.visual import TextStim
+
+from functools import partial
+import yaml
+
+from mid.run_mid_trial import run_mid_trial
+from mid.mid_controller import Controller
+
 # trigger
-from psyflow.TriggerSender import TriggerSender
-from psyflow.TriggerBank import TriggerBank
-from psyflow.utils import show_ports
+
 show_ports()
 import serial
 
@@ -34,6 +34,9 @@ subform_config = {
 
 subform = SubInfo(subform_config)
 subject_data = subform.collect()
+if subject_data is None:
+    print("Participant cancelled — aborting experiment.")
+    core.quit()
 
 # subject_data={'subject_id': '123', 'subject_name': '123', 'experimenter': '123', 'gender': 'Male', 'race': 'Caucasian'}    
 # 2. Load settings
@@ -83,7 +86,7 @@ stim_map = stim_bank.get_selected([
 ser = serial.serial_for_url("loop://", baudrate=115200, timeout=1)
 trigger = TriggerSender(
     trigger_func=lambda code: ser.write([1, 225, 1, 0, (code)]),
-    post_delay=0.005,
+    post_delay=0,
     on_trigger_start=lambda: ser.open() if not ser.is_open else None,
     on_trigger_end=lambda: ser.close()
 )
@@ -96,7 +99,7 @@ triggerbank = TriggerBank(trigger_config)
 controller_config = {
     **config.get('controller', {})
     }
-controller = AdaptiveController.from_dict(controller_config)
+controller = Controller.from_dict(controller_config)
 
 
 
@@ -131,7 +134,7 @@ for block_i in range(settings.total_blocks):
         # print(b.describe())
     
     block.run_trial(
-        partial(run_mid_trial, stim_bank=stim_bank, controller=controller, triggerbank=triggerbank)
+        partial(run_mid_trial, stim_bank=stim_bank, controller=controller, triggersender=trigger, triggerbank=triggerbank)
     )
     
     block.to_dict(all_data)

@@ -1,32 +1,35 @@
-from psyflow.TrialUnit import TrialUnit
-def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, triggerbank):
+from psyflow import TrialUnit
+from functools import partial
+
+def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, triggersender, triggerbank):
     """
     Run a single MID trial sequence (fixation → cue → ITI → target → feedback).
     See full docstring above...
     """
 
     trial_data = {"condition": condition}
+    make_unit = partial(TrialUnit, win=win, triggersender=triggersender)
 
     # --- Fixation ---
-    TrialUnit(win,"fixation").add_stim(stim_bank.get("fixation")) \
+    make_unit(unit_label='fixation').add_stim(stim_bank.get("fixation")) \
         .show(duration=settings.fixation_duration, onset_trigger=triggerbank.get("fixation_onset")) \
         .to_dict(trial_data)
 
     # --- Cue ---
-    TrialUnit(win,"cue").add_stim(stim_dict["cue"]) \
+    make_unit(unit_label='cue').add_stim(stim_dict["cue"]) \
         .show(duration=settings.cue_duration, onset_trigger=triggerbank.get(f"{condition}_cue_onset")) \
         .to_dict(trial_data)
 
 
     # --- Anticipation ---
-    TrialUnit(win,"anticipation") \
+    make_unit(unit_label='anticipation') \
         .add_stim(stim_bank.get("fixation")) \
         .show(duration=settings.anticipation_duration, onset_trigger=triggerbank.get(f"{condition}_anti_onset")) \
         .to_dict(trial_data)
 
     # --- Target ---
     duration = controller.get_duration(condition)
-    target = TrialUnit(win,"target") \
+    target = make_unit(unit_label="target") \
         .add_stim(stim_dict["target"])
     target.capture_response(
             keys=settings.key_list,
@@ -49,8 +52,9 @@ def run_mid_trial(win, kb, settings, condition, stim_dict, stim_bank, controller
 
     hit_type = "hit" if hit else "miss"
     fb_stim = stim_bank.get(f"feedback_{condition}_{hit_type}")
-    fb = TrialUnit(win,"feedback") \
+    fb = make_unit(unit_label="feedback") \
         .add_stim(fb_stim) \
         .show(duration=settings.feedback_duration, onset_trigger=triggerbank.get(f"{condition}_{hit_type}_fb_onset"))
     fb.set_state(hit=hit, delta=delta).to_dict(trial_data)
     return trial_data
+
