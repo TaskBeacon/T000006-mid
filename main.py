@@ -21,12 +21,12 @@ import yaml
 import sys
 import serial
 
-from mid.run_mid_trial import run_mid_trial
-from mid.mid_controller import Controller
+from mid_core import run_mid_trial,Controller
+
 
 
 # 1. Load config
-with open('mid/config.yaml', encoding='utf-8') as f:
+with open('cofig/config.yaml', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
 # 2. collect subject info
