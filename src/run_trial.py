@@ -3,7 +3,7 @@ from functools import partial
 
 def run_trial(win, kb, settings, condition, stim_dict, stim_bank, controller, triggersender, triggerbank):
     """
-    Run a single MID trial sequence (fixation → cue → ITI → target → feedback).
+    Run a single MID trial sequence (fixation → cue → anticipation → target → feedback).
     See full docstring above...
     """
 
