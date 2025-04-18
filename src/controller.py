@@ -34,7 +34,7 @@ class Controller:
         self.histories: Dict[Optional[str], List[bool]] = {}
 
     @classmethod
-    def from_dict(cls, config: dict) -> 'AdaptiveController':
+    def from_dict(cls, config: dict) -> 'Controller':
         """
         Create an AdaptiveController instance from a flattened config dictionary.
 
