@@ -95,10 +95,9 @@ controller = Controller.from_dict(controller_config)
 
 
 # show instruction
-stim_bank.get('instruction_text').show().wait_and_continue()
-stim_bank.get('instruction_image1').show().wait_and_continue()
-stim_bank.get('instruction_image2').show().wait_and_continue()
-
+TrialUnit(win, 'instruction_text').add_stim(stim_bank.get('instruction_text')).wait_and_continue()
+TrialUnit(win, 'instruction_image1').add_stim(stim_bank.get('instruction_image1')).wait_and_continue()
+TrialUnit(win, 'instruction_image2').add_stim(stim_bank.get('instruction_image2')).wait_and_continue()
 
 all_data = []
 for block_i in range(settings.total_blocks):
