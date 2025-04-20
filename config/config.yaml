@@ -66,75 +66,76 @@ stimuli:
     text: "+"
     color: white
 
-  cue_win:
+  win_cue:
     type: circle
     radius: 3
     fillColor: magenta
     lineColor: black
 
-  cue_lose:
+  lose_cue:
     type: rect
     width: 6
     height: 6
     fillColor: yellow
     lineColor: black
 
-  cue_neut:
+  neut_cue:
     type: polygon
     edges: 3
     size: 6
     fillColor: cyan
     lineColor: black
 
-  target_win:
+  win_target:
     type: circle
     radius: 3
     fillColor: black
     lineColor: black
 
-  target_lose:
+  lose_target:
     type: rect
     width: 6
     height: 6
     fillColor: black
     lineColor: black
 
-  target_neut:
+  neut_target:
     type: polygon
     edges: 3
     size: 6
     fillColor: black
     lineColor: black
 
-  feedback_win_hit:
+  win_hit_feedback:
     type: text
     text: "You earned 10 points!"
     color: white
 
-  feedback_win_miss:
+  win_miss_feedback:
     type: text
     text: "You earned 0 points."
     color: white
 
-  feedback_lose_hit:
+  lose_hit_feedback:
     type: text
     text: "You earned 0 points."
     color: white
 
-  feedback_lose_miss:
+  lose_miss_feedback:
     type: text
     text: "You earned -10 points."
     color: white
 
-  feedback_neut_hit:
+  neut_hit_feedback:
     type: text
     text: "You earned 0 points."
     color: white
 
-  feedback_neut_miss:
+  neut_miss_feedback:
     type: text
     text: "You earned 0 points."
     color: white
+
   
   block_break:
     type: text
