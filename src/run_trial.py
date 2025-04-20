@@ -51,14 +51,14 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
     
     # --- Feedback ---
     if early_response:
-        delta = -10
+        delta = settings.delta * -1
         hit=False
     else:
         hit = target.get_state("hit", False)
         if condition == "win":
-            delta = 10 if hit else 0
+            delta = settings.delta if hit else 0
         elif condition == "lose":
-            delta = 0 if hit else -10
+            delta = 0 if hit else settings.delta * -1
         else:
             delta = 0
     controller.update(condition, hit)
