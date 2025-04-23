@@ -8,7 +8,7 @@ subinfo_fields:
       max: 999
       digits: 3
 
-  - name: session_name
+  - name: subject_name
     type: string
 
   - name: experimenter
@@ -23,21 +23,21 @@ subinfo_fields:
     choices: [Caucasian, African-American, Asian, Hispanic, Native-American]
 
 subinfo_mapping:
-    subject_id: "Subject ID (three digits)"
-    session_name: "Session Name"
-    experimenter: "Experimenter"
-    gender: "Gender"
-    race: "Race"
-    Male: "Male"
-    Female: "Female"
-    Caucasian: "White"
-    African-American: "African American"
-    Asian: "Asian"
-    Hispanic: "Hispanic"
-    Native-American: "Native American"
-    registration_failed: "Registration failed."
-    registration_successful: "Registration successful！"
-    invalid_input: "Field {field} input is invalid."
+    subject_id: "受试编号（三位数）"
+    subject_name: "受试者姓名"
+    experimenter: "主试姓名"
+    gender: "性别"
+    race: "种族"
+    Male: "男"
+    Female: "女"
+    Caucasian: "白人"
+    African-American: "非裔"
+    Asian: "亚洲人"
+    Hispanic: "拉丁裔"
+    Native-American: "美洲原住民"
+    registration_failed: "受试者注册失败。"
+    registration_successful: "受试者注册成功！"
+    invalid_input: "字段 {field} 的输入无效。"
 
 
 # === Window settings ===
@@ -55,8 +55,8 @@ task:
   total_trials: 10
   trial_per_block: 5
   conditions: [win, lose, neut]
-  key_list: [down]
-  delta: 10
+  response_key: space
+  key_list: [space]
   seed_mode: "same_across_sub"
 
 
@@ -65,132 +65,103 @@ stimuli:
   fixation:
     type: text
     text: "+"
-    color: white
+    color: black
 
-  win_cue:
+  cue_win:
     type: circle
-    radius: 3
+    radius: 4
     fillColor: magenta
-    lineColor: black
+    lineColor: ""
 
-  lose_cue:
+  cue_lose:
     type: rect
-    width: 6
-    height: 6
+    width: 8
+    height: 8
     fillColor: yellow
-    lineColor: black
+    lineColor: ""
 
-  neut_cue:
+  cue_neut:
     type: polygon
     edges: 3
-    size: 6
+    size: 8
     fillColor: cyan
-    lineColor: black
+    lineColor: ""
 
-  win_target:
+  target_win:
     type: circle
-    radius: 3
+    radius: 4
     fillColor: black
-    lineColor: black
+    lineColor: ""
 
-  lose_target:
+  target_lose:
     type: rect
-    width: 6
-    height: 6
+    width: 8
+    height: 8
     fillColor: black
-    lineColor: black
+    lineColor: ""
 
-  neut_target:
+  target_neut:
     type: polygon
     edges: 3
-    size: 6
+    size: 8
     fillColor: black
-    lineColor: black
+    lineColor: ""
 
-  win_hit_feedback:
+  feedback_win_hit:
     type: text
-    text: "You earned 10 points!"
+    text: "You earned +10 points!"
     color: white
 
-  win_miss_feedback:
+  feedback_win_miss:
+    type: text
+    text: "Too slow! No points."
+    color: white
+
+  feedback_lose_hit:
+    type: text
+    text: "You avoided losing 10 points!"
+    color: white
+
+  feedback_lose_miss:
+    type: text
+    text: "You lost 10 points."
+    color: white
+
+  feedback_neut_hit:
     type: text
     text: "You earned 0 points."
     color: white
 
-  lose_hit_feedback:
+  feedback_neut_miss:
     type: text
     text: "You earned 0 points."
-    color: white
-
-  lose_miss_feedback:
-    type: text
-    text: "You earned -10 points."
-    color: white
-
-  neut_hit_feedback:
-    type: text
-    text: "You earned 0 points."
-    color: white
-
-  neut_miss_feedback:
-    type: text
-    text: "You earned 0 points."
-    color: white
-
-  
-  block_break:
-    type: text
-    text: |
-      Take a break! 
-      When you are ready, press space to continue.
     color: white
 
   block_feedback:
     type: text
-    text: |
-      Block {block_num} of {total_blocks} completed. 
-      Accuaracy: {accuracy:.2f}
-      Reward: {reward:.2f}
-      Press space to continue.
-    color: white
-
-  instruction_text:
-    type: text
-    text: |
-      In this task, you will see a series of cues and targets. 
-      Your task is to respond to the cues as quickly as possible. 
-      If you respond to a cue, you will earn 10 points. 
-      If you do not respond to a cue, you will earn 0 points. 
-      Press space to continue.
-    color: white
-
-  instruction_image1:
-    type: image
-    image: ./assets/instruction_iamge1.bmp
-
-  instruction_image2:
-    type: image
-    image: ./assets/instruction_image2.bmp
+    text: "Block {block_num} of {total_blocks} completed.\n /
+           Accuaracy: {accuracy:.2f}\n /
+           Reward: {reward:.2f}\n /
+           Press space to continue."
 
   good_bye:
     type: text
-    text: |
-      Thank you for participating!
-      Your final reward is {reward:.2f}.
-      Press space to exit.
-    color: white
+    text: "Thank you for participating!\n /
+           Your final reward is {reward:.2f}.\n /
+           Press space to exit."
 
 # === Timing & Adaptivity ===
 timing:
-  fixation_duration: [0.8, 1.0]
-  cue_duration: [0.8, 1.0]
-  anticipation_duration: [0.8, 1.0]
-  feedback_duration: 1.5
+  
+  cue_duration: 0.25
+  anticipation_duration: [2, 2.5]
+  fixation_duration: 1.2
+  feedback_duration: 1.2
   iti_duration: [0.6, 0.8]
 
 controller:
   initial_duration: 0.3
-  min_duration: 0.05
+  min_duration: 0.15
   max_duration: 0.5
   step: 0.05
   target_accuracy: 0.66
