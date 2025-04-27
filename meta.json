@@ -1,15 +1,16 @@
 {
-    "name": "MID",
-    "version": "0.3.1",
-    "description": "Monetary Incentive Delay Task built with psyflow",
-    "created_by": "Your Name or Lab",
-    "date_created": "2024-04-18",
-    "psyflow_version": "0.3.0",
-    "psychopy_version": "2023.2.1",
-    "tasks": ["MID"],
-    "stimuli_dir": "assets/",
-    "config_file": "config/config.yaml",
-    "entry_point": "main.py",
-    "default_language": "en"
-  }
+  "name": "Monetary Incentive Delay (MID) Task",
+  "version": "0.1.0",
+  "description": "A dynamic Monetary Incentive Delay (MID) task with adaptive target timing, built using psyflow.",
+  "created_by": "Zhipeng Cao",
+  "date_created": "2025-04-22",
+  "psyflow_version": "0.3.0",
+  "psychopy_version": "2023.2.1",
+  "tasks": ["MID"],
+  "stimuli_dir": "assets/",
+  "config_file": "config/config.yaml",
+  "entry_point": "main.py",
+  "default_language": "zh"
+}
+
   
