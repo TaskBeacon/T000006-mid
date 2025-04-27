@@ -5,7 +5,7 @@ from psyflow import BlockUnit
 from psyflow import StimUnit
 from psyflow import TriggerSender
 from psyflow import TriggerBank
-from psyflow import generate_balanced_conditions
+from psyflow import generate_balanced_conditions, count_down
 
 from psychopy.visual import Window
 from psychopy.hardware import keyboard
@@ -61,7 +61,6 @@ logging.LogFile(settings.log_file, level=logging.DATA, filemode='a')
 logging.console.setLevel(logging.INFO)
 settings.frame_time_seconds =win.monitorFramePeriod
 settings.win_fps = win.getActualFrameRate()
-settings.save_path = './data'
 
 # 5. Setup stimulus bank
 stim_bank = StimBank(win)
@@ -98,7 +97,7 @@ controller = Controller.from_dict(controller_config)
 StimUnit(win, 'instruction_text').add_stim(stim_bank.get('instruction_text')).wait_and_continue()
 StimUnit(win, 'instruction_image1').add_stim(stim_bank.get('instruction_image1')).wait_and_continue()
 StimUnit(win, 'instruction_image2').add_stim(stim_bank.get('instruction_image2')).wait_and_continue()
-
+count_down(win, 3, color='white')
 all_data = []
 for block_i in range(settings.total_blocks):
     # 8. setup block
@@ -140,6 +139,8 @@ for block_i in range(settings.total_blocks):
                                                                 total_blocks=settings.total_blocks,
                                                                 accuracy=hit_rate,
                                                                 total_score=total_score)).wait_and_continue()
+    if block_i+1 < settings.total_blocks:
+       count_down(win, 3, color='white')
     if block_i+1 == settings.total_blocks:
         final_score = sum(trial.get("feedback_delta", 0) for trial in all_data)
         StimUnit(win, 'block').add_stim(stim_bank.get_and_format('good_bye', total_score=final_score)).wait_and_continue(terminate=True)
