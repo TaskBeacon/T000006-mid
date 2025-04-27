@@ -41,9 +41,8 @@ window:
 
 # === Task-level settings ===
 task:
-  total_blocks: 2
-  total_trials: 10
-  trial_per_block: 5
+  total_blocks: 3
+  total_trials: 75
   conditions: [win, lose, neut]
   key_list: [down]
   delta: 10
@@ -224,10 +223,10 @@ stimuli:
 # === Timing & Adaptivity ===
 timing:
   
-  cue_duration: 0.25
-  anticipation_duration: [2, 2.5]
-  fixation_duration: 1.2
-  feedback_duration: 1.2
+  cue_duration: 0.3
+  anticipation_duration: [1, 1.2]
+  fixation_duration: [0.8,1]
+  feedback_duration: 1
   iti_duration: [0.6, 0.8]
 
 controller:
