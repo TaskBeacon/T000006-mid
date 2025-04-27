@@ -1,4 +1,4 @@
-from psyflow import TrialUnit
+from psyflow import StimUnit
 from functools import partial
 
 def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sender, trigger_bank):
@@ -8,12 +8,9 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
     """
 
     trial_data = {"condition": condition}
-    make_unit = partial(TrialUnit, win=win, triggersender=trigger_sender)
+    make_unit = partial(StimUnit, win=win, triggersender=trigger_sender)
 
-    # --- Fixation ---
-    make_unit(unit_label='fixation').add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.fixation_duration, onset_trigger=trigger_bank.get("fixation_onset")) \
-        .to_dict(trial_data)
+
 
     # --- Cue ---
     make_unit(unit_label='cue').add_stim(stim_bank.get(f"{condition}_cue")) \
@@ -48,6 +45,10 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
 )
     target.to_dict(trial_data)
 
+    # --- Fixation ---
+    make_unit(unit_label='fixation').add_stim(stim_bank.get("fixation")) \
+        .show(duration=settings.fixation_duration, onset_trigger=trigger_bank.get("fixation_onset")) \
+        .to_dict(trial_data)
     
     # --- Feedback ---
     if early_response:
@@ -69,5 +70,9 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
         .add_stim(fb_stim) \
         .show(duration=settings.feedback_duration, onset_trigger=trigger_bank.get(f"{condition}_{hit_type}_fb_onset"))
     fb.set_state(hit=hit, delta=delta).to_dict(trial_data)
+
+    make_unit(unit_label = 'iti').add_stim(stim_bank.get("iti_stim")) \
+        .show(duration=settings.iti_duration)
+
     return trial_data
 

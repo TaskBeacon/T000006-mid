@@ -8,7 +8,7 @@ subinfo_fields:
       max: 999
       digits: 3
 
-  - name: subject_name
+  - name: session_name
     type: string
 
   - name: experimenter
@@ -18,26 +18,16 @@ subinfo_fields:
     type: choice
     choices: [Male, Female]
 
-  - name: race
-    type: choice
-    choices: [Caucasian, African-American, Asian, Hispanic, Native-American]
-
 subinfo_mapping:
-    subject_id: "受试编号（三位数）"
-    subject_name: "受试者姓名"
-    experimenter: "主试姓名"
+    subject_id: "被试号"
+    session_name: "Session名称(Practice/Experiment)"
+    experimenter: "主试姓名或缩写"
     gender: "性别"
-    race: "种族"
     Male: "男"
     Female: "女"
-    Caucasian: "白人"
-    African-American: "非裔"
-    Asian: "亚洲人"
-    Hispanic: "拉丁裔"
-    Native-American: "美洲原住民"
-    registration_failed: "受试者注册失败。"
-    registration_successful: "受试者注册成功！"
-    invalid_input: "字段 {field} 的输入无效。"
+    registration_failed: "注册失败。"
+    registration_successful: "注册成功！"
+    invalid_input: "字段 {field} 输入无效。"
 
 
 # === Window settings ===
@@ -108,47 +98,129 @@ stimuli:
     lineColor: ""
 
   feedback_win_hit:
-    type: text
-    text: "You earned +10 points!"
+    type: textbox
+    text: |
+      击中
+      +10 分
     color: white
-
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+ 
   feedback_win_miss:
-    type: text
-    text: "Too slow! No points."
+    type: textbox
+    text: |
+      未击中
+      +0 分
     color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
 
   feedback_lose_hit:
-    type: text
-    text: "You avoided losing 10 points!"
+    type: textbox
+    text: |
+      击中
+      -0 分
     color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
 
   feedback_lose_miss:
-    type: text
-    text: "You lost 10 points."
+    type: textbox
+    text: |
+      未击中
+      -10 分
     color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
 
   feedback_neut_hit:
-    type: text
-    text: "You earned 0 points."
+    type: textbox
+    text: |
+      击中
+      +0 分
     color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78   
 
   feedback_neut_miss:
-    type: text
-    text: "You earned 0 points."
+    type: textbox
+    text: |
+      未击中
+      -0 分
     color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+  
+  iti_stim:
+    type: text
+    text: ""
 
   block_feedback:
-    type: text
-    text: "Block {block_num} of {total_blocks} completed.\n /
-           Accuaracy: {accuracy:.2f}\n /
-           Reward: {reward:.2f}\n /
-           Press space to continue."
+    type: textbox
+    text: |
+      第 {block_num} / {total_blocks} 部分完成
+      击中率：{accuracy:.2f}
+      总分：{total_score}
+      
+      请在充分休息后按下空格键
+      进入下一个部分
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
+
+
+instruction_text:
+      type: textbox
+  text: |
+    【MID 任务】
+
+    接下来，您将参与一个反应任务。
+    每个试次开始时，会出现不同形状的提示图案，
+    它们分别代表不同的得分条件：
+    
+    ● 圆形：有机会赢取奖励
+    ■ 方形：有可能失去分数
+    ▲ 三角形：无得失
+
+    随后，您需要在目标出现时尽快按下指定按键。
+    击中目标可能获得奖励或避免失分，
+    未击中则可能失去奖励或扣分。
+
+    请尽量快速而准确地作出反应！
+    
+    准备好后，请按【空格键】开始任务。
+  color: white
+  font: SimHei
+  alignment: center
+  letterHeight: 0.78
+ 
+  instruction_image1:
+    type: image
+    image: ./assets/instruction_iamge1.bmp
+ 
+  instruction_image2:
+    type: image
+    image: ./assets/instruction_image2.bmp
 
   good_bye:
-    type: text
-    text: "Thank you for participating!\n /
-           Your final reward is {reward:.2f}.\n /
-           Press space to exit."
+    type: textbox
+    text: |
+      任务结束
+  
+      最后得分:{total_score}
+      感谢您的参与
+      请按【空格键】键退出
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
 
 # === Timing & Adaptivity ===
 timing:
