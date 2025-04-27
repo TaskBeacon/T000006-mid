@@ -45,8 +45,8 @@ task:
   total_trials: 10
   trial_per_block: 5
   conditions: [win, lose, neut]
-  response_key: space
-  key_list: [space]
+  key_list: [down]
+  delta: 10
   seed_mode: "same_across_sub"
 
 
@@ -57,47 +57,47 @@ stimuli:
     text: "+"
     color: black
 
-  cue_win:
-    type: circle
-    radius: 4
-    fillColor: magenta
-    lineColor: ""
-
-  cue_lose:
+  win_cue:
+     type: circle
+     radius: 3
+     fillColor: magenta
+     lineColor: black
+ 
+  lose_cue:
     type: rect
-    width: 8
-    height: 8
+    width: 6
+    height: 6
     fillColor: yellow
-    lineColor: ""
+    lineColor: black
 
-  cue_neut:
+  neut_cue:
     type: polygon
     edges: 3
-    size: 8
+    size: 6
     fillColor: cyan
-    lineColor: ""
+    lineColor: black
 
-  target_win:
+  win_target:
     type: circle
-    radius: 4
+    radius: 3
     fillColor: black
-    lineColor: ""
+    lineColor: black
 
-  target_lose:
+  lose_target:
     type: rect
-    width: 8
-    height: 8
+    width: 6
+    height: 6
     fillColor: black
-    lineColor: ""
+    lineColor: black
 
-  target_neut:
+  neut_target:
     type: polygon
     edges: 3
-    size: 8
+    size: 6
     fillColor: black
-    lineColor: ""
+    lineColor: black
 
-  feedback_win_hit:
+  win_hit_feedback:
     type: textbox
     text: |
       击中
@@ -107,7 +107,7 @@ stimuli:
     alignment: center
     letterHeight: 0.78
  
-  feedback_win_miss:
+  win_miss_feedback:
     type: textbox
     text: |
       未击中
@@ -117,7 +117,7 @@ stimuli:
     alignment: center
     letterHeight: 0.78
 
-  feedback_lose_hit:
+  lose_hit_feedback:
     type: textbox
     text: |
       击中
@@ -127,7 +127,7 @@ stimuli:
     alignment: center
     letterHeight: 0.78
 
-  feedback_lose_miss:
+  lose_miss_feedback:
     type: textbox
     text: |
       未击中
@@ -137,7 +137,7 @@ stimuli:
     alignment: center
     letterHeight: 0.78
 
-  feedback_neut_hit:
+  neut_hit_feedback:
     type: textbox
     text: |
       击中
@@ -147,7 +147,7 @@ stimuli:
     alignment: center
     letterHeight: 0.78   
 
-  feedback_neut_miss:
+  neut_miss_feedback:
     type: textbox
     text: |
       未击中
@@ -161,7 +161,7 @@ stimuli:
     type: text
     text: ""
 
-  block_feedback:
+  block_break:
     type: textbox
     text: |
       第 {block_num} / {total_blocks} 部分完成
@@ -176,30 +176,30 @@ stimuli:
     letterHeight: 0.78
 
 
-instruction_text:
-      type: textbox
-  text: |
-    【MID 任务】
+  instruction_text:
+    type: textbox
+    text: |
+      【MID 任务】
 
-    接下来，您将参与一个反应任务。
-    每个试次开始时，会出现不同形状的提示图案，
-    它们分别代表不同的得分条件：
-    
-    ● 圆形：有机会赢取奖励
-    ■ 方形：有可能失去分数
-    ▲ 三角形：无得失
+      接下来，您将参与一个反应任务。
+      每个试次开始时，会出现不同形状的提示图案，
+      它们分别代表不同的得分条件：
+      
+      ● 圆形：有机会赢取奖励
+      ■ 方形：有可能失去分数
+      ▲ 三角形：无得失
 
-    随后，您需要在目标出现时尽快按下指定按键。
-    击中目标可能获得奖励或避免失分，
-    未击中则可能失去奖励或扣分。
+      随后，您需要在目标出现时尽快按下指定按键。
+      击中目标可能获得奖励或避免失分，
+      未击中则可能失去奖励或扣分。
 
-    请尽量快速而准确地作出反应！
-    
-    准备好后，请按【空格键】开始任务。
-  color: white
-  font: SimHei
-  alignment: center
-  letterHeight: 0.78
+      请尽量快速而准确地作出反应！
+      
+      准备好后，请按【空格键】开始任务。
+    color: white
+    font: SimHei
+    alignment: center
+    letterHeight: 0.78
  
   instruction_image1:
     type: image
