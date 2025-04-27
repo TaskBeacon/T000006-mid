@@ -42,7 +42,8 @@ window:
 # === Task-level settings ===
 task:
   total_blocks: 3
-  total_trials: 75
+  total_trials: 225
+  trial_per_block: 75
   conditions: [win, lose, neut]
   key_list: [down]
   delta: 10
@@ -193,7 +194,7 @@ stimuli:
       未击中则可能失去奖励或扣分。
 
       请尽量快速而准确地作出反应！
-      
+ 
     color: black
     font: SimHei
     alignment: center
@@ -202,10 +203,12 @@ stimuli:
   instruction_image1:
     type: image
     image: ./assets/instruction_iamge1.bmp
+
  
   instruction_image2:
     type: image
     image: ./assets/instruction_image2.bmp
+
 
   good_bye:
     type: textbox
