@@ -97,36 +97,22 @@ controller = Controller.from_dict(controller_config)
 StimUnit(win, 'instruction_text').add_stim(stim_bank.get('instruction_text')).wait_and_continue()
 StimUnit(win, 'instruction_image1').add_stim(stim_bank.get('instruction_image1')).wait_and_continue()
 StimUnit(win, 'instruction_image2').add_stim(stim_bank.get('instruction_image2')).wait_and_continue()
-count_down(win, 3, color='white')
+
 all_data = []
 for block_i in range(settings.total_blocks):
     # 8. setup block
+    count_down(win, 3, color='white')
     block = BlockUnit(
         block_id=f"block_{block_i}",
         block_idx=block_i,
         settings=settings,
         window=win,
         keyboard=keyboard
-    )
-
-    block.generate_conditions(func=generate_balanced_conditions)
-
-    @block.on_start
-    def _block_start(b):
-        print("Block start {}".format(b.block_idx))
-        trigger_sender.send(trigger_bank.get("block_onset"))
-    @block.on_end
-    def _block_end(b):     
-        print("Block end {}".format(b.block_idx))
-        trigger_sender.send(trigger_bank.get("block_end"))
-
-    
-    # 9. run block
-    block.run_trial(
-        partial(run_trial, stim_bank=stim_bank, controller=controller, trigger_sender=trigger_sender, trigger_bank=trigger_bank)
-    )
-    
-    block.to_dict(all_data)
+    ).generate_conditions(func=generate_balanced_conditions) \
+    .on_start(lambda b: trigger_sender.send(trigger_bank.get("block_onset")))\
+    .on_end(lambda b: trigger_sender.send(trigger_bank.get("block_end")))\
+    .run_trial(partial(run_trial, stim_bank=stim_bank, controller=controller, trigger_sender=trigger_sender, trigger_bank=trigger_bank))\
+    .to_dict(all_data)
     
     # Filter trials for block_0
     block_trials = [trial for trial in all_data if trial.get("block_id") == f"block_{block_i}"]
@@ -139,12 +125,11 @@ for block_i in range(settings.total_blocks):
                                                                 total_blocks=settings.total_blocks,
                                                                 accuracy=hit_rate,
                                                                 total_score=total_score)).wait_and_continue()
-    if block_i+1 < settings.total_blocks:
-       count_down(win, 3, color='white')
-    if block_i+1 == settings.total_blocks:
-        final_score = sum(trial.get("feedback_delta", 0) for trial in all_data)
-        StimUnit(win, 'block').add_stim(stim_bank.get_and_format('good_bye', total_score=final_score)).wait_and_continue(terminate=True)
-    
+       
+
+final_score = sum(trial.get("feedback_delta", 0) for trial in all_data)
+StimUnit(win, 'block').add_stim(stim_bank.get_and_format('good_bye', total_score=final_score)).wait_and_continue(terminate=True)
+
 import pandas as pd
 df = pd.DataFrame(all_data)
 df.to_csv(settings.res_file, index=False)
