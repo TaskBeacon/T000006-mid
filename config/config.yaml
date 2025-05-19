@@ -112,7 +112,7 @@ stimuli:
     text: |
       未击中
       +0 分
-    color: white
+    color: black
     font: SimHei
     alignment: center
     letterHeight: 0.78
@@ -122,7 +122,7 @@ stimuli:
     text: |
       击中
       -0 分
-    color: white
+    color: black
     font: SimHei
     alignment: center
     letterHeight: 0.78
@@ -132,7 +132,7 @@ stimuli:
     text: |
       未击中
       -10 分
-    color: white
+    color: black
     font: SimHei
     alignment: center
     letterHeight: 0.78
@@ -142,7 +142,7 @@ stimuli:
     text: |
       击中
       +0 分
-    color: white
+    color: black
     font: SimHei
     alignment: center
     letterHeight: 0.78   
@@ -152,7 +152,7 @@ stimuli:
     text: |
       未击中
       -0 分
-    color: white
+    color: black
     font: SimHei
     alignment: center
     letterHeight: 0.78

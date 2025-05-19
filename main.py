@@ -1,5 +1,5 @@
 from psyflow import BlockUnit,StimBank, StimUnit,SubInfo,TaskSettings,TriggerSender
-from psyflow import load_config,count_down, initialize_exp
+from psyflow import load_config,count_down, initialize_exp, generate_balanced_conditions
 import pandas as pd
 from psychopy import core
 from functools import partial
@@ -49,7 +49,7 @@ StimUnit(win, 'instruction_image2').add_stim(stim_bank.get('instruction_image2')
 all_data = []
 for block_i in range(settings.total_blocks):
     # 8. setup block
-    count_down(win, 3, color='white')
+    count_down(win, 3, color='black')
     block = BlockUnit(
         block_id=f"block_{block_i}",
         block_idx=block_i,
