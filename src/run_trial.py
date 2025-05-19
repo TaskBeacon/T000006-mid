@@ -1,7 +1,7 @@
 from psyflow import StimUnit
 from functools import partial
 
-def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sender, trigger_bank):
+def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sender):
     """
     Run a single MID trial sequence (fixation → cue → anticipation → target → feedback).
     See full docstring above...
@@ -11,10 +11,9 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
     make_unit = partial(StimUnit, win=win, triggersender=trigger_sender)
 
 
-
     # --- Cue ---
     make_unit(unit_label='cue').add_stim(stim_bank.get(f"{condition}_cue")) \
-        .show(duration=settings.cue_duration, onset_trigger=trigger_bank.get(f"{condition}_cue_onset")) \
+        .show(duration=settings.cue_duration, onset_trigger=settings.triggers.get(f"{condition}_cue_onset")) \
         .to_dict(trial_data)
 
 
@@ -24,7 +23,7 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
     anti.capture_response(
             keys=settings.key_list,
             duration=settings.anticipation_duration,
-            onset_trigger=trigger_bank.get(f"{condition}_anti_onset"),
+            onset_trigger=settings.triggers.get(f"{condition}_anti_onset"),
             terminate_on_response=False)
         
     
@@ -39,15 +38,15 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
     target.capture_response(
             keys=settings.key_list,
             duration=duration,
-            onset_trigger=trigger_bank.get(f"{condition}_target_onset"),
-            response_trigger=trigger_bank.get(f"{condition}_key_press"),
-            timeout_trigger=trigger_bank.get(f"{condition}_no_response"),
+            onset_trigger=settings.triggers.get(f"{condition}_target_onset"),
+            response_trigger=settings.triggers.get(f"{condition}_key_press"),
+            timeout_trigger=settings.triggers.get(f"{condition}_no_response"),
 )
     target.to_dict(trial_data)
 
     # --- Fixation ---
     make_unit(unit_label='fixation').add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.fixation_duration, onset_trigger=trigger_bank.get("fixation_onset")) \
+        .show(duration=settings.fixation_duration, onset_trigger=settings.triggers.get("fixation_onset")) \
         .to_dict(trial_data)
     
     # --- Feedback ---
@@ -68,7 +67,7 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
     fb_stim = stim_bank.get(f"{condition}_{hit_type}_feedback")
     fb = make_unit(unit_label="feedback") \
         .add_stim(fb_stim) \
-        .show(duration=settings.feedback_duration, onset_trigger=trigger_bank.get(f"{condition}_{hit_type}_fb_onset"))
+        .show(duration=settings.feedback_duration, onset_trigger=settings.triggers.get(f"{condition}_{hit_type}_fb_onset"))
     fb.set_state(hit=hit, delta=delta).to_dict(trial_data)
 
     make_unit(unit_label = 'iti').add_stim(stim_bank.get("iti_stim")) \
