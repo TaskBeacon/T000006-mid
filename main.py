@@ -1,16 +1,10 @@
 from psyflow import BlockUnit,StimBank, StimUnit,SubInfo,TaskSettings,TriggerSender
-from psyflow import load_config,count_down, initialize_exp, generate_balanced_conditions
-
-from psychopy.visual import Window
-from psychopy.hardware import keyboard
-from psychopy import logging, core
-
+from psyflow import load_config,count_down, initialize_exp
+import pandas as pd
+from psychopy import core
 from functools import partial
-import yaml
-import sys
 import serial
-
-from src import run_trial,Controller
+from src import run_trial, Controller
 
 
 # 1. Load config
@@ -84,9 +78,13 @@ for block_i in range(settings.total_blocks):
 final_score = sum(trial.get("feedback_delta", 0) for trial in all_data)
 StimUnit(win, 'block').add_stim(stim_bank.get_and_format('good_bye', total_score=final_score)).wait_and_continue(terminate=True)
 
-import pandas as pd
+# 9. Save data
 df = pd.DataFrame(all_data)
 df.to_csv(settings.res_file, index=False)
+
+# 10. Close everything
+win.close()
+core.quit()
 
 
 
