@@ -195,6 +195,8 @@ stimuli:
       未击中目标:可能会错失奖励或被扣分
       
       请尽量快速且准确地做出反应！
+      
+      请按【空格键】键开始任务
     color: black
     font: SimHei
     alignment: center
