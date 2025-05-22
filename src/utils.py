@@ -15,9 +15,9 @@ class Controller:
     def __init__(
         self,
         initial_duration: float = 0.25,
-        min_duration: float = 0.1,
-        max_duration: float = 0.4,
-        step: float = 0.02,
+        min_duration: float = 0.04,
+        max_duration: float = 0.34,
+        step: float = 0.03,
         target_accuracy: float = 0.66,
         condition_specific: bool = True,
         enable_logging: bool = True
@@ -43,9 +43,9 @@ class Controller:
         """
         allowed_keys = {
             'initial_duration': 0.25,
-            'min_duration': 0.1,
-            'max_duration': 0.4,
-            'step': 0.02,
+            'min_duration': 0.04,
+            'max_duration': 0.34,
+            'step': 0.03,
             'target_accuracy': 0.66,
             'condition_specific': True,
             'enable_logging': True

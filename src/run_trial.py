@@ -61,7 +61,7 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
             delta = 0 if hit else settings.delta * -1
         else:
             delta = 0
-    controller.update(condition, hit)
+    controller.update(hit, condition)
 
     hit_type = "hit" if hit else "miss"
     fb_stim = stim_bank.get(f"{condition}_{hit_type}_feedback")
