@@ -102,7 +102,7 @@ stimuli:
     text: |
       击中
       +10 分
-    color: white
+    color: black
     font: SimHei
     alignment: center
     letterHeight: 0.78
@@ -170,7 +170,7 @@ stimuli:
       
       请在充分休息后按下空格键
       进入下一个部分
-    color: white
+    color: black
     font: SimHei
     alignment: center
     letterHeight: 0.78
