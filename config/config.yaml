@@ -46,7 +46,7 @@ task:
   trial_per_block: 75
   conditions: [win, lose, neut]
   key_list: [down]
-  delta: 10
+  delta: 5
   seed_mode: "same_across_sub"
 
 
