@@ -37,7 +37,7 @@ window:
   screen: 1
   bg_color: gray
   fullscreen: True
-  monitor_width_cm: 59.7
+  monitor_width_cm: 58
   monitor_distance_cm: 57
 
 # === Task-level settings ===
@@ -197,13 +197,13 @@ stimuli:
       
       请尽量快速且准确地做出反应！
       
-      请按【空格键】键开始任务
+      请按【空格键】开始任务
     color: black
     font: SimHei
     alignment: center
     letterHeight: 0.72
- 
 
+ 
   good_bye:
     type: textbox
     text: |
