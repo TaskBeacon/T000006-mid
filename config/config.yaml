@@ -179,36 +179,27 @@ stimuli:
   instruction_text:
     type: textbox
     text: |
-      【MID 任务】
+      【奖赏任务说明】
+      接下来，您将参与一个反应任务
+      每个试次开始时，屏幕上会出现一个提示图形
+      它表示当前的得分条件：
 
-      接下来，您将参与一个反应任务。
-      每个试次开始时，会出现不同形状的提示图案，
-      它们分别代表不同的得分条件：
+      红色圆形代表：奖励条件,有机会获得 5 分
+      黄色方块代表：惩罚条件,有可能扣除 5 分
+      蓝色三角代表：中性条件,不会得分或扣分
+
+      提示图形出现后，将呈现一个黑色目标图形
+      您的任务是在目标出现时尽快按下【下箭头】：
       
-      ● 圆形：有机会赢取奖励
-      ■ 方形：有可能失去分数
-      ▲ 三角形：无得失
-
-      随后，您需要在目标出现时尽快按下指定按键。
-      击中目标可能获得奖励或避免失分，
-      未击中则可能失去奖励或扣分。
-
-      请尽量快速而准确地作出反应！
- 
+      击中目标:可能获得奖励或避免失分
+      未击中目标:可能会错失奖励或被扣分
+      
+      请尽量快速且准确地做出反应！
     color: black
     font: SimHei
     alignment: center
-    letterHeight: 0.78
+    letterHeight: 0.72
  
-  instruction_image1:
-    type: image
-    image: ./assets/instruction_iamge1.bmp
-
- 
-  instruction_image2:
-    type: image
-    image: ./assets/instruction_image2.bmp
-
 
   good_bye:
     type: textbox
