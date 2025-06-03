@@ -1,5 +1,5 @@
 from psyflow import BlockUnit,StimBank, StimUnit,SubInfo,TaskSettings,TriggerSender
-from psyflow import load_config,count_down, initialize_exp, generate_balanced_conditions
+from psyflow import load_config,count_down, initialize_exp
 import pandas as pd
 from psychopy import core
 from functools import partial
@@ -20,10 +20,13 @@ settings.add_subinfo(subject_data)
 
 # 4. setup triggers
 settings.triggers = cfg['trigger_config']
+# 4. setup triggers
+settings.triggers = cfg['trigger_config']
 ser = serial.serial_for_url("loop://", baudrate=115200, timeout=1)
+# ser = serial.Serial("COM3", baudrate=115200, timeout=1)
 trigger_sender = TriggerSender(
     trigger_func=lambda code: ser.write([1, 225, 1, 0, (code)]),
-    post_delay=0,
+    post_delay=0.001,
     on_trigger_start=lambda: ser.open() if not ser.is_open else None,
     on_trigger_end=lambda: ser.close()
 )
@@ -42,9 +45,9 @@ settings.controller=cfg['controller_config']
 settings.save_to_json() # save all settings to json file
 controller = Controller.from_dict(settings.controller)
 
-
+trigger_sender.send(settings.triggers.get("exp_onset"))
 # show instruction
-StimUnit(win, 'instruction_text')\
+StimUnit('instruction_text', win, kb)\
     .add_stim(stim_bank.get('instruction_text'))\
     .add_stim(stim_bank.get('instruction_text_voice'))\
     .wait_and_continue()
@@ -59,7 +62,7 @@ for block_i in range(settings.total_blocks):
         settings=settings,
         window=win,
         keyboard=kb
-    ).generate_conditions(func=generate_balanced_conditions) \
+    ).generate_conditions() \
     .on_start(lambda b: trigger_sender.send(settings.triggers.get("block_onset")))\
     .on_end(lambda b: trigger_sender.send(settings.triggers.get("block_end")))\
     .run_trial(partial(run_trial, stim_bank=stim_bank, controller=controller, trigger_sender=trigger_sender))\
@@ -71,7 +74,7 @@ for block_i in range(settings.total_blocks):
     # Calculate for the block feedback
     hit_rate = sum(trial.get("target_hit", False) for trial in block_trials) / len(block_trials)
     total_score = sum(trial.get("feedback_delta", 0) for trial in block_trials)
-    StimUnit(win, 'block').add_stim(stim_bank.get_and_format('block_break', 
+    StimUnit('block',win,kb).add_stim(stim_bank.get_and_format('block_break', 
                                                                 block_num=block_i+1, 
                                                                 total_blocks=settings.total_blocks,
                                                                 accuracy=hit_rate,
@@ -79,8 +82,9 @@ for block_i in range(settings.total_blocks):
        
 
 final_score = sum(trial.get("feedback_delta", 0) for trial in all_data)
-StimUnit(win, 'block').add_stim(stim_bank.get_and_format('good_bye', total_score=final_score)).wait_and_continue(terminate=True)
+StimUnit('goodbye',win,kb).add_stim(stim_bank.get_and_format('good_bye', total_score=final_score)).wait_and_continue(terminate=True)
 
+trigger_sender.send(settings.triggers.get("exp_end"))
 # 9. Save data
 df = pd.DataFrame(all_data)
 df.to_csv(settings.res_file, index=False)

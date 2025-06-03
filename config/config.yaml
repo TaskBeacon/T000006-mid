@@ -8,11 +8,15 @@ subinfo_fields:
       max: 999
       digits: 3
 
-  - name: session_name
+
+  - name: subname    
     type: string
 
-  - name: experimenter
-    type: string
+  - name: age 
+    type: int
+    constraints:
+      min: 5
+      max: 60
 
   - name: gender
     type: choice
@@ -20,14 +24,14 @@ subinfo_fields:
 
 subinfo_mapping:
     subject_id: "被试号"
-    session_name: "Session名称(Practice/Experiment)"
-    experimenter: "主试姓名或缩写"
+    subname: "被试姓名(拼音)"
+    age: "年龄"
     gender: "性别"
     Male: "男"
     Female: "女"
     registration_failed: "注册失败。"
     registration_successful: "注册成功！"
-    invalid_input: "字段 {field} 输入无效。"
+    invalid_input: "字段 {field} 输入无效"
 
 
 # === Window settings ===
@@ -37,17 +41,18 @@ window:
   screen: 1
   bg_color: gray
   fullscreen: True
-  monitor_width_cm: 58
-  monitor_distance_cm: 57
+  monitor_width_cm: 60
+  monitor_distance_cm: 72
 
 # === Task-level settings ===
 task:
+  task_name: "eeg_mid"
   total_blocks: 3
-  total_trials: 225
-  trial_per_block: 75
+  total_trials: 180
+  trial_per_block: 60
   conditions: [win, lose, neut]
-  key_list: [down]
-  delta: 5
+  key_list: [space]
+  delta: 10
   seed_mode: "same_across_sub"
 
 
@@ -163,7 +168,7 @@ stimuli:
     text: ""
 
   block_break:
-    type: textbox
+    type: text
     text: |
       第 {block_num} / {total_blocks} 部分完成
       击中率：{accuracy:.2f}
@@ -172,9 +177,7 @@ stimuli:
       请在充分休息后按下空格键
       进入下一个部分
     color: black
-    font: SimHei
-    alignment: center
-    letterHeight: 0.78
+    height: 0.78
 
 
   instruction_text:
@@ -185,27 +188,34 @@ stimuli:
       每个试次开始时，屏幕上会出现一个提示图形
       它表示当前的得分条件：
 
-      红色圆形代表：奖励条件,有机会获得 5 分
-      黄色方块代表：惩罚条件,有可能扣除 5 分
+      红色圆形代表：奖励条件,有机会获得 10 分
+      黄色方块代表：惩罚条件,有可能扣除 10 分
       蓝色三角代表：中性条件,不会得分或扣分
 
       提示图形出现后，将呈现一个黑色目标图形
-      您的任务是在目标出现时尽快按下【下箭头】：
+      您的任务是在目标出现时尽快
+      
+      用右手食指按下【空格键】
       
       击中目标:可能获得奖励或避免失分
       未击中目标:可能会错失奖励或被扣分
       
-      请尽量快速且准确地做出反应！
+      注意：目标呈现的时间不固定
+      请尽量快速且准确地在目标呈现时击中目标
+
+      在目标出现前按键会被视为未击中
       
       请按【空格键】开始任务
     color: black
     font: SimHei
     alignment: center
     letterHeight: 0.72
-
+    units: deg
+    size: [20, 5]
  
+
   good_bye:
-    type: textbox
+    type: text
     text: |
       任务结束
   
@@ -213,28 +223,30 @@ stimuli:
       感谢您的参与
       请按【空格键】键退出
     color: white
-    font: SimHei
-    alignment: center
-    letterHeight: 0.78
+    height: 0.78
+
 
 # === Timing & Adaptivity ===
 timing:
   
   cue_duration: 0.3
-  anticipation_duration: [0.9, 1.2]
+  anticipation_duration: [1, 1.2]
   fixation_duration: [0.8,1]
   feedback_duration: 1
   iti_duration: [0.6, 0.8]
 
 controller:
-  initial_duration: 0.25
+  initial_duration: 0.2
   min_duration: 0.04
-  max_duration: 0.34
+  max_duration: 0.37
   step: 0.03
   target_accuracy: 0.66
   condition_specific: true
 
 triggers:
+  exp_onset: 98
+  exp_end: 99
+
   win_cue_onset: 10
   lose_cue_onset: 20
   neut_cue_onset: 30
@@ -262,9 +274,6 @@ triggers:
   win_no_response: 16
   lose_no_response: 26
   neut_no_response: 36
-
-  exp_onset: 98
-  exp_end: 99
 
   block_onset: 100
   block_end: 101
