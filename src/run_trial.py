@@ -8,7 +8,7 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
     """
 
     trial_data = {"condition": condition}
-    make_unit = partial(StimUnit, win=win, kb=kb,  triggersender=trigger_sender)
+    make_unit = partial(StimUnit, win=win, kb=kb, triggersender=trigger_sender)
 
 
     # --- Cue ---
@@ -44,9 +44,8 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
 )
     target.to_dict(trial_data)
 
-    # --- Fixation ---
-    make_unit(unit_label='fixation').add_stim(stim_bank.get("fixation")) \
-        .show(duration=settings.fixation_duration, onset_trigger=settings.triggers.get("fixation_onset")) \
+    make_unit(unit_label='prefeedback_fixation').add_stim(stim_bank.get("fixation")) \
+        .show(duration=settings.prefeedback_duration) \
         .to_dict(trial_data)
     
     # --- Feedback ---
@@ -70,8 +69,6 @@ def run_trial(win, kb, settings, condition, stim_bank, controller, trigger_sende
         .show(duration=settings.feedback_duration, onset_trigger=settings.triggers.get(f"{condition}_{hit_type}_fb_onset"))
     fb.set_state(hit=hit, delta=delta).to_dict(trial_data)
 
-    make_unit(unit_label = 'iti').add_stim(stim_bank.get("iti_stim")) \
-        .show(duration=settings.iti_duration)
 
     return trial_data
 

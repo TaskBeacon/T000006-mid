@@ -163,9 +163,10 @@ stimuli:
     alignment: center
     letterHeight: 0.78
   
-  iti_stim:
+  blank_stim:
     type: text
     text: ""
+  
 
   block_break:
     type: text
@@ -229,11 +230,11 @@ stimuli:
 # === Timing & Adaptivity ===
 timing:
   
+  fixation_duration: [0.6, 0.8]
   cue_duration: 0.3
   anticipation_duration: [1, 1.2]
-  fixation_duration: [0.8,1]
+  prefeedback_duration: [0.6, 0.8]
   feedback_duration: 1
-  iti_duration: [0.6, 0.8]
 
 controller:
   initial_duration: 0.2
