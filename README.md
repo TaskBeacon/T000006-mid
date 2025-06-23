@@ -12,11 +12,6 @@
 | PsychoPy Version     |2025.1.1                  |
 | Modality     |Behavior/EEG                  |
 
-The task is originally developed by Knutson 2000:
->Knutson, B., Westdorp, A., Kaiser, E., & Hommer, D. (2000). FMRI visualization of brain activity during a monetary incentive delay task. Neuroimage, 12(1), 20-27.
-
-Here, we adopted the ABCD Study design of the task:
->Casey, B. J., Cannonier, T., Conley, M. I., Cohen, A. O., Barch, D. M., Heitzeg, M. M., ... & Dale, A. M. (2018). The adolescent brain cognitive development (ABCD) study: imaging acquisition across 21 sites. Developmental cognitive neuroscience, 32, 43-54.
 
 ## 1. Task Overview
 
@@ -164,3 +159,10 @@ Participants performed a computerized Monetary Incentive Delay (MID) task to ass
 The target's presentation duration was controlled by an adaptive algorithm that updated the duration after each trial based on performance. Initial target duration was set to 0.2 s and was adjusted between 0.04 and 0.37 s using ±0.03 s increments to stabilize performance at a target accuracy of 66%, tracked separately by condition.
 
 Feedback followed the target phase, based on whether participants responded within the target duration. “击中” (“hit”) and “未击中” (“miss”) messages were shown with point gain/loss specific to the cue type. After each block, a break screen summarized the participant's accuracy and cumulative score. The task began with audio-visual instructions and ended with a final message displaying total score. 
+
+## 5. References
+The task is originally developed by Knutson 2000:
+>Knutson, B., Westdorp, A., Kaiser, E., & Hommer, D. (2000). FMRI visualization of brain activity during a monetary incentive delay task. Neuroimage, 12(1), 20-27.
+
+Here, we adopted the ABCD Study design of the task:
+>Casey, B. J., Cannonier, T., Conley, M. I., Cohen, A. O., Barch, D. M., Heitzeg, M. M., ... & Dale, A. M. (2018). The adolescent brain cognitive development (ABCD) study: imaging acquisition across 21 sites. Developmental cognitive neuroscience, 32, 43-54.
