@@ -1,0 +1,11 @@
+id: T000006
+slug: mid
+title: "Monetary Incentive Delay (MID) Task"
+acquisition: eeg
+variant: baseline
+cognitive_domain: []
+maturity: piloted
+version:
+  release_tag: ""
+evidence: []
+maintainer: []
