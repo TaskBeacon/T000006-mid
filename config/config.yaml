@@ -247,40 +247,56 @@ controller:
   condition_specific: true
 
 triggers:
-  exp_onset: 98
-  exp_end: 99
+  map:
+    exp_onset: 98
+    exp_end: 99
 
-  win_cue_onset: 10
-  lose_cue_onset: 20
-  neut_cue_onset: 30
+    win_cue_onset: 10
+    lose_cue_onset: 20
+    neut_cue_onset: 30
 
-  win_anti_onset: 11
-  lose_anti_onset: 21
-  neut_anti_onset: 31
+    win_anti_onset: 11
+    lose_anti_onset: 21
+    neut_anti_onset: 31
 
-  win_target_onset: 12
-  lose_target_onset: 22
-  neut_target_onset: 32
+    win_target_onset: 12
+    lose_target_onset: 22
+    neut_target_onset: 32
 
-  win_hit_fb_onset: 13
-  lose_hit_fb_onset: 23
-  neut_hit_fb_onset: 33
-  
-  win_miss_fb_onset: 14
-  lose_miss_fb_onset: 24
-  neut_miss_fb_onset: 34
+    win_hit_fb_onset: 13
+    lose_hit_fb_onset: 23
+    neut_hit_fb_onset: 33
 
-  win_key_press: 15
-  lose_key_press: 25
-  neut_key_press: 35
+    win_miss_fb_onset: 14
+    lose_miss_fb_onset: 24
+    neut_miss_fb_onset: 34
 
-  win_no_response: 16
-  lose_no_response: 26
-  neut_no_response: 36
+    win_key_press: 15
+    lose_key_press: 25
+    neut_key_press: 35
 
-  block_onset: 100
-  block_end: 101
+    win_no_response: 16
+    lose_no_response: 26
+    neut_no_response: 36
 
-  fixation_onset: 1
+    block_onset: 100
+    block_end: 101
+    fixation_onset: 1
+
+  driver:
+    # kind: serial_port  # lab example
+    # port: "COM3"
+    kind: serial_url      # dev example
+    url: "loop://"
+    baudrate: 115200
+    timeout: 1
+    prefix: [1, 225, 1, 0]
+
+  policy:
+    strict: false
+
+  timing:
+    # Used by callable driver; kept here for consistency across drivers.
+    post_delay_s: 0.001
 
 
