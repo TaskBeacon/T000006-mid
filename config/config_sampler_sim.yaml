@@ -1,111 +1,77 @@
-# config.yaml
-# === Subject info ===
+# Default simulation config (used by `python main.py --mode sim`).
 subinfo_fields:
-  - name: subject_id
-    type: int
-    constraints:
-      min: 101
-      max: 999
-      digits: 3
-
-
-  - name: subname    
-    type: string
-
-  - name: age 
-    type: int
-    constraints:
-      min: 5
-      max: 60
-
-  - name: gender
-    type: choice
-    choices: [Male, Female]
-
+- name: subject_id
+  type: string
 subinfo_mapping:
-    subject_id: "被试号"
-    subname: "被试姓名(拼音)"
-    age: "年龄"
-    gender: "性别"
-    Male: "男"
-    Female: "女"
-    registration_failed: "注册失败。"
-    registration_successful: "注册成功！"
-    invalid_input: "字段 {field} 输入无效"
-
-
-# === Window settings ===
+  subject_id: Subject ID
+  registration_failed: Registration failed.
+  registration_successful: Registration successful.
+  invalid_input: Invalid input for {field}.
 window:
-  size: [1920, 1080]
+  size:
+  - 1280
+  - 720
   units: deg
-  screen: 1
+  screen: 0
   bg_color: gray
-  fullscreen: True
+  fullscreen: false
   monitor_width_cm: 60
   monitor_distance_cm: 72
-
-# === Task-level settings ===
 task:
-  task_name: "eeg_mid"
-  language: "Chinese"
-  voice_enabled: true
-  voice_name: "zh-CN-YunyangNeural"
-  total_blocks: 3
-  total_trials: 180
-  trial_per_block: 60
-  conditions: [win, lose, neut]
-  key_list: [space]
+  task_name: eeg_mid
+  language: Chinese
+  voice_enabled: false
+  voice_name: zh-CN-YunyangNeural
+  total_blocks: 1
+  total_trials: 12
+  trial_per_block: 12
+  conditions:
+  - win
+  - lose
+  - neut
+  key_list:
+  - space
   delta: 10
-  seed_mode: "same_across_sub"
-
-
-# === Stimuli (for MID task) ===
+  seed_mode: same_across_sub
 stimuli:
   fixation:
     type: text
     text: "+"
     color: black
-
   win_cue:
-     type: circle
-     radius: 3
-     fillColor: magenta
-     lineColor: black
- 
+    type: circle
+    radius: 3
+    fillColor: magenta
+    lineColor: black
   lose_cue:
     type: rect
     width: 6
     height: 6
     fillColor: yellow
     lineColor: black
-
   neut_cue:
     type: polygon
     edges: 3
     size: 6
     fillColor: cyan
     lineColor: black
-
   win_target:
     type: circle
     radius: 3
     fillColor: black
     lineColor: black
-
   lose_target:
     type: rect
     width: 6
     height: 6
     fillColor: black
     lineColor: black
-
   neut_target:
     type: polygon
     edges: 3
     size: 6
     fillColor: black
     lineColor: black
-
   win_hit_feedback:
     type: textbox
     text: |
@@ -115,7 +81,6 @@ stimuli:
     font: SimHei
     alignment: center
     letterHeight: 0.78
- 
   win_miss_feedback:
     type: textbox
     text: |
@@ -125,7 +90,6 @@ stimuli:
     font: SimHei
     alignment: center
     letterHeight: 0.78
-
   lose_hit_feedback:
     type: textbox
     text: |
@@ -135,7 +99,6 @@ stimuli:
     font: SimHei
     alignment: center
     letterHeight: 0.78
-
   lose_miss_feedback:
     type: textbox
     text: |
@@ -145,7 +108,6 @@ stimuli:
     font: SimHei
     alignment: center
     letterHeight: 0.78
-
   neut_hit_feedback:
     type: textbox
     text: |
@@ -154,8 +116,7 @@ stimuli:
     color: black
     font: SimHei
     alignment: center
-    letterHeight: 0.78   
-
+    letterHeight: 0.78
   neut_miss_feedback:
     type: textbox
     text: |
@@ -165,12 +126,9 @@ stimuli:
     font: SimHei
     alignment: center
     letterHeight: 0.78
-  
   blank_stim:
     type: text
     text: ""
-  
-
   block_break:
     type: text
     text: |
@@ -182,8 +140,6 @@ stimuli:
       进入下一个部分
     color: black
     height: 0.78
-
-
   instruction_text:
     type: textbox
     text: |
@@ -215,9 +171,9 @@ stimuli:
     alignment: center
     letterHeight: 0.72
     units: deg
-    size: [20, 5]
- 
-
+    size:
+    - 20
+    - 5
   good_bye:
     type: text
     text: |
@@ -228,17 +184,18 @@ stimuli:
       请按【空格键】键退出
     color: white
     height: 0.78
-
-
-# === Timing & Adaptivity ===
 timing:
-  
-  fixation_duration: [0.6, 0.8]
+  fixation_duration:
+  - 0.6
+  - 0.8
   cue_duration: 0.3
-  anticipation_duration: [1, 1.2]
-  prefeedback_duration: [0.6, 0.8]
+  anticipation_duration:
+  - 1
+  - 1.2
+  prefeedback_duration:
+  - 0.6
+  - 0.8
   feedback_duration: 1
-
 controller:
   initial_duration: 0.2
   min_duration: 0.04
@@ -256,68 +213,67 @@ qa:
   max_wait_s: 10.0
 
 sim:
-  output_dir: outputs/sim
-  seed: 0
+  output_dir: outputs/sim_sampler
+  seed: 11
   policy: warn
   default_rt_s: 0.2
   clamp_rt: false
   responder:
-    type: scripted
+    type: responders.mid_sampler:MidSamplerResponder
     kwargs:
       key: space
-      rt_s: 0.25
-
+      p_early: 0.02
+      continue_rt_s: 0.25
+      p_hit_win: 0.82
+      p_hit_neut: 0.7
+      p_hit_lose: 0.6
+      p_hit_default: 0.68
+      rt_mu_win: 0.23
+      rt_mu_neut: 0.27
+      rt_mu_lose: 0.31
+      rt_mu_default: 0.28
+      rt_sigma: 0.05
+      rt_min_s: 0.12
+      
 triggers:
   map:
     exp_onset: 98
     exp_end: 99
-
     win_cue_onset: 10
     lose_cue_onset: 20
     neut_cue_onset: 30
-
     win_anti_onset: 11
     lose_anti_onset: 21
     neut_anti_onset: 31
-
     win_target_onset: 12
     lose_target_onset: 22
     neut_target_onset: 32
-
     win_hit_fb_onset: 13
     lose_hit_fb_onset: 23
     neut_hit_fb_onset: 33
-
     win_miss_fb_onset: 14
     lose_miss_fb_onset: 24
     neut_miss_fb_onset: 34
-
     win_key_press: 15
     lose_key_press: 25
     neut_key_press: 35
-
     win_no_response: 16
     lose_no_response: 26
     neut_no_response: 36
-
     block_onset: 100
     block_end: 101
     fixation_onset: 1
-
   driver:
-    # type: serial_port  # lab example
-    # port: "COM3"
-    type: serial_url      # dev example
-    url: "loop://"
+    type: serial_url
+    url: loop://
     baudrate: 115200
     timeout: 1
-    prefix: [1, 225, 1, 0]
-
+    prefix:
+    - 1
+    - 225
+    - 1
+    - 0
   policy:
     strict: false
-
   timing:
-    # Used by callable driver; kept here for consistency across drivers.
     post_delay_s: 0.001
-
-

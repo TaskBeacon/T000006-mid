@@ -1,16 +1,15 @@
 # Monetary Incentive Delay (MID) Task
 
-![Maturity: piloted](https://img.shields.io/badge/Maturity-piloted-65a30d?style=for-the-badge&labelColor=c2410c)
-
+![Maturity: piloted](https://img.shields.io/badge/Maturity-piloted-16a34a?style=flat-square&labelColor=111827)
 | Field                | Value                        |
 |----------------------|------------------------------|
 | Name                 | Monetary Incentive Delay (MID) Task |
-| Version              | main (1.0)                          |
+| Version              | main (1.1.0)                        |
 | URL / Repository     |https://github.com/TaskBeacon/T000006-mid  |
 | Short Description    | A task measuring reward anticipation and feedback processing using adaptive timing |
 | Created By           |Zhipeng Cao (zhipeng30@foxmail.com)   |
-| Date Updated         |2025/06/21                |
-| PsyFlow Version      |0.1.0                     |
+| Date Updated         |2026/02/16                |
+| PsyFlow Version      |0.1.8                     |
 | PsychoPy Version     |2025.1.1                  |
 | Modality     |Behavior/EEG                  |
 | Language | Chinese |

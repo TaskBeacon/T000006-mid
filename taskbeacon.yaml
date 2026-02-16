@@ -7,5 +7,7 @@ cognitive_domain: []
 maturity: piloted
 version:
   release_tag: ""
+contracts:
+  psyflow_taps: v0.1.0
 evidence: []
 maintainer: []
