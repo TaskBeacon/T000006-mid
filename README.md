@@ -59,15 +59,21 @@ The Monetary Incentive Delay (MID) Task is designed to assess reward processing 
 | Condition Specific  | Tracks performance separately by condition (win/lose/neutral)               |
 | Logging             | Performance logs are printed to PsychoPy console                            |
 
+### Runtime Context Phases
+| Phase Label | Meaning |
+|---|---|
+| `anticipation_fixation` | anticipation fixation stage in `src/run_trial.py` responder context. |
+| `target_response_window` | target response window stage in `src/run_trial.py` responder context. |
+
 ## 3. Configuration Summary
 
 ### a. Subject Info
 
 | Field       | Meaning                    |
 |-------------|----------------------------|
-| subject_id  | Unique participant number (101�?99, 3 digits) |
+| subject_id  | Unique participant number (101?99, 3 digits) |
 | subname     | Participant name (pinyin)  |
-| age         | Participant age (5�?0)     |
+| age         | Participant age (5?0)     |
 | gender      | Participant gender (Male/Female) |
 
 ### b. Window Settings
@@ -93,12 +99,12 @@ The Monetary Incentive Delay (MID) Task is designed to assess reward processing 
 | win_target               | circle    | Black circle target                                   |
 | lose_target              | rect      | Black square target                                   |
 | neut_target              | triangle  | Black triangle target                                 |
-| win_hit_feedback         | textbox   | “击�?+10 分�?(black text, SimHei)                    |
-| win_miss_feedback        | textbox   | “未击中 +0 分�?                                      |
-| lose_hit_feedback        | textbox   | “击�?-0 分�?                                        |
-| lose_miss_feedback       | textbox   | “未击中 -10 分�?                                     |
-| neut_hit_feedback        | textbox   | “击�?+0 分�?                                        |
-| neut_miss_feedback       | textbox   | “未击中 -0 分�?                                      |
+| win_hit_feedback         | textbox   | “击?+10 分?(black text, SimHei)                    |
+| win_miss_feedback        | textbox   | “未击中 +0 分?                                      |
+| lose_hit_feedback        | textbox   | “击?-0 分?                                        |
+| lose_miss_feedback       | textbox   | “未击中 -10 分?                                     |
+| neut_hit_feedback        | textbox   | “击?+0 分?                                        |
+| neut_miss_feedback       | textbox   | “未击中 -0 分?                                      |
 | instruction_text         | textbox   | Multi-line Chinese instructions (includes scoring rules) |
 | block_break              | text      | Inter-block message showing block, accuracy, and score |
 | good_bye                 | text      | End screen showing final score                        |
@@ -108,9 +114,9 @@ The Monetary Incentive Delay (MID) Task is designed to assess reward processing 
 | Phase                 | Duration (s)        |
 |------------------------|--------------------|
 | cue                   | 0.3                |
-| anticipation          | random 1.0�?.2     |
-| target                | adaptive (0.04�?.37)|
-| prefeedback fixation  | random 0.6�?.8     |
+| anticipation          | random 1.0?.2     |
+| target                | adaptive (0.04?.37)|
+| prefeedback fixation  | random 0.6?.8     |
 | feedback              | 1.0                |
 
 ### e. Triggers
@@ -155,13 +161,13 @@ The Monetary Incentive Delay (MID) Task is designed to assess reward processing 
 | target_accuracy    | 0.66     |
 | condition_specific | true     |
 
-## 4. Methods
+## 4. Methods (for academic publication)
 
-Participants performed a computerized Monetary Incentive Delay (MID) task to assess motivational processing under different reward contingencies. The task consisted of **3 blocks**, each comprising **60 trials**, totaling **180 trials**. Each trial began with a cue, a colored shape (circle, square, or triangle), signaling whether the trial was a reward, punishment, or neutral condition. Following a variable anticipation phase (1.0�?.2 s), a black target appeared briefly. Participants were instructed to press the spacebar as quickly as possible upon target onset.
+Participants performed a computerized Monetary Incentive Delay (MID) task to assess motivational processing under different reward contingencies. The task consisted of **3 blocks**, each comprising **60 trials**, totaling **180 trials**. Each trial began with a cue, a colored shape (circle, square, or triangle), signaling whether the trial was a reward, punishment, or neutral condition. Following a variable anticipation phase (1.0?.2 s), a black target appeared briefly. Participants were instructed to press the spacebar as quickly as possible upon target onset.
 
 The target's presentation duration was controlled by an adaptive algorithm that updated the duration after each trial based on performance. Initial target duration was set to 0.2 s and was adjusted between 0.04 and 0.37 s using ±0.03 s increments to stabilize performance at a target accuracy of 66%, tracked separately by condition.
 
-Feedback followed the target phase, based on whether participants responded within the target duration. “击中�?(“hit�? and “未击中�?(“miss�? messages were shown with point gain/loss specific to the cue type. After each block, a break screen summarized the participant's accuracy and cumulative score. The task began with audio-visual instructions and ended with a final message displaying total score. 
+Feedback followed the target phase, based on whether participants responded within the target duration. “击中?(“hit? and “未击中?(“miss? messages were shown with point gain/loss specific to the cue type. After each block, a break screen summarized the participant's accuracy and cumulative score. The task began with audio-visual instructions and ended with a final message displaying total score. 
 
 ## 5. References
 The task is originally developed by Knutson 2000:

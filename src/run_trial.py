@@ -37,7 +37,7 @@ def run_trial(
     block_idx=None,
 ):
     """
-    Run one MID trial (cue -> anticipation -> target -> feedback).
+    Run one MID trial (task-specific phases for responder context).
     """
     trial_id = _next_trial_id(controller)
     trial_data = {"condition": condition}
@@ -52,12 +52,12 @@ def run_trial(
     set_trial_context(
         anti,
         trial_id=trial_id,
-        phase="anticipation",
+        phase="anticipation_fixation",
         deadline_s=_deadline_s(settings.anticipation_duration),
         valid_keys=list(settings.key_list),
         block_id=block_id,
         condition_id=str(condition),
-        task_factors={"condition": str(condition), "stage": "anticipation", "block_idx": block_idx},
+        task_factors={"condition": str(condition), "stage": "anticipation_fixation", "block_idx": block_idx},
         stim_id="fixation",
     )
     anti.capture_response(
@@ -75,14 +75,14 @@ def run_trial(
     set_trial_context(
         target,
         trial_id=trial_id,
-        phase="target",
+        phase="target_response_window",
         deadline_s=_deadline_s(duration),
         valid_keys=list(settings.key_list),
         block_id=block_id,
         condition_id=str(condition),
         task_factors={
             "condition": str(condition),
-            "stage": "target",
+            "stage": "target_response_window",
             "block_idx": block_idx,
             "target_duration_s": float(duration),
         },
@@ -102,7 +102,7 @@ def run_trial(
         onset_trigger=settings.triggers.get("fixation_onset"),
     ).to_dict(trial_data)
 
-    # Early anticipation response is always treated as a miss.
+    # Early response during the fixation window is always treated as a miss.
     hit = False if early_response else bool(target.get_state("hit", False))
     reward_if_hit = {"win": settings.delta, "lose": 0, "neut": 0}
     penalty_if_miss = {"win": 0, "lose": -settings.delta, "neut": 0}
