@@ -1,28 +1,6 @@
 from functools import partial
 
-from psyflow import StimUnit, set_trial_context
-
-
-def _deadline_s(value) -> float | None:
-    if isinstance(value, (int, float)):
-        return float(value)
-    if isinstance(value, (list, tuple)) and value:
-        try:
-            return float(max(value))
-        except Exception:
-            return None
-    return None
-
-
-def _next_trial_id(controller) -> int:
-    histories = getattr(controller, "histories", {}) or {}
-    done = 0
-    for items in histories.values():
-        try:
-            done += len(items)
-        except Exception:
-            continue
-    return int(done) + 1
+from psyflow import StimUnit, set_trial_context, next_trial_id
 
 
 def run_trial(
@@ -39,8 +17,8 @@ def run_trial(
     """
     Run one MID trial (task-specific phases for responder context).
     """
-    trial_id = _next_trial_id(controller)
-    trial_data = {"condition": condition}
+    trial_id = next_trial_id()
+    trial_data = {"condition": condition, "trial_id": trial_id}
     make_unit = partial(StimUnit, win=win, kb=kb, runtime=trigger_runtime)
 
     make_unit(unit_label="cue").add_stim(stim_bank.get(f"{condition}_cue")).show(
@@ -53,7 +31,7 @@ def run_trial(
         anti,
         trial_id=trial_id,
         phase="anticipation_fixation",
-        deadline_s=_deadline_s(settings.anticipation_duration),
+        deadline_s=settings.anticipation_duration,
         valid_keys=list(settings.key_list),
         block_id=block_id,
         condition_id=str(condition),
@@ -76,7 +54,7 @@ def run_trial(
         target,
         trial_id=trial_id,
         phase="target_response_window",
-        deadline_s=_deadline_s(duration),
+        deadline_s=duration,
         valid_keys=list(settings.key_list),
         block_id=block_id,
         condition_id=str(condition),
