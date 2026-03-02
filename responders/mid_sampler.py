@@ -153,7 +153,7 @@ class MidSamplerResponder:
             return Action(key=key, rt_s=rt, meta={"source": "mid_sampler", "phase": phase})
 
         # Early presses in anticipation are rare.
-        if phase == "anticipation":
+        if phase in ("anticipation", "anticipation_fixation"):
             if self._rng.random() > self.p_early:
                 return Action(
                     key=None,
@@ -174,7 +174,7 @@ class MidSamplerResponder:
             )
 
         # MID target: condition-dependent miss/hit + RT model.
-        if phase == "target":
+        if phase in ("target", "target_response_window"):
             p_hit = self._p_hit(cond)
             if self._rng.random() > p_hit:
                 return Action(

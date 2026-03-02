@@ -1,0 +1,38 @@
+﻿task_id: T000006
+generated_at: 2026-03-02T18:20:00Z
+selection_policy: manual_relevance_curation_from_openalex_mid_query
+citation_threshold: 100
+papers:
+  - id: W2119128116
+    title: Anticipation of Increasing Monetary Reward Selectively Recruits Nucleus Accumbens
+    year: 2001
+    journal: Journal of Neuroscience
+    doi_or_url: https://doi.org/10.1523/jneurosci.21-16-rc159.2001
+    citation_count: 2244
+    open_access: true
+    is_high_impact: false
+    used_for:
+      - mid_reward_anticipation_core
+      - cue_anticipation_target_feedback_state_model
+  - id: W2096412262
+    title: ERP Correlates of Feedback and Reward Processing in the Presence and Absence of Response Choice
+    year: 2004
+    journal: Cerebral Cortex
+    doi_or_url: https://doi.org/10.1093/cercor/bhh153
+    citation_count: 516
+    open_access: true
+    is_high_impact: true
+    used_for:
+      - feedback_coding
+      - reward_outcome_eeg_triggering
+  - id: W2097716692
+    title: "Incentive-Elicited Brain Activation in Adolescents: Similarities and Differences from Young Adults"
+    year: 2004
+    journal: Journal of Neuroscience
+    doi_or_url: https://doi.org/10.1523/jneurosci.2372-04.2004
+    citation_count: 559
+    open_access: true
+    is_high_impact: false
+    used_for:
+      - mid_block_design
+      - incentive_condition_comparison

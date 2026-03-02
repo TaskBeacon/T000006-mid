@@ -4,8 +4,27 @@ All notable development changes for `T000006-mid` are documented here.
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-03-02
+
+### Added
+- Added contract-standard sampler adapter at `responders/task_sampler.py` (`TaskSamplerResponder`) to expose the required responder plugin surface.
+- Added full reference artifact bundle under `references/`:
+  - `references.yaml`
+  - `references.md`
+  - `parameter_mapping.md`
+  - `stimulus_mapping.md`
+  - `task_logic_audit.md`
+  - `selected_papers.json`
+
 ### Changed
+- Updated `responders/mid_sampler.py` phase matching so sampler behavior aligns with runtime context phases (`anticipation_fixation`, `target_response_window`).
 - Refactored `src/run_trial.py` to use `psyflow`'s native `next_trial_id()` and removed legacy internal `_next_trial_id` and `_deadline_s` boilerplate.
+- Updated `.gitignore` to contract-preferred outputs rule (`outputs/*` with `!/outputs/.gitkeep`).
+
+### Fixed
+- Fixed YAML contract parsing failure in `references/references.yaml` by quoting colon-containing paper title text.
+- Restored required repository keepfile at `outputs/.gitkeep` for artifact path contract compliance.
+- Resolved missing QA artifact contract issues by regenerating QA outputs.
 
 ## [1.1.1] - 2026-02-18
 - Refactored responder context phase names in `src/run_trial.py` to task-specific labels (removed generic MID-style phase naming).

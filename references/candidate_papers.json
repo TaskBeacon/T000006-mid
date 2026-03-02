@@ -1,0 +1,1164 @@
+[
+  {
+    "id": "W2077611535",
+    "title": "Cortical substrates for exploratory decisions in humans",
+    "authors": [
+      "Nathaniel D. Daw",
+      "John P. O\u2019Doherty",
+      "Peter Dayan",
+      "Ben Seymour",
+      "Raymond J. Dolan"
+    ],
+    "year": 2006,
+    "journal": "Nature",
+    "doi_or_url": "https://doi.org/10.1038/nature04766",
+    "citation_count": 2312,
+    "is_high_impact": true,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2119128116",
+    "title": "Anticipation of Increasing Monetary Reward Selectively Recruits Nucleus Accumbens",
+    "authors": [
+      "Brian Knutson",
+      "Charles M. Adams",
+      "Grace Fong",
+      "Daniel W. Hommer"
+    ],
+    "year": 2001,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.21-16-j0002.2001",
+    "citation_count": 2244,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2163979049",
+    "title": "Distributed Neural Representation of Expected Value",
+    "authors": [
+      "Brian Knutson",
+      "Jonathan Taylor",
+      "Matthew T. Kaufman",
+      "Richard Peterson",
+      "Gary H. Glover"
+    ],
+    "year": 2005,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.0642-05.2005",
+    "citation_count": 957,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2138154769",
+    "title": "Independent Coding of Reward Magnitude and Valence in the Human Brain",
+    "authors": [
+      "Nick Yeung",
+      "Alan G. Sanfey"
+    ],
+    "year": 2004,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.4537-03.2004",
+    "citation_count": 934,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W1998633617",
+    "title": "Precuneus Is a Functional Core of the Default-Mode Network",
+    "authors": [
+      "Amanda V. Utevsky",
+      "David V. Smith",
+      "Scott A. Huettel"
+    ],
+    "year": 2014,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.4227-13.2014",
+    "citation_count": 907,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2096684870",
+    "title": "Predictability Modulates Human Brain Response to Reward",
+    "authors": [
+      "Gregory S. Berns",
+      "Samuel M. McClure",
+      "Giuseppe Pagnoni",
+      "P. Read Montague"
+    ],
+    "year": 2001,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.21-08-02793.2001",
+    "citation_count": 714,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2097716692",
+    "title": "Incentive-Elicited Brain Activation in Adolescents: Similarities and Differences from Young Adults",
+    "authors": [
+      "James M. Bjork",
+      "Brian Knutson",
+      "Grace Fong",
+      "Daniel M. Caggiano",
+      "Shannon M. Bennett",
+      "Daniel W. Hommer"
+    ],
+    "year": 2004,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.4862-03.2004",
+    "citation_count": 559,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W1976079390",
+    "title": "Dissociable Systems for Gain- and Loss-Related Value Predictions and Errors of Prediction in the Human Brain",
+    "authors": [
+      "Juliana Yacubian",
+      "Jan Gl\u00e4scher",
+      "Katrin Schr\u00f6der",
+      "Tobias Sommer",
+      "Dieter F. Braus",
+      "Christian B\u00fcchel"
+    ],
+    "year": 2006,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.2915-06.2006",
+    "citation_count": 541,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2157385519",
+    "title": "Differential Response Patterns in the Striatum and Orbitofrontal Cortex to Financial Reward in Humans: A Parametric Functional Magnetic Resonance Imaging Study",
+    "authors": [
+      "Rebecca Elliott",
+      "Jana L. Newman",
+      "Olivia Longe",
+      "J.F.W. Deakin"
+    ],
+    "year": 2003,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.23-01-00303.2003",
+    "citation_count": 519,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2096412262",
+    "title": "ERP Correlates of Feedback and Reward Processing in the Presence and Absence of Response Choice",
+    "authors": [
+      "Nick Yeung",
+      "Clay B. Holroyd",
+      "Jonathan D. Cohen"
+    ],
+    "year": 2004,
+    "journal": "Cerebral Cortex",
+    "doi_or_url": "https://doi.org/10.1093/cercor/bhh153",
+    "citation_count": 516,
+    "is_high_impact": true,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W1968748283",
+    "title": "Sleep Deprivation Amplifies Reactivity of Brain Reward Networks, Biasing the Appraisal of Positive Emotional Experiences",
+    "authors": [
+      "Ninad Gujar",
+      "Seung\u2010Schik Yoo",
+      "Peter Hu",
+      "Matthew P. Walker"
+    ],
+    "year": 2011,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.3220-10.2011",
+    "citation_count": 472,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2043214237",
+    "title": "Differential Encoding of Losses and Gains in the Human Striatum",
+    "authors": [
+      "Ben Seymour",
+      "Nathaniel D. Daw",
+      "Peter Dayan",
+      "Tania Singer",
+      "Raymond J. Dolan"
+    ],
+    "year": 2007,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.0400-07.2007",
+    "citation_count": 466,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2128577709",
+    "title": "Dorsal striatum responses to reward and punishment: Effects of valence and magnitude manipulations",
+    "authors": [
+      "Mauricio R. Delgado",
+      "H. M. LOCKE",
+      "V. Andrew Stenger",
+      "Julie A. Fiez"
+    ],
+    "year": 2003,
+    "journal": "Cognitive Affective & Behavioral Neuroscience",
+    "doi_or_url": "https://doi.org/10.3758/cabn.3.1.27",
+    "citation_count": 428,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2124611764",
+    "title": "Anticipation of monetary and social reward differently activates mesolimbic brain structures in men and women",
+    "authors": [
+      "Katja N. Spreckelmeyer",
+      "S\u00f6ren Krach",
+      "Gregor Kohls",
+      "Lena Rademacher",
+      "Arda Irmak",
+      "Kerstin Konrad",
+      "Tilo Kircher",
+      "Gerhard Gr\u00fcnder"
+    ],
+    "year": 2009,
+    "journal": "Social Cognitive and Affective Neuroscience",
+    "doi_or_url": "https://doi.org/10.1093/scan/nsn051",
+    "citation_count": 423,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2004014356",
+    "title": "Reinforcement Learning Signals in the Human Striatum Distinguish Learners from Nonlearners during Reward-Based Decision Making",
+    "authors": [
+      "Tom Sch\u00f6nberg",
+      "Nathaniel D. Daw",
+      "Daphna Joel",
+      "John P. O\u2019Doherty"
+    ],
+    "year": 2007,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.2496-07.2007",
+    "citation_count": 406,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W1660666227",
+    "title": "Human Striatal Response to Salient Nonrewarding Stimuli",
+    "authors": [
+      "Caroline F. Zink",
+      "Giuseppe Pagnoni",
+      "Megan E. Martin",
+      "Mukeshwar Dhamala",
+      "Gregory S. Berns"
+    ],
+    "year": 2003,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.23-22-08092.2003",
+    "citation_count": 312,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2147156351",
+    "title": "Prefrontal cortex activity is reduced in gambling and nongambling substance users during decision\u2010making",
+    "authors": [
+      "Jody Tanabe",
+      "Laetitia L. Thompson",
+      "Eric D. Claus",
+      "Manish Dalwani",
+      "Kent E. Hutchison",
+      "Marie T. Banich"
+    ],
+    "year": 2007,
+    "journal": "Human Brain Mapping",
+    "doi_or_url": "https://doi.org/10.1002/hbm.20344",
+    "citation_count": 307,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2011653800",
+    "title": "Variations in the Human Pain Stress Experience Mediated by Ventral and Dorsal Basal Ganglia Dopamine Activity",
+    "authors": [
+      "David Scott",
+      "Mary M. Heitzeg",
+      "Robert A. Koeppe",
+      "Christian S. Stohler",
+      "Jon\u2010Kar Zubieta"
+    ],
+    "year": 2006,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.2577-06.2006",
+    "citation_count": 297,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2158697067",
+    "title": "Reward circuitry function in autism spectrum disorders",
+    "authors": [
+      "Gabriel S. Dichter",
+      "Jennifer N. Felder",
+      "Steven R. Green",
+      "Alison Rittenberg",
+      "Noah J. Sasson",
+      "James W. Bodfish"
+    ],
+    "year": 2010,
+    "journal": "Social Cognitive and Affective Neuroscience",
+    "doi_or_url": "https://doi.org/10.1093/scan/nsq095",
+    "citation_count": 292,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2114396781",
+    "title": "Neural Response to Reward Anticipation under Risk Is Nonlinear in Probabilities",
+    "authors": [
+      "Ming Hsu",
+      "Ian Krajbich",
+      "Chen Zhao",
+      "Colin F. Camerer"
+    ],
+    "year": 2009,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.5296-08.2009",
+    "citation_count": 280,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2020441740",
+    "title": "Human oscillatory activity associated to reward processing in a gambling task",
+    "authors": [
+      "Josep Marco\u2010Pallar\u00e9s",
+      "David Cucurell",
+      "Toni Cunillera",
+      "Rafael Antonio Garc\u00eda",
+      "Antonio Andr\u00e9s Pueyo",
+      "Thomas F. M\u00fcnte",
+      "Antoni Rodr\u0131\u0301guez-Fornells"
+    ],
+    "year": 2007,
+    "journal": "Neuropsychologia",
+    "doi_or_url": "https://doi.org/10.1016/j.neuropsychologia.2007.07.016",
+    "citation_count": 273,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2164961539",
+    "title": "Dopamine Modulates Reward-Related Vigor",
+    "authors": [
+      "Ulrik Beierholm",
+      "Marc Guitart\u2010Masip",
+      "Marcos Economides",
+      "Rumana Chowdhury",
+      "Emrah D\u00fczel",
+      "Raymond J. Dolan",
+      "Peter Dayan"
+    ],
+    "year": 2013,
+    "journal": "Neuropsychopharmacology",
+    "doi_or_url": "https://doi.org/10.1038/npp.2013.48",
+    "citation_count": 237,
+    "is_high_impact": true,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2065885725",
+    "title": "Converging Structural and Functional Connectivity of Orbitofrontal, Dorsolateral Prefrontal, and Posterior Parietal Cortex in the Human Striatum",
+    "authors": [
+      "Kevin Jarbo",
+      "Timothy Verstynen"
+    ],
+    "year": 2015,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.2636-14.2015",
+    "citation_count": 229,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W3124528568",
+    "title": "The Wick in the Candle of Learning: Epistemic Curiosity Activates Reward Circuitry and Enhances Memory",
+    "authors": [
+      "Min Jeong Kang",
+      "Ming Hsu",
+      "Ian Krajbich",
+      "George Loewenstein",
+      "Samuel M. McClure",
+      "Joseph Tao\u2010yi Wang",
+      "Colin Camerer"
+    ],
+    "year": 2008,
+    "journal": "SSRN Electronic Journal",
+    "doi_or_url": "https://doi.org/10.2139/ssrn.1308286",
+    "citation_count": 219,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2111436741",
+    "title": "Striatal Functional Alteration in Adolescents Characterized by Early Childhood Behavioral Inhibition",
+    "authors": [
+      "Amanda E. Guyer",
+      "Eric E. Nelson",
+      "Koraly P\u00e9rez\u2010Edgar",
+      "Michael Hardin",
+      "Roxann Roberson\u2010Nay",
+      "Christopher S. Monk",
+      "James M. Bjork",
+      "Heather A. Henderson",
+      "Daniel S. Pine",
+      "Nathan A. Fox",
+      "Mathias Ernst"
+    ],
+    "year": 2006,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.0666-06.2006",
+    "citation_count": 212,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2170110106",
+    "title": "Activation in the VTA and nucleus accumbens increases in anticipation of both gains and losses",
+    "authors": [
+      "Ronald Carter"
+    ],
+    "year": 2009,
+    "journal": "Frontiers in Behavioral Neuroscience",
+    "doi_or_url": "https://doi.org/10.3389/neuro.08.021.2009",
+    "citation_count": 201,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2164121118",
+    "title": "Social \u2018wanting\u2019 dysfunction in autism: neurobiological underpinnings and treatment implications",
+    "authors": [
+      "Gregor Kohls",
+      "Coralie Chevallier",
+      "Vanessa Troiani",
+      "Robert T. Schultz"
+    ],
+    "year": 2012,
+    "journal": "Journal of Neurodevelopmental Disorders",
+    "doi_or_url": "https://doi.org/10.1186/1866-1955-4-10",
+    "citation_count": 196,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W1987598380",
+    "title": "The rewarding nature of social interactions",
+    "authors": [
+      "S\u00f6ren Krach"
+    ],
+    "year": 2010,
+    "journal": "Frontiers in Behavioral Neuroscience",
+    "doi_or_url": "https://doi.org/10.3389/fnbeh.2010.00022",
+    "citation_count": 194,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2110113097",
+    "title": "Dimensional psychiatry: reward dysfunction and depressive mood across psychiatric disorders",
+    "authors": [
+      "Claudia H\u00e4gele",
+      "Florian Schlagenhauf",
+      "Michael A. Rapp",
+      "Philipp Sterzer",
+      "Anne Beck",
+      "Felix Bermpohl",
+      "Meline Stoy",
+      "Andreas Str\u00f6hle",
+      "Hans\u2010Ulrich W\u00efttchen",
+      "Raymond J. Dolan",
+      "Andreas Heinz"
+    ],
+    "year": 2014,
+    "journal": "Psychopharmacology",
+    "doi_or_url": "https://doi.org/10.1007/s00213-014-3662-7",
+    "citation_count": 191,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2152174719",
+    "title": "Social and monetary reward processing in autism spectrum disorders",
+    "authors": [
+      "Sonja Delmonte",
+      "Joshua H. Balsters",
+      "Jane McGrath",
+      "Jacqueline Fitzgerald",
+      "S. Brennan",
+      "Andrew Fagan",
+      "Louise Gallagher"
+    ],
+    "year": 2012,
+    "journal": "Molecular Autism",
+    "doi_or_url": "https://doi.org/10.1186/2040-2392-3-7",
+    "citation_count": 181,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2127820682",
+    "title": "Enriched Encoding: Reward Motivation Organizes Cortical Networks for Hippocampal Detection of Unexpected Events",
+    "authors": [
+      "Vishnu P. Murty",
+      "R. Alison Adcock"
+    ],
+    "year": 2013,
+    "journal": "Cerebral Cortex",
+    "doi_or_url": "https://doi.org/10.1093/cercor/bht063",
+    "citation_count": 170,
+    "is_high_impact": true,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2782386660",
+    "title": "Locus Coeruleus Activity Strengthens Prioritized Memories Under Arousal",
+    "authors": [
+      "David Clewett",
+      "Ringo Huang",
+      "Rico Velasco",
+      "Tae\u2010Ho Lee",
+      "Mara Mather"
+    ],
+    "year": 2018,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.2097-17.2017",
+    "citation_count": 163,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2076663297",
+    "title": "Episodic Memory Encoding Interferes with Reward Learning and Decreases Striatal Prediction Errors",
+    "authors": [
+      "G. Elliott Wimmer",
+      "Erin Kendall Braun",
+      "Nathaniel D. Daw",
+      "Daphna Shohamy"
+    ],
+    "year": 2014,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.0204-14.2014",
+    "citation_count": 150,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2055514102",
+    "title": "Behavioral and Neural Changes after Gains and Losses of Conditioned Reinforcers",
+    "authors": [
+      "Hyojung Seo",
+      "Daeyeol Lee"
+    ],
+    "year": 2009,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.4726-08.2009",
+    "citation_count": 145,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W4231936410",
+    "title": "Dopamine Agonists Diminish Value Sensitivity of the Orbitofrontal Cortex: A Trigger for Pathological Gambling in Parkinson's Disease?",
+    "authors": [
+      "Thilo van Eimeren",
+      "B\u00e9n\u00e9dicte Ballanger",
+      "Giovanna Pellecchia",
+      "Janis M. Miyasaki",
+      "Anthony E. Lang",
+      "Antonio P. Strafella"
+    ],
+    "year": 2009,
+    "journal": "Neuropsychopharmacology",
+    "doi_or_url": "https://doi.org/10.1038/npp.2009.124",
+    "citation_count": 141,
+    "is_high_impact": true,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2114691017",
+    "title": "Common and distinct neural features of social and non-social reward processing in autism and social anxiety disorder",
+    "authors": [
+      "John A. Richey",
+      "Alison Rittenberg",
+      "Lauren Hughes",
+      "Cara R. Damiano",
+      "Antoinette Sabatino",
+      "Stephanie Miller",
+      "Eleanor K. Hanna",
+      "James W. Bodfish",
+      "Gabriel S. Dichter"
+    ],
+    "year": 2012,
+    "journal": "Social Cognitive and Affective Neuroscience",
+    "doi_or_url": "https://doi.org/10.1093/scan/nss146",
+    "citation_count": 132,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2135214000",
+    "title": "Is avolition in schizophrenia associated with a deficit of dorsal caudate activity? A functional magnetic resonance imaging study during reward anticipation and feedback",
+    "authors": [
+      "Armida Mucci",
+      "Danai Dima",
+      "Andrea Soricelli",
+      "Umberto Volpe",
+      "Paola Bucci",
+      "Sophia Frangou",
+      "Anna Prinster",
+      "Marco Salvatore",
+      "Silvana Galderisi",
+      "Mario Maj"
+    ],
+    "year": 2015,
+    "journal": "Psychological Medicine",
+    "doi_or_url": "https://doi.org/10.1017/s0033291714002943",
+    "citation_count": 132,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2065050486",
+    "title": "Nucleus Accumbens Response to Incentive Stimuli Anticipation in Children of Alcoholics: Relationships with Precursive Behavioral Risk and Lifetime Alcohol Use",
+    "authors": [
+      "Wai-Ying Wendy Yau",
+      "Jon\u2010Kar Zubieta",
+      "Barbara J. Weiland",
+      "Preeti Samudra",
+      "Robert A. Zucker",
+      "Mary M. Heitzeg"
+    ],
+    "year": 2012,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.1390-11.2012",
+    "citation_count": 127,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W1528757035",
+    "title": "Longitudinal Changes in Prefrontal Cortex Activation Underlie Declines in Adolescent Risk Taking",
+    "authors": [
+      "Yusheng Qu",
+      "Adriana Galv\u00e1n",
+      "Andrew J. Fuligni",
+      "Matthew D. Lieberman",
+      "Eva H. Telzer"
+    ],
+    "year": 2015,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.1553-15.2015",
+    "citation_count": 124,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2161467512",
+    "title": "Regional gray matter density is associated with achievement motivation: evidence from voxel-based morphometry",
+    "authors": [
+      "Hikaru Takeuchi",
+      "Yasuyuki Taki",
+      "Rui Nouchi",
+      "Atsushi Sekiguchi",
+      "Yuka Kotozaki",
+      "Carlos Makoto Miyauchi",
+      "Ryoichi Yokoyama",
+      "Kunio Iizuka",
+      "Hiroshi Hashizume",
+      "Seishu Nakagawa",
+      "Keiko Kunitoki",
+      "Yuko Sassa"
+    ],
+    "year": 2012,
+    "journal": "Brain Structure and Function",
+    "doi_or_url": "https://doi.org/10.1007/s00429-012-0485-3",
+    "citation_count": 124,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2165836892",
+    "title": "Differential patterns of nucleus accumbens activation during anticipation of monetary and social reward in young and older adults",
+    "authors": [
+      "Lena Rademacher",
+      "Aallaa Salama",
+      "Gerhard Gr\u00fcnder",
+      "Katja N. Spreckelmeyer"
+    ],
+    "year": 2013,
+    "journal": "Social Cognitive and Affective Neuroscience",
+    "doi_or_url": "https://doi.org/10.1093/scan/nst047",
+    "citation_count": 122,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W1982336939",
+    "title": "Reward networks in the brain as captured by connectivity measures",
+    "authors": [
+      "Estela C\u00e0mara"
+    ],
+    "year": 2009,
+    "journal": "Frontiers in Neuroscience",
+    "doi_or_url": "https://doi.org/10.3389/neuro.01.034.2009",
+    "citation_count": 119,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2590236599",
+    "title": "Blunted ventral striatal responses to anticipated rewards foreshadow problematic drug use in novelty-seeking adolescents",
+    "authors": [
+      "Christian B\u00fcchel",
+      "Jan Peters",
+      "Tobias Banaschewski",
+      "Arun L.W. Bokde",
+      "Uli Bromberg",
+      "Patricia Conrod",
+      "Herta Flor",
+      "Dimitri Papadopoulos",
+      "Hugh Garavan",
+      "Penny Gowland",
+      "Andreas Heinz",
+      "Henrik Walter"
+    ],
+    "year": 2017,
+    "journal": "Nature Communications",
+    "doi_or_url": "https://doi.org/10.1038/ncomms14140",
+    "citation_count": 117,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2140531843",
+    "title": "Cerebral Correlates of Salient Prediction Error for Different Rewards and Punishments",
+    "authors": [
+      "\u00c9lise M\u00e9t\u00e9reau",
+      "Jean\u2010Claude Dreher"
+    ],
+    "year": 2012,
+    "journal": "Cerebral Cortex",
+    "doi_or_url": "https://doi.org/10.1093/cercor/bhs037",
+    "citation_count": 117,
+    "is_high_impact": true,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2043782979",
+    "title": "The influence of affective states varying in motivational intensity on cognitive scope",
+    "authors": [
+      "Eddie Harmon\u2010Jones",
+      "Philip A. Gable",
+      "Tom F. Price"
+    ],
+    "year": 2012,
+    "journal": "Frontiers in Integrative Neuroscience",
+    "doi_or_url": "https://doi.org/10.3389/fnint.2012.00073",
+    "citation_count": 108,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2082907353",
+    "title": "Contextual Novelty Changes Reward Representations in the Striatum",
+    "authors": [
+      "Marc Guitart\u2010Masip",
+      "Nico Bunzeck",
+      "Klaas \u0395. Stephan",
+      "Raymond J. Dolan",
+      "Emrah D\u00fczel"
+    ],
+    "year": 2010,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.5331-09.2010",
+    "citation_count": 106,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2015652930",
+    "title": "Influence of Dopaminergically Mediated Reward on Somatosensory Decision-Making",
+    "authors": [
+      "Burkhard Pleger",
+      "Christian C. Ruff",
+      "Felix Blankenburg",
+      "Stefan Kl\u00f6ppel",
+      "Jon Driver",
+      "Raymond J. Dolan"
+    ],
+    "year": 2009,
+    "journal": "PLoS Biology",
+    "doi_or_url": "https://doi.org/10.1371/journal.pbio.1000164",
+    "citation_count": 100,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2169500536",
+    "title": "Learning to Like: A Role for Human Orbitofrontal Cortex in Conditioned Reward",
+    "authors": [
+      "Sylvia M. L. Cox",
+      "Alexandre Andrade",
+      "Ingrid S. Johnsrude"
+    ],
+    "year": 2005,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.3360-04.2005",
+    "citation_count": 98,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W2167727962",
+    "title": "Response to Anticipated Reward in the Nucleus Accumbens Predicts Behavior in an Independent Test of Honesty",
+    "authors": [
+      "Nobuhito Abe",
+      "Joshua D. Greene"
+    ],
+    "year": 2014,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.0217-14.2014",
+    "citation_count": 97,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  },
+  {
+    "id": "W3028337256",
+    "title": "Behavioral and Neural Signatures of Working Memory in Childhood",
+    "authors": [
+      "Monica D. Rosenberg",
+      "Steven A. Martinez",
+      "Kristina M. Rapuano",
+      "May I. Conley",
+      "Alexandra O. Cohen",
+      "M. Daniela Cornejo",
+      "Donald J. Hagler",
+      "W.J. MEREDITH",
+      "Kevin Anderson",
+      "Tor D. Wager",
+      "Eric Feczko",
+      "Eric Earl"
+    ],
+    "year": 2020,
+    "journal": "Journal of Neuroscience",
+    "doi_or_url": "https://doi.org/10.1523/jneurosci.2841-19.2020",
+    "citation_count": 96,
+    "is_high_impact": false,
+    "open_access": true,
+    "used_for": [
+      "task_workflow",
+      "timing_parameters"
+    ],
+    "parameter_bindings": {},
+    "notes": ""
+  }
+]
