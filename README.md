@@ -22,6 +22,8 @@ The Monetary Incentive Delay (MID) Task is designed to assess reward processing 
 
 ## 2. Task Flow
 
+![Task flow](./task_flow.png)
+
 ### Block-Level Flow
 
 | Step                       | Description                                                                 |
