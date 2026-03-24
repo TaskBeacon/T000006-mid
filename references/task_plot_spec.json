@@ -11,11 +11,12 @@
         "filename": "task_flow.png",
         "dpi": 300,
         "width_in": 16.0,
-        "background": "white"
+        "background": "white",
+        "auto_width": false
       },
       "layout": {
-        "max_conditions": 4,
-        "screens_per_timeline": 6,
+        "max_conditions": 3,
+        "screens_per_timeline": 5,
         "screen_overlap_ratio": 0.1,
         "screen_slope": 0.08,
         "screen_slope_deg": 25.0,
@@ -42,8 +43,38 @@
         "display_condition_label": "Win",
         "phases": [
           {
+            "phase_name": "cue",
+            "display_phase_label": "Cue",
+            "duration_ms": {
+              "fixed": 300
+            },
+            "response_window_ms": null,
+            "display_timing_label": "300 ms",
+            "stim_ids": [
+              "win_cue"
+            ],
+            "stimulus_example": {
+              "summary": "Magenta reward cue",
+              "modality": "visual",
+              "draw_hint": "shape",
+              "render_items": [
+                {
+                  "kind": "shape",
+                  "shape": "circle",
+                  "label": "Reward Cue",
+                  "color": "magenta",
+                  "line_color": "black",
+                  "line_width": 1.0,
+                  "pos": null,
+                  "size": 1.0
+                }
+              ]
+            },
+            "notes": "奖励提示由 `show()` 直接呈现，源代码未调用 `set_trial_context(...)`；本次按可见阶段重新补入。"
+          },
+          {
             "phase_name": "anticipation fixation",
-            "display_phase_label": "Fixation",
+            "display_phase_label": "Anticipation",
             "duration_ms": {
               "range": [
                 1000,
@@ -70,33 +101,79 @@
                   "text": "+",
                   "color": "black",
                   "pos": null,
-                  "height": null
+                  "height": 1.5
                 }
               ]
             },
-            "notes": ""
+            "notes": "注视等待阶段先调用 `set_trial_context(...)`，再用 `capture_response(...)` 记录反应；持续 1000–1200 ms。"
           },
           {
             "phase_name": "target response window",
             "display_phase_label": "Target",
-            "duration_ms": null,
-            "response_window_ms": null,
-            "display_timing_label": "",
+            "duration_ms": {
+              "range": [
+                40,
+                370
+              ]
+            },
+            "response_window_ms": {
+              "range": [
+                40,
+                370
+              ]
+            },
+            "display_timing_label": "Adaptive 40-370 ms",
             "stim_ids": [
               "win_target"
             ],
             "stimulus_example": {
-              "summary": "[circle:win_target]",
-              "modality": "other",
-              "draw_hint": "annotation",
+              "summary": "Black circle target",
+              "modality": "visual",
+              "draw_hint": "shape",
               "render_items": [
                 {
-                  "kind": "annotation",
-                  "text": "circle: win_target"
+                  "kind": "shape",
+                  "shape": "circle",
+                  "label": "Win Target",
+                  "color": "black",
+                  "line_color": "black",
+                  "line_width": 1.0,
+                  "pos": null,
+                  "size": 1.0
                 }
               ]
             },
-            "notes": ""
+            "notes": "目标时长由 `controller.get_duration(condition)` 自适应控制，初始约 200 ms，按 30 ms 步长在 40–370 ms 范围内调整。"
+          },
+          {
+            "phase_name": "pre feedback fixation",
+            "display_phase_label": "Pre-Feedback",
+            "duration_ms": {
+              "range": [
+                600,
+                800
+              ]
+            },
+            "response_window_ms": null,
+            "display_timing_label": "600-800 ms",
+            "stim_ids": [
+              "fixation"
+            ],
+            "stimulus_example": {
+              "summary": "+",
+              "modality": "visual",
+              "draw_hint": "text",
+              "render_items": [
+                {
+                  "kind": "text",
+                  "text": "+",
+                  "color": "black",
+                  "pos": null,
+                  "height": 1.5
+                }
+              ]
+            },
+            "notes": "反馈前空屏由 `show()` 直接呈现，源代码未调用 `set_trial_context(...)`；本次单独恢复为过渡阶段。"
           },
           {
             "phase_name": "feedback",
@@ -106,26 +183,352 @@
             },
             "response_window_ms": null,
             "display_timing_label": "1000 ms",
-            "stim_ids": [],
+            "stim_ids": [
+              "win_hit_feedback",
+              "win_miss_feedback"
+            ],
             "stimulus_example": {
-              "summary": "[annotation] feedback",
+              "summary": "Win hit/miss feedback",
               "modality": "other",
               "draw_hint": "annotation",
               "render_items": [
                 {
                   "kind": "annotation",
-                  "text": "feedback"
+                  "text": "Win hit/miss feedback"
                 }
               ]
             },
-            "notes": "inferred from show() without set_trial_context"
+            "notes": "反馈内容依据 `condition` 与 `hit_type` 动态切换，并通过 `show()` 呈现；击中/未击中反馈文本来自配置。"
           }
-        ],
-        "condition_variants": [
-          "lose",
-          "neut"
-        ],
-        "display_condition_note": "Also: Lose, Neut"
+        ]
+      },
+      {
+        "condition": "lose",
+        "display_condition_label": "Lose",
+        "phases": [
+          {
+            "phase_name": "cue",
+            "display_phase_label": "Cue",
+            "duration_ms": {
+              "fixed": 300
+            },
+            "response_window_ms": null,
+            "display_timing_label": "300 ms",
+            "stim_ids": [
+              "lose_cue"
+            ],
+            "stimulus_example": {
+              "summary": "Yellow loss cue",
+              "modality": "visual",
+              "draw_hint": "shape",
+              "render_items": [
+                {
+                  "kind": "shape",
+                  "shape": "rect",
+                  "label": "Loss Cue",
+                  "color": "yellow",
+                  "line_color": "black",
+                  "line_width": 1.0,
+                  "pos": null,
+                  "size": 1.0
+                }
+              ]
+            },
+            "notes": "损失提示由 `show()` 直接呈现，源代码未调用 `set_trial_context(...)`；本次按可见阶段重新补入。"
+          },
+          {
+            "phase_name": "anticipation fixation",
+            "display_phase_label": "Anticipation",
+            "duration_ms": {
+              "range": [
+                1000,
+                1200
+              ]
+            },
+            "response_window_ms": {
+              "range": [
+                1000,
+                1200
+              ]
+            },
+            "display_timing_label": "1000-1200 ms",
+            "stim_ids": [
+              "fixation"
+            ],
+            "stimulus_example": {
+              "summary": "+",
+              "modality": "visual",
+              "draw_hint": "text",
+              "render_items": [
+                {
+                  "kind": "text",
+                  "text": "+",
+                  "color": "black",
+                  "pos": null,
+                  "height": 1.5
+                }
+              ]
+            },
+            "notes": "注视等待阶段先调用 `set_trial_context(...)`，再用 `capture_response(...)` 记录反应；持续 1000–1200 ms。"
+          },
+          {
+            "phase_name": "target response window",
+            "display_phase_label": "Target",
+            "duration_ms": {
+              "range": [
+                40,
+                370
+              ]
+            },
+            "response_window_ms": {
+              "range": [
+                40,
+                370
+              ]
+            },
+            "display_timing_label": "Adaptive 40-370 ms",
+            "stim_ids": [
+              "lose_target"
+            ],
+            "stimulus_example": {
+              "summary": "Black square target",
+              "modality": "visual",
+              "draw_hint": "shape",
+              "render_items": [
+                {
+                  "kind": "shape",
+                  "shape": "rect",
+                  "label": "Lose Target",
+                  "color": "black",
+                  "line_color": "black",
+                  "line_width": 1.0,
+                  "pos": null,
+                  "size": 1.0
+                }
+              ]
+            },
+            "notes": "目标时长由 `controller.get_duration(condition)` 自适应控制，初始约 200 ms，按 30 ms 步长在 40–370 ms 范围内调整。"
+          },
+          {
+            "phase_name": "pre feedback fixation",
+            "display_phase_label": "Pre-Feedback",
+            "duration_ms": {
+              "range": [
+                600,
+                800
+              ]
+            },
+            "response_window_ms": null,
+            "display_timing_label": "600-800 ms",
+            "stim_ids": [
+              "fixation"
+            ],
+            "stimulus_example": {
+              "summary": "+",
+              "modality": "visual",
+              "draw_hint": "text",
+              "render_items": [
+                {
+                  "kind": "text",
+                  "text": "+",
+                  "color": "black",
+                  "pos": null,
+                  "height": 1.5
+                }
+              ]
+            },
+            "notes": "反馈前空屏由 `show()` 直接呈现，源代码未调用 `set_trial_context(...)`；本次单独恢复为过渡阶段。"
+          },
+          {
+            "phase_name": "feedback",
+            "display_phase_label": "Feedback",
+            "duration_ms": {
+              "fixed": 1000
+            },
+            "response_window_ms": null,
+            "display_timing_label": "1000 ms",
+            "stim_ids": [
+              "lose_hit_feedback",
+              "lose_miss_feedback"
+            ],
+            "stimulus_example": {
+              "summary": "Lose hit/miss feedback",
+              "modality": "other",
+              "draw_hint": "annotation",
+              "render_items": [
+                {
+                  "kind": "annotation",
+                  "text": "Lose hit/miss feedback"
+                }
+              ]
+            },
+            "notes": "反馈内容依据 `condition` 与 `hit_type` 动态切换，并通过 `show()` 呈现；击中/未击中反馈文本来自配置。"
+          }
+        ]
+      },
+      {
+        "condition": "neut",
+        "display_condition_label": "Neutral",
+        "phases": [
+          {
+            "phase_name": "cue",
+            "display_phase_label": "Cue",
+            "duration_ms": {
+              "fixed": 300
+            },
+            "response_window_ms": null,
+            "display_timing_label": "300 ms",
+            "stim_ids": [
+              "neut_cue"
+            ],
+            "stimulus_example": {
+              "summary": "Cyan neutral cue",
+              "modality": "visual",
+              "draw_hint": "shape",
+              "render_items": [
+                {
+                  "kind": "shape",
+                  "shape": "generic",
+                  "label": "Neutral Cue",
+                  "color": "cyan",
+                  "line_color": "black",
+                  "line_width": 1.0,
+                  "pos": null,
+                  "size": 1.0
+                }
+              ]
+            },
+            "notes": "中性提示由 `show()` 直接呈现，源代码未调用 `set_trial_context(...)`；本次按可见阶段重新补入。"
+          },
+          {
+            "phase_name": "anticipation fixation",
+            "display_phase_label": "Anticipation",
+            "duration_ms": {
+              "range": [
+                1000,
+                1200
+              ]
+            },
+            "response_window_ms": {
+              "range": [
+                1000,
+                1200
+              ]
+            },
+            "display_timing_label": "1000-1200 ms",
+            "stim_ids": [
+              "fixation"
+            ],
+            "stimulus_example": {
+              "summary": "+",
+              "modality": "visual",
+              "draw_hint": "text",
+              "render_items": [
+                {
+                  "kind": "text",
+                  "text": "+",
+                  "color": "black",
+                  "pos": null,
+                  "height": 1.5
+                }
+              ]
+            },
+            "notes": "注视等待阶段先调用 `set_trial_context(...)`，再用 `capture_response(...)` 记录反应；持续 1000–1200 ms。"
+          },
+          {
+            "phase_name": "target response window",
+            "display_phase_label": "Target",
+            "duration_ms": {
+              "range": [
+                40,
+                370
+              ]
+            },
+            "response_window_ms": {
+              "range": [
+                40,
+                370
+              ]
+            },
+            "display_timing_label": "Adaptive 40-370 ms",
+            "stim_ids": [
+              "neut_target"
+            ],
+            "stimulus_example": {
+              "summary": "Black triangle target",
+              "modality": "visual",
+              "draw_hint": "shape",
+              "render_items": [
+                {
+                  "kind": "shape",
+                  "shape": "generic",
+                  "label": "Neutral Target",
+                  "color": "black",
+                  "line_color": "black",
+                  "line_width": 1.0,
+                  "pos": null,
+                  "size": 1.0
+                }
+              ]
+            },
+            "notes": "目标时长由 `controller.get_duration(condition)` 自适应控制，初始约 200 ms，按 30 ms 步长在 40–370 ms 范围内调整。"
+          },
+          {
+            "phase_name": "pre feedback fixation",
+            "display_phase_label": "Pre-Feedback",
+            "duration_ms": {
+              "range": [
+                600,
+                800
+              ]
+            },
+            "response_window_ms": null,
+            "display_timing_label": "600-800 ms",
+            "stim_ids": [
+              "fixation"
+            ],
+            "stimulus_example": {
+              "summary": "+",
+              "modality": "visual",
+              "draw_hint": "text",
+              "render_items": [
+                {
+                  "kind": "text",
+                  "text": "+",
+                  "color": "black",
+                  "pos": null,
+                  "height": 1.5
+                }
+              ]
+            },
+            "notes": "反馈前空屏由 `show()` 直接呈现，源代码未调用 `set_trial_context(...)`；本次单独恢复为过渡阶段。"
+          },
+          {
+            "phase_name": "feedback",
+            "display_phase_label": "Feedback",
+            "duration_ms": {
+              "fixed": 1000
+            },
+            "response_window_ms": null,
+            "display_timing_label": "1000 ms",
+            "stim_ids": [
+              "neut_hit_feedback",
+              "neut_miss_feedback"
+            ],
+            "stimulus_example": {
+              "summary": "Neutral hit/miss feedback",
+              "modality": "other",
+              "draw_hint": "annotation",
+              "render_items": [
+                {
+                  "kind": "annotation",
+                  "text": "Neutral hit/miss feedback"
+                }
+              ]
+            },
+            "notes": "反馈内容依据 `condition` 与 `hit_type` 动态切换，并通过 `show()` 呈现；击中/未击中反馈文本来自配置。"
+          }
+        ]
       }
     ],
     "legend": []
